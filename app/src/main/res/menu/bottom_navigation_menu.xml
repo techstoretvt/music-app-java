@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Khám phá"
+        android:icon="@drawable/baseline_panorama_fish_eye_24"
+        android:id="@+id/khamPha"/>
+    <item android:title="Thư viện"
+        android:icon="@drawable/baseline_music_video_24"
+        android:id="@+id/thuVien"/>
+    <item android:title="Thông báo"
+        android:icon="@drawable/baseline_notifications_24"
+        android:id="@+id/thongBao"/>
+    <item android:title="Cá nhân"
+        android:icon="@drawable/baseline_person_24"
+        android:id="@+id/caNhan"/>
+
+</menu>

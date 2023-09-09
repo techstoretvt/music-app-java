@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Màu nền chính -->
+    <color name="primary_color">#BDB3FF</color>
+
+    <!-- Màu nền thứ cấp -->
+    <color name="secondary_color">#000000</color>
+
+    <!-- Màu chữ chính -->
+    <color name="text_color">#ffffff</color>
+
+    <!-- Màu chữ phụ -->
+    <color name="text_secondary_color">#999999</color>
+
+    <!-- Màu nhấn chính -->
+    <color name="primary_color_accent">#FF0000</color>
+
+    <!-- Màu nhấn phụ -->
+    <color name="primary_color_light">#FF7A00</color>
+
+    <!-- Màu lỗi -->
+    <color name="error_color">#FF3D00</color>
+
+    <!-- Màu đường viền -->
+    <color name="border_color">#00A2E2</color>
+
+    <!-- Màu bóng -->
+    <color name="shadow_color">#0095BC</color>
+
+    <color name="teal_200">#20DDB7</color>
+    <color name="purple_200">#955CBD</color>
+    <color name="purple_700">#2C3EDC</color>
+</resources>
