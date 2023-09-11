@@ -20,6 +20,7 @@
             app:expandedTitleMarginStart="72dp"
             android:fitsSystemWindows="true"
             app:expandedTitleTextColor="#fff"
+            app:collapsedTitleTextColor="#fff"
             app:expandedTitleMarginBottom="28dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
@@ -30,7 +31,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/girl1"
+                android:src="@drawable/anh_header"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
                 android:contentDescription="anh header" />
@@ -40,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:title="Khám phá"
+                app:title="KHÁM PHÁ"
                 app:menu="@menu/top_app_bar"
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
@@ -53,6 +54,7 @@
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#000"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </androidx.recyclerview.widget.RecyclerView>

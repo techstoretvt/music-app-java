@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:background="#000"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/txtStt"
+        android:textColor="#fff"
+        android:text="1"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/anh_header"
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="14dp"
+        android:fitsSystemWindows="true"
+        android:contentDescription="anh header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tenBaiHat"
+            android:textColor="#fff"
+            android:text="Anh đâu muốn thấy em buồn"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_marginBottom="8dp"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tenCaSi"
+            android:textColor="#fff"
+            android:text="Châu Khải Phong, ACV"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,14 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.musicapp.R;
-import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.adapters.Adapter;
+import com.example.musicapp.adapters.AdapterKhamPha;
+import com.example.musicapp.modal.anhxajson.BaiHat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +38,7 @@ public class KhamPhaFragment extends Fragment {
 
     RecyclerView recyclerView;
     LinearLayoutManager manager;
-    Adapter adapter;
+    AdapterKhamPha adapter;
 
     Boolean isScrolling = false;
     int currentItems, totalItems, scrollOutItems;
@@ -89,13 +86,16 @@ public class KhamPhaFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
         manager = new LinearLayoutManager(getActivity());
 
-        String[] a = {"23", "24", "25", "26", "27", "28", "29"
-                , "30", "31", "32", "23", "24", "25", "26", "27",
-                "28", "29", "30", "31", "32"};
-        list = new ArrayList(Arrays.asList(a));
+        list = new ArrayList<BaiHat>();
+
+        for (int i = 0; i < 20; i++) {
+            BaiHat baiHat = new BaiHat(String.valueOf(i + 1), "Ten bai hat"
+                    + String.valueOf(i + 1), "Ten ca si" + String.valueOf(i + 1));
+            list.add(baiHat);
+        }
 
 
-        adapter = new Adapter(list, getActivity());
+        adapter = new AdapterKhamPha(list, getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);
 
@@ -115,7 +115,7 @@ public class KhamPhaFragment extends Fragment {
                 totalItems = manager.getItemCount();
                 scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
 
-                if (isScrolling && (currentItems + scrollOutItems + 3 == totalItems)) {
+                if (isScrolling && (currentItems + scrollOutItems + 4 == totalItems)) {
                     isScrolling = false;
                     fetchData();
                 }
@@ -127,16 +127,20 @@ public class KhamPhaFragment extends Fragment {
                     @Override
                     public void run() {
                         for (int i = 0; i < 10; i++) {
-                            list.add(Math.floor(Math.random() * 100) + "");
-//                    User user = new User(i + 1, "Ten" + (i + 1), new Address(i + 1, "Bac Lieu"));
-//                    list.add(user);
+                            BaiHat baiHat = new BaiHat(String.valueOf(i + 1), "Ten bai hat"
+                                    + String.valueOf(i + 1), "Ten ca si" + String.valueOf(i + 1));
+                            list.add(baiHat);
+
                             adapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
                         }
                     }
                 }, 1000);
             }
+
         });
         return view;
     }
+
+
 }
