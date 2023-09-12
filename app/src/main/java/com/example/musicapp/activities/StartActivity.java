@@ -36,20 +36,27 @@ public class StartActivity extends AppCompatActivity {
                 Log.e("log", String.valueOf(responseDefault));
                 if (responseDefault != null && responseDefault.getErrCode() == 0) {
                     SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
+
                     String accessToken = sharedPreferences.getString("accessToken", null);
                     String refreshToken = sharedPreferences.getString("refreshToken", null);
+                    String timeToken = sharedPreferences.getString("timeToken", null);
 
-                    Log.e("accessToken", accessToken);
-                    Log.e("refreshToken", refreshToken);
 
                     Intent intent;
-                    if (accessToken.isEmpty() || refreshToken.isEmpty()) {
+                    if (accessToken == null || accessToken.isEmpty() ||
+                            refreshToken == null || refreshToken.isEmpty() ||
+                            timeToken == null || timeToken.isEmpty()
+                    ) {
                         intent = new Intent(StartActivity.this, LoginActivity.class);
+                        startActivity(intent);
                     } else {
+                        Log.e("accessToken", accessToken);
+                        Log.e("refreshToken", refreshToken);
                         intent = new Intent(StartActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
 
-                    startActivity(intent);
+
                     finish();
                 }
             }

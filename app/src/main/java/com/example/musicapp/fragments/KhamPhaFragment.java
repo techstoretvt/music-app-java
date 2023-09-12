@@ -13,12 +13,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.musicapp.R;
+import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.AdapterKhamPha;
+import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.modal.anhxajson.Casi;
+import com.example.musicapp.modal.anhxajson.GetListBaiHat;
+import com.example.musicapp.modal.anhxajson.ResponseDefault;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,9 +53,12 @@ public class KhamPhaFragment extends Fragment {
     AdapterKhamPha adapter;
 
     Boolean isScrolling = false;
-    int currentItems, totalItems, scrollOutItems;
+    int currentItems, totalItems, scrollOutItems, offSetScroll;
     ArrayList list = null;
     ProgressBar progressBar;
+
+    int page = 1;
+    int maxCount = 15;
 
     public KhamPhaFragment() {
         // Required empty public constructor
@@ -88,59 +103,119 @@ public class KhamPhaFragment extends Fragment {
 
         list = new ArrayList<BaiHat>();
 
-        for (int i = 0; i < 20; i++) {
-            BaiHat baiHat = new BaiHat(String.valueOf(i + 1), "Ten bai hat"
-                    + String.valueOf(i + 1), "Ten ca si" + String.valueOf(i + 1));
-            list.add(baiHat);
-        }
+//        for (int i = 0; i < 20; i++) {
+//            BaiHat baiHat = new BaiHat(String.valueOf(i + 1), "Ten bai hat " + (i + ""),
+//                    "Loi bai hat", "anh bia", "link bai hat", new Casi("id",
+//                    "Ten ca si", "Mo ta", "link anh")
+//            );
+//            list.add(baiHat);
+//        }
+        getListBaiHat();
 
 
-        adapter = new AdapterKhamPha(list, getActivity());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(manager);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isScrolling = true;
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                currentItems = manager.getChildCount();
-                totalItems = manager.getItemCount();
-                scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
-
-                if (isScrolling && (currentItems + scrollOutItems + 4 == totalItems)) {
-                    isScrolling = false;
-                    fetchData();
-                }
-            }
-
-            private void fetchData() {
-                progressBar.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 10; i++) {
-                            BaiHat baiHat = new BaiHat(String.valueOf(i + 1), "Ten bai hat"
-                                    + String.valueOf(i + 1), "Ten ca si" + String.valueOf(i + 1));
-                            list.add(baiHat);
-
-                            adapter.notifyDataSetChanged();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                }, 1000);
-            }
-
-        });
         return view;
     }
 
+    private void getListBaiHat() {
+        Map<String, String> options = new HashMap<>();
+        options.put("maxCount", String.valueOf(maxCount));
+        options.put("page", "1");
+        options.put("order_style", "desc");
 
+        ApiServiceV1.apiServiceV1.getListBaiHatHome(options).enqueue(new Callback<GetListBaiHat>() {
+            @Override
+            public void onResponse(Call<GetListBaiHat> call, Response<GetListBaiHat> response) {
+                GetListBaiHat res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        ArrayList<BaiHat> baiHats = res.getData();
+                        list = baiHats;
+                        adapter = new AdapterKhamPha(list, getActivity());
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(manager);
+
+                        offSetScroll = 3;
+
+                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                super.onScrollStateChanged(recyclerView, newState);
+                                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                                    isScrolling = true;
+                                }
+                            }
+
+                            @Override
+                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                super.onScrolled(recyclerView, dx, dy);
+                                currentItems = manager.getChildCount();
+                                totalItems = manager.getItemCount();
+                                scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
+
+                                if (isScrolling && (currentItems + scrollOutItems + offSetScroll == totalItems)) {
+                                    isScrolling = false;
+                                    fetchData();
+                                }
+                            }
+
+
+                        });
+                        Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        Toast.makeText(getActivity(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetListBaiHat> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error call api get list bai hat", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+    }
+
+    private void fetchData() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        page++;
+
+        Map<String, String> options = new HashMap<>();
+        options.put("maxCount", String.valueOf(maxCount));
+        options.put("page", String.valueOf(page));
+        options.put("order_style", "desc");
+
+        ApiServiceV1.apiServiceV1.getListBaiHatHome(options).enqueue(new Callback<GetListBaiHat>() {
+            @Override
+            public void onResponse(Call<GetListBaiHat> call, Response<GetListBaiHat> response) {
+                GetListBaiHat res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        ArrayList<BaiHat> baiHats = res.getData();
+                        list.addAll(baiHats);
+                        offSetScroll += 3;
+                        progressBar.setVisibility(View.GONE);
+                    } else {
+                        Toast.makeText(getActivity(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetListBaiHat> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error call api get list bai hat", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+    }
+
+
+    //        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//            }
+//        }, 1000);
 }

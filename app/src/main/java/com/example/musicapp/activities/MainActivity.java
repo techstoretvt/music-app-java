@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -29,8 +31,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replace_fragment(new KhamPhaFragment());
 
-//        TextView tx = findViewById(R.id.textView11);
-//        tx.setText("hello 11");
+
+//        SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        editor.remove("accessToken");
+//        editor.remove("refreshToken");
+//        editor.apply();
 
         //binding bottom tabs
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -55,26 +62,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
-
-
-//    private void callApi() {
-//        ApiService.apiService.productConvert().enqueue(new Callback<Currency>() {
-//            @Override
-//            public void onResponse(Call<Currency> call, Response<Currency> response) {
-//                Toast.makeText(MainActivity.this, "Call api success", Toast.LENGTH_SHORT).show();
-//
-//                Currency currency = response.body();
-//                if (currency != null) {
-//                    idProduct.setText(String.valueOf(currency.getData().get(0).getId()));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Currency> call, Throwable t) {
-//                Toast.makeText(MainActivity.this, "Call api error", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 
 
 }

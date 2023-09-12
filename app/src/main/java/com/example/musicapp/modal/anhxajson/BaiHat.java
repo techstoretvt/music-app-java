@@ -3,12 +3,18 @@ package com.example.musicapp.modal.anhxajson;
 public class BaiHat {
     private String id;
     private String tenBaiHat;
-    private String tenCaSi;
+    private String loiBaiHat;
+    private String anhBia;
+    private String linkBaiHat;
+    private Casi casi;
 
-    public BaiHat(String id, String tenBaiHat, String tenCaSi) {
+    public BaiHat(String id, String tenBaiHat, String loiBaiHat, String anhBia, String linkBaiHat, Casi casi) {
         this.id = id;
         this.tenBaiHat = tenBaiHat;
-        this.tenCaSi = tenCaSi;
+        this.loiBaiHat = loiBaiHat;
+        this.anhBia = anhBia;
+        this.linkBaiHat = linkBaiHat;
+        this.casi = casi;
     }
 
     public String getId() {
@@ -27,11 +33,35 @@ public class BaiHat {
         this.tenBaiHat = tenBaiHat;
     }
 
-    public String getTenCaSi() {
-        return tenCaSi;
+    public String getLoiBaiHat() {
+        return loiBaiHat;
     }
 
-    public void setTenCaSi(String tenCaSi) {
-        this.tenCaSi = tenCaSi;
+    public void setLoiBaiHat(String loiBaiHat) {
+        this.loiBaiHat = loiBaiHat;
+    }
+
+    public String getAnhBia() {
+        return anhBia;
+    }
+
+    public void setAnhBia(String anhBia) {
+        this.anhBia = anhBia;
+    }
+
+    public String getLinkBaiHat() {
+        return linkBaiHat;
+    }
+
+    public void setLinkBaiHat(String linkBaiHat) {
+        this.linkBaiHat = linkBaiHat;
+    }
+
+    public Casi getCasi() {
+        return casi;
+    }
+
+    public void setCasi(Casi casi) {
+        this.casi = casi;
     }
 }

@@ -31,7 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    Button btnLogin, btnSignUp;
+    Button btnLogin, btnSignUp, btnQuenMK;
     TextView txtErrMess;
     TextInputEditText ipEmail, ipPassword;
     TextInputLayout layoutEmail, layoutPassword;
@@ -68,6 +68,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        btnQuenMK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, QuenMKActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -86,18 +94,19 @@ public class LoginActivity extends AppCompatActivity {
                         String accessToken = login.getAccessToken();
                         String refreshToken = login.getRefreshToken();
 
-                        Log.e("Access token", accessToken);
-                        Log.e("Refresh token", refreshToken);
-
                         SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
                         editor.putString("accessToken", accessToken);
                         editor.putString("refreshToken", refreshToken);
+                        long time = System.currentTimeMillis() + 3600000;
+                        editor.putString("timeToken", String.valueOf(time));
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
+
+                        finish();
 
                     } else {
                         txtErrMess.setText(login.getErrMessage());
@@ -188,6 +197,7 @@ public class LoginActivity extends AppCompatActivity {
     private void anhXaView() {
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
+        btnQuenMK = findViewById(R.id.btnQuenMatKhau);
 
         ipEmail = findViewById(R.id.email);
         ipPassword = findViewById(R.id.password);

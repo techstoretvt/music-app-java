@@ -1,12 +1,16 @@
 package com.example.musicapp.api;
 
+import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.Login;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.modal.body.BodyChangePass;
 import com.example.musicapp.modal.body.BodyLogin;
 import com.example.musicapp.modal.body.BodySignUp;
 import com.example.musicapp.modal.body.BodyXacNhan;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -15,6 +19,8 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface ApiServiceV1 {
     Gson gson = new GsonBuilder()
@@ -38,6 +44,15 @@ public interface ApiServiceV1 {
 
     @PUT("/api/v2/verify-code-for-create-user-mobile")
     Call<ResponseDefault> xacNhanEmail(@Body BodyXacNhan value);
+
+    @PUT("/apt/v1/get-code-verify-forget-pass")
+    Call<ResponseDefault> getCodeQuenMK(@Body BodyLogin value);
+
+    @PUT("/api/v1/change-pass-forget")
+    Call<ResponseDefault> doiMK(@Body BodyChangePass value);
+
+    @GET("/api/v2/lay-ds-bai-hat-public")
+    Call<GetListBaiHat> getListBaiHatHome(@QueryMap Map<String, String> options);
 
     /* Get
     1. Truyền tham số ?access_key=access_key
