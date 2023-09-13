@@ -1,6 +1,8 @@
 package com.example.musicapp.activities;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,6 +11,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.musicapp.R;
@@ -17,8 +22,10 @@ import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.w3c.dom.Text;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+
 
     }
 

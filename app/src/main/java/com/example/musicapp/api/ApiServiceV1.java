@@ -11,7 +11,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -27,9 +29,16 @@ public interface ApiServiceV1 {
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
             .create();
 
+    OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS) // Thời gian tối đa cho việc kết nối
+            .readTimeout(60, TimeUnit.SECONDS)    // Thời gian tối đa cho việc đọc dữ liệu
+            .writeTimeout(30, TimeUnit.SECONDS)   // Thời gian tối đa cho việc ghi dữ liệu
+            .build();
+
     ApiServiceV1 apiServiceV1 = new Retrofit.Builder()
             .baseUrl("https://techstoretvtserver2.onrender.com")
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
             .build()
             .create(ApiServiceV1.class);
 

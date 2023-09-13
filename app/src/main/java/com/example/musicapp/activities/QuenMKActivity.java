@@ -1,5 +1,6 @@
 package com.example.musicapp.activities;
 
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
@@ -23,6 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import androidx.transition.Transition;
+
 public class QuenMKActivity extends AppCompatActivity {
     Button btnLayMa;
 
@@ -34,7 +37,7 @@ public class QuenMKActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quen_mkactivity);
 
-        //anh xa view
+//        overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         anhXa();
 
         btnLayMa.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +87,7 @@ public class QuenMKActivity extends AppCompatActivity {
         });
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
