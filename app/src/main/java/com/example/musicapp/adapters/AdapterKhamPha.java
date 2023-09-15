@@ -2,6 +2,8 @@ package com.example.musicapp.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,9 @@ import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.utils.Common;
+import com.example.musicapp.utils.MediaCustom;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 
@@ -49,7 +54,6 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
         holder.stt.setText(String.valueOf(position + 1));
         holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
         holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
-//        holder.imgView.setImageURI(data.get(position).getAnhBia());
         Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
 
         if (position == 0) {
@@ -70,6 +74,27 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
             @Override
             public void onClick(View view) {
                 Log.e("Ten bai hat", data.get(holder.getAdapterPosition()).getTenBaiHat());
+                MainActivity.currentBaiHat = data.get(holder.getAdapterPosition());
+
+                // Create a new thread
+                MainActivity.phatNhacMini(data.get(holder.getAdapterPosition()).getAnhBia(),
+                        data.get(holder.getAdapterPosition()).getTenBaiHat(),
+                        data.get(holder.getAdapterPosition()).getCasi().getTenCaSi());
+
+                MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat());
+                MainActivity.typePlay = 1;
+                MainActivity.positionPlay = holder.getAdapterPosition();
+
+                if (holder.getAdapterPosition() == 0) {
+                    MainActivity.btnPrev.setVisibility(View.GONE);
+                } else {
+                    MainActivity.btnPrev.setVisibility(View.VISIBLE);
+                }
+
+//                ColorDrawable colorDrawable = new ColorDrawable(Color.GREEN);
+//                holder.linearLayout.setBackground(colorDrawable);
+
+
             }
         });
 

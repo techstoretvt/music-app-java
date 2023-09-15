@@ -54,7 +54,7 @@ public class KhamPhaFragment extends Fragment {
 
     Boolean isScrolling = false;
     int currentItems, totalItems, scrollOutItems, offSetScroll;
-    ArrayList list = null;
+    public static ArrayList<BaiHat> list = null;
     ProgressBar progressBar;
 
     int page = 1;
@@ -101,16 +101,42 @@ public class KhamPhaFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
         manager = new LinearLayoutManager(getActivity());
 
-        list = new ArrayList<BaiHat>();
 
-//        for (int i = 0; i < 20; i++) {
-//            BaiHat baiHat = new BaiHat(String.valueOf(i + 1), "Ten bai hat " + (i + ""),
-//                    "Loi bai hat", "anh bia", "link bai hat", new Casi("id",
-//                    "Ten ca si", "Mo ta", "link anh")
-//            );
-//            list.add(baiHat);
-//        }
-        getListBaiHat();
+        if (list == null) {
+            list = new ArrayList<BaiHat>();
+            getListBaiHat();
+        } else {
+            adapter = new AdapterKhamPha(list, getActivity());
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(manager);
+
+            offSetScroll = 3;
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                        isScrolling = true;
+                    }
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    currentItems = manager.getChildCount();
+                    totalItems = manager.getItemCount();
+                    scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
+
+                    if (isScrolling && (currentItems + scrollOutItems + offSetScroll == totalItems)) {
+                        isScrolling = false;
+                        fetchData();
+                    }
+                }
+
+
+            });
+        }
 
 
         return view;

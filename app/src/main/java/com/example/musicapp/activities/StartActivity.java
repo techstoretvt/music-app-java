@@ -1,6 +1,8 @@
 package com.example.musicapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +10,23 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
+import com.example.musicapp.adapters.AdapterKhamPha;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.utils.Common;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;

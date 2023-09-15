@@ -30,10 +30,11 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="5dp"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
+            android:id="@+id/imgNhac"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/anh_header"
@@ -41,6 +42,7 @@
             app:civ_border_color="#FF000000"/>
 
         <LinearLayout
+            android:id="@+id/layoutTencasi"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,6 +51,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tenBaiHat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chúng ta không thuộc về nhau ha haha ha"
@@ -58,6 +61,7 @@
                 android:singleLine="true"/>
 
             <TextView
+                android:id="@+id/tenCaSi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Son Tung MTP"
@@ -69,16 +73,20 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/btnPrev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_skip_previous_24"/>
 
         <ImageView
+            android:id="@+id/dungNhac"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_play_arrow_24"/>
+            android:layout_marginHorizontal="5dp"
+            android:src="@drawable/baseline_pause_24"/>
 
         <ImageView
+            android:id="@+id/btnNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_skip_next_24"/>

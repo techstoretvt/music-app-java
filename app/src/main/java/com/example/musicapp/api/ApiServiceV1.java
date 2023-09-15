@@ -30,8 +30,8 @@ public interface ApiServiceV1 {
             .create();
 
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS) // Thời gian tối đa cho việc kết nối
-            .readTimeout(60, TimeUnit.SECONDS)    // Thời gian tối đa cho việc đọc dữ liệu
+            .connectTimeout(200, TimeUnit.SECONDS) // Thời gian tối đa cho việc kết nối
+            .readTimeout(200, TimeUnit.SECONDS)    // Thời gian tối đa cho việc đọc dữ liệu
             .writeTimeout(30, TimeUnit.SECONDS)   // Thời gian tối đa cho việc ghi dữ liệu
             .build();
 

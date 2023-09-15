@@ -1,9 +1,17 @@
 package com.example.musicapp.utils;
 
+import android.media.MediaPlayer;
+import android.util.Log;
+
+import com.example.musicapp.activities.MainActivity;
+
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Common {
+
+    public static int maxCountBaiHatHome = 15;
 
     public static Boolean isValidEmail(String email) {
         // Biểu thức chính quy để kiểm tra địa chỉ email
@@ -18,5 +26,6 @@ public class Common {
         // Kiểm tra xem chuỗi khớp với biểu thức chính quy hay không
         return matcher.matches();
     }
+
 
 }
