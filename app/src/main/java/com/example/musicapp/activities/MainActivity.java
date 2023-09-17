@@ -32,6 +32,7 @@ import com.example.musicapp.adapters.AdapterKhamPha;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.fragments.CaNhanFragment;
+import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
@@ -71,14 +72,19 @@ public class MainActivity extends AppCompatActivity {
     public static int typePlay = 0; //0: khong co - 1: kham pha
     public static int positionPlay = -1;
 
+    public static String accessToken;
+
+    public static FragmentManager fragmentManager2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replace_fragment(new ThuVienFragment());
+        replace_fragment(new ChiTietThuVienFragment());
 
         anhXaView();
+
 
 //        SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -86,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
 //        editor.remove("accessToken");
 //        editor.remove("refreshToken");
 //        editor.apply();
+        SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
+
+        accessToken = sharedPreferences.getString("accessToken", null);
 
         //binding bottom tabs
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -206,14 +215,18 @@ public class MainActivity extends AppCompatActivity {
         layoutTencasi = findViewById(R.id.layoutTencasi);
         btnPrev = findViewById(R.id.btnPrev);
         btnNext = findViewById(R.id.btnNext);
+
+
     }
 
     private void replace_fragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager2 = fragmentManager;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
 
     //phat nhac mini
     public static void phatNhacMini(String urlAnh, String tenbh, String tencasi) {

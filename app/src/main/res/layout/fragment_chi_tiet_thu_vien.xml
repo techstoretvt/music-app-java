@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#000"
+    android:padding="20dp"
+    tools:context=".fragments.ChiTietThuVienFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:src="@drawable/baseline_keyboard_arrow_left_white"
+                    tools:ignore="MissingConstraints"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:src="@drawable/baseline_more_vert_24"
+                    tools:ignore="MissingConstraints"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_marginTop="20dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+
+                android:layout_gravity="center_horizontal"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="20dp"
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="#ccc"
+                app:cardMaxElevation="12dp"
+                app:cardPreventCornerOverlap="true">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:src="@drawable/anh_tram_2"
+                    android:background="#fff"
+                    tools:ignore="MissingConstraints"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên danh sách"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_height="wrap_content"
+                android:text="94 bài hát - 6 giờ 39 phút"
+                android:textColor="#fff"
+                android:textSize="12dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phát ngẫu nhiên"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:src="@drawable/baseline_add_circle_white"
+                        tools:ignore="MissingConstraints"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thêm bài"
+                        android:textColor="#fff"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#000"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>
+

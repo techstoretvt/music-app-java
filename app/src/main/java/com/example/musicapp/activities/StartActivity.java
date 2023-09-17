@@ -65,8 +65,18 @@ public class StartActivity extends AppCompatActivity {
                     } else {
                         Log.e("accessToken", accessToken);
                         Log.e("refreshToken", refreshToken);
-                        intent = new Intent(StartActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        Log.e("timeToken", timeToken);
+                        long time = System.currentTimeMillis();
+                        Log.e("timeCurrent", String.valueOf(time));
+                        if (Long.parseLong(timeToken) < time) {
+                            intent = new Intent(StartActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            intent = new Intent(StartActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+
+
                     }
 
 

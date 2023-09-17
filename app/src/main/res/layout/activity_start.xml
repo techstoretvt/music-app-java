@@ -11,8 +11,8 @@
         android:layout_height="match_parent"
         android:contentDescription="anh header"
         android:fitsSystemWindows="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/girl1"
+        android:scaleType="fitXY"
+        android:src="@drawable/anh_tram_3"
         tools:ignore="MissingConstraints"/>
 
     <LinearLayout

@@ -1,20 +1,45 @@
 package com.example.musicapp.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.musicapp.R;
 import com.example.musicapp.activities.AddPlayListActivity;
+import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.adapters.AdapterKhamPha;
+import com.example.musicapp.adapters.AdapterThuVien;
+import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.modal.anhxajson.DanhSachPhat;
+import com.example.musicapp.modal.anhxajson.GetListBaiHat;
+import com.example.musicapp.modal.anhxajson.GetListPlaylist;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +57,12 @@ public class ThuVienFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    RecyclerView recyclerView;
+    LinearLayoutManager manager;
+    AdapterThuVien adapter;
     Button btnAddNew;
+
+    public static ArrayList<DanhSachPhat> danhSachPhats = null;
 
     public ThuVienFragment() {
         // Required empty public constructor
@@ -73,6 +103,21 @@ public class ThuVienFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_thu_vien, container, false);
         btnAddNew = view.findViewById(R.id.btnAddNew);
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
+        manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setNestedScrollingEnabled(false);
+
+        //get danh sach phat
+        if (danhSachPhats != null) {
+            adapter = new AdapterThuVien(danhSachPhats, getActivity());
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(manager);
+        } else {
+            getDanhSachPhat();
+        }
+
         btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,13 +131,52 @@ public class ThuVienFragment extends Fragment {
         return view;
     }
 
+    private void getDanhSachPhat() {
+        Toast.makeText(getContext(), "vao",
+                Toast.LENGTH_SHORT).show();
+
+        String header = "bearer " + MainActivity.accessToken;
+        ApiServiceV1.apiServiceV1.getDanhSachPhat(header).enqueue(new Callback<GetListPlaylist>() {
+            @Override
+            public void onResponse(Call<GetListPlaylist> call, Response<GetListPlaylist> response) {
+                GetListPlaylist res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        danhSachPhats = res.getData();
+
+                        adapter = new AdapterThuVien(danhSachPhats, getActivity());
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(manager);
+
+                        Toast.makeText(getContext(), "Success",
+                                Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetListPlaylist> call, Throwable t) {
+                Toast.makeText(getContext(), "Error from api get danh sach in ThuVienFragment",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 100 && resultCode == 101) {
-            String status = data.getStringExtra("status");
-            Log.e("res", status);
+            Bundle bundle = data.getBundleExtra("myBundle");
+            DanhSachPhat newData = (DanhSachPhat) bundle.getSerializable("newData");
+            danhSachPhats.add(newData);
+            adapter.notifyDataSetChanged();
         }
     }
 }

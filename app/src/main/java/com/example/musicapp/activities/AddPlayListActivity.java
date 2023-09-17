@@ -7,13 +7,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.musicapp.R;
+import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.modal.anhxajson.DanhSachPhat;
+import com.example.musicapp.modal.anhxajson.ThemDSPhat;
+import com.example.musicapp.modal.body.BodyThemDSPhat;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.Serializable;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddPlayListActivity extends AppCompatActivity {
 
@@ -64,7 +76,45 @@ public class AddPlayListActivity extends AppCompatActivity {
                     layoutTenDS.setError("*Bắc buộc");
                     return;
                 }
+                layoutTenDS.setErrorEnabled(false);
+                layoutTenDS.setError("");
 
+                String header = "bearer " + MainActivity.accessToken;
+                String strNameDS = String.valueOf(tenDS.getText());
+
+                BodyThemDSPhat body = new BodyThemDSPhat(strNameDS);
+
+
+                ApiServiceV1.apiServiceV1.themDanhSachPhat(body, header).enqueue(new Callback<ThemDSPhat>() {
+                    @Override
+                    public void onResponse(Call<ThemDSPhat> call, Response<ThemDSPhat> response) {
+                        ThemDSPhat res = response.body();
+
+                        if (res != null) {
+                            if (res.getErrCode() == 0) {
+                                DanhSachPhat ds = res.getData();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("newData", ds);
+                                intent.putExtra("myBundle", bundle);
+                                setResult(101, intent);
+                                finish();
+                            } else {
+                                layoutTenDS.setErrorEnabled(true);
+                                layoutTenDS.setError(res.getErrMessage());
+                                if (res.getStatus() == 401) {
+                                    System.exit(0);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ThemDSPhat> call, Throwable t) {
+                        Toast.makeText(AddPlayListActivity.this,
+                                "Error from them ds phat in AddPlayListActivity",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });

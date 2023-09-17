@@ -222,6 +222,7 @@ public class KhamPhaFragment extends Fragment {
                         ArrayList<BaiHat> baiHats = res.getData();
                         list.addAll(baiHats);
                         offSetScroll += 3;
+                        adapter.notifyDataSetChanged();
                         progressBar.setVisibility(View.GONE);
                     } else {
                         Toast.makeText(getActivity(), res.getErrMessage(), Toast.LENGTH_SHORT)

@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         editor.putString("accessToken", accessToken);
                         editor.putString("refreshToken", refreshToken);
-                        long time = System.currentTimeMillis() + 3600000;
+                        long time = System.currentTimeMillis() + 60000 * 10;
                         editor.putString("timeToken", String.valueOf(time));
                         editor.apply();
 
