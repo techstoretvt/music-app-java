@@ -1,6 +1,7 @@
 package com.example.musicapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
+import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.fragments.KhamPhaFragment;
+import com.example.musicapp.fragments.ModalBottomSheet;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
@@ -28,6 +31,9 @@ import java.util.ArrayList;
 
 public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder> {
 
+    public static String idBaiHat = null;
+
+    public static ModalBottomSheet md = new ModalBottomSheet();
     ArrayList<BaiHat> data;
     Context context;
 
@@ -73,7 +79,6 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("Ten bai hat", data.get(holder.getAdapterPosition()).getTenBaiHat());
                 MainActivity.currentBaiHat = data.get(holder.getAdapterPosition());
 
                 // Create a new thread
@@ -94,10 +99,22 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
 //                ColorDrawable colorDrawable = new ColorDrawable(Color.GREEN);
 //                holder.linearLayout.setBackground(colorDrawable);
 
+                MainActivity.layoutTencasi.callOnClick();
+
 
             }
         });
 
+        holder.btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+
+                md.show(MainActivity.supportFragmentManager, ModalBottomSheet.TAG);
+
+                idBaiHat = data.get(holder.getAdapterPosition()).getId();
+            }
+        });
 
     }
 
@@ -105,7 +122,7 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
         TextView stt, tenBaiHat, tenCasi;
         LinearLayout linearLayout;
 
-        ImageView imgView;
+        ImageView imgView, btnMore;
 
         public VHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +131,7 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
             tenBaiHat = itemView.findViewById(R.id.tenBaiHat);
             linearLayout = itemView.findViewById(R.id.layoutBaiHat);
             imgView = itemView.findViewById(R.id.imgView);
+            btnMore = itemView.findViewById(R.id.btnMore);
         }
     }
 }

@@ -18,6 +18,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -31,9 +32,11 @@ import com.example.musicapp.R;
 import com.example.musicapp.adapters.AdapterKhamPha;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.databinding.ActivityMainBinding;
+import com.example.musicapp.fragments.BottomSheetThemBHVaoDS;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
+import com.example.musicapp.fragments.ModalBottomSheet;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
 
-    LinearLayout layoutTencasi;
+    public static LinearLayout layoutTencasi;
 
     public static LinearLayout layoutAudio;
     public static ImageView imgNhac, btnPrev, dungNhac = null;
@@ -76,15 +79,25 @@ public class MainActivity extends AppCompatActivity {
 
     public static FragmentManager fragmentManager2;
 
+    private long lastBackPressedTime;
+
+    public static Boolean isChiTietThuVien = false;
+
+    public static String idDanhSachPhat = null;
+
+    public static FragmentManager supportFragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replace_fragment(new ChiTietThuVienFragment());
+        replace_fragment(new KhamPhaFragment());
 
         anhXaView();
 
+//        BottomSheetThemBHVaoDS md = new BottomSheetThemBHVaoDS();
+//        md.show(MainActivity.supportFragmentManager, BottomSheetThemBHVaoDS.TAG);
 
 //        SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -200,10 +213,30 @@ public class MainActivity extends AppCompatActivity {
 
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
+
+
                 }
 
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (isChiTietThuVien) {
+            replace_fragment(new ThuVienFragment());
+            isChiTietThuVien = false;
+            return;
+        }
+
+        if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
+            finish();
+        } else {
+            Toast.makeText(this, "Nhấn back lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show();
+        }
+        lastBackPressedTime = System.currentTimeMillis();
     }
 
     private void anhXaView() {
@@ -215,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         layoutTencasi = findViewById(R.id.layoutTencasi);
         btnPrev = findViewById(R.id.btnPrev);
         btnNext = findViewById(R.id.btnNext);
-
+        supportFragmentManager = getSupportFragmentManager();
 
     }
 
@@ -245,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
         animator.start();
 
     }
+
 
 }
 

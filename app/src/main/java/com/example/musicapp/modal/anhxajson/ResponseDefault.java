@@ -1,12 +1,20 @@
 package com.example.musicapp.modal.anhxajson;
 
 public class ResponseDefault {
-    private int errCode;
+    private int errCode, status;
     private String errMessage;
 
     public ResponseDefault(int errCode, String errMessage) {
         this.errCode = errCode;
         this.errMessage = errMessage;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public int getErrCode() {

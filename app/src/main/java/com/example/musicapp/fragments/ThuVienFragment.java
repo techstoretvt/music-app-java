@@ -59,7 +59,7 @@ public class ThuVienFragment extends Fragment {
 
     RecyclerView recyclerView;
     LinearLayoutManager manager;
-    AdapterThuVien adapter;
+    public static AdapterThuVien adapter;
     Button btnAddNew;
 
     public static ArrayList<DanhSachPhat> danhSachPhats = null;
@@ -132,8 +132,6 @@ public class ThuVienFragment extends Fragment {
     }
 
     private void getDanhSachPhat() {
-        Toast.makeText(getContext(), "vao",
-                Toast.LENGTH_SHORT).show();
 
         String header = "bearer " + MainActivity.accessToken;
         ApiServiceV1.apiServiceV1.getDanhSachPhat(header).enqueue(new Callback<GetListPlaylist>() {
@@ -147,9 +145,6 @@ public class ThuVienFragment extends Fragment {
                         adapter = new AdapterThuVien(danhSachPhats, getActivity());
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(manager);
-
-                        Toast.makeText(getContext(), "Success",
-                                Toast.LENGTH_SHORT).show();
 
                     } else {
                         if (res.getStatus() == 401) {

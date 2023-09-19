@@ -1,16 +1,28 @@
 package com.example.musicapp.modal.anhxajson;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class DanhSachPhat implements Serializable {
     private String id;
     private String tenDanhSach;
     private String idUser;
 
-    public DanhSachPhat(String id, String tenDanhSach, String idUser) {
+    private ArrayList<ChiTietDanhSachPhat> chiTietDanhSachPhats;
+
+    public DanhSachPhat(String id, String tenDanhSach, String idUser, ArrayList<ChiTietDanhSachPhat> chiTietDanhSachPhats) {
         this.id = id;
         this.tenDanhSach = tenDanhSach;
         this.idUser = idUser;
+        this.chiTietDanhSachPhats = chiTietDanhSachPhats;
+    }
+
+    public ArrayList<ChiTietDanhSachPhat> getChiTietDanhSachPhats() {
+        return chiTietDanhSachPhats;
+    }
+
+    public void setChiTietDanhSachPhats(ArrayList<ChiTietDanhSachPhat> chiTietDanhSachPhats) {
+        this.chiTietDanhSachPhats = chiTietDanhSachPhats;
     }
 
     public String getId() {

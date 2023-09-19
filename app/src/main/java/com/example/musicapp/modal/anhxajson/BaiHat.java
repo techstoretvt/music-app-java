@@ -8,6 +8,8 @@ public class BaiHat {
     private String linkBaiHat;
     private Casi casi;
 
+    private long thoiGian;
+
     public BaiHat(String id, String tenBaiHat, String loiBaiHat, String anhBia, String linkBaiHat, Casi casi) {
         this.id = id;
         this.tenBaiHat = tenBaiHat;
@@ -15,6 +17,14 @@ public class BaiHat {
         this.anhBia = anhBia;
         this.linkBaiHat = linkBaiHat;
         this.casi = casi;
+    }
+
+    public long getThoiGian() {
+        return thoiGian;
+    }
+
+    public void setThoiGian(long thoiGian) {
+        this.thoiGian = thoiGian;
     }
 
     public String getId() {

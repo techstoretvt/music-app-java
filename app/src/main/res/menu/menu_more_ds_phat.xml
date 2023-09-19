@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/option_1"
+        android:icon="@drawable/ic_voice"
+        android:title="Thêm bái hát" />
+    <item android:id="@+id/option_2"
+        android:icon="@drawable/ic_voice"
+        android:title="Chính sửa danh sách" />
+    <item android:id="@+id/option_3"
+        android:icon="@drawable/ic_voice"
+        android:title="Xóa danh sách" />
+</menu>

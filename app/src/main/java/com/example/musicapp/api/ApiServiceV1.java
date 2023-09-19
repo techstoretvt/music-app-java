@@ -1,5 +1,6 @@
 package com.example.musicapp.api;
 
+import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
 import com.example.musicapp.modal.anhxajson.Login;
@@ -8,8 +9,10 @@ import com.example.musicapp.modal.anhxajson.ThemDSPhat;
 import com.example.musicapp.modal.body.BodyChangePass;
 import com.example.musicapp.modal.body.BodyLogin;
 import com.example.musicapp.modal.body.BodySignUp;
+import com.example.musicapp.modal.body.BodyThemBHVaoDS;
 import com.example.musicapp.modal.body.BodyThemDSPhat;
 import com.example.musicapp.modal.body.BodyXacNhan;
+import com.example.musicapp.modal.body.BodyXoaDSPhat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,6 +24,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -34,8 +38,8 @@ public interface ApiServiceV1 {
             .create();
 
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(200, TimeUnit.SECONDS) // Thời gian tối đa cho việc kết nối
-            .readTimeout(200, TimeUnit.SECONDS)    // Thời gian tối đa cho việc đọc dữ liệu
+            .connectTimeout(300, TimeUnit.SECONDS) // Thời gian tối đa cho việc kết nối
+            .readTimeout(300, TimeUnit.SECONDS)    // Thời gian tối đa cho việc đọc dữ liệu
             .writeTimeout(30, TimeUnit.SECONDS)   // Thời gian tối đa cho việc ghi dữ liệu
             .build();
 
@@ -72,6 +76,16 @@ public interface ApiServiceV1 {
 
     @POST("/api/v2/them-danh-sach-phat")
     Call<ThemDSPhat> themDanhSachPhat(@Body BodyThemDSPhat name, @Header("authorization") String authorization);
+
+    @GET("/api/v2/lay-bai-hat-trong-danh-sach")
+    Call<GetDSPhatById> getDanhSachPhatById(@Query("idDanhSachPhat") String idDanhSachPhat
+            , @Header("authorization") String authorization);
+
+    @POST("/api/v2/them-bai-hat-vao-danh-sach")
+    Call<ResponseDefault> themBaiHatVaoDS(@Body BodyThemBHVaoDS body, @Header("authorization") String authorization);
+
+    @DELETE("/api/v2/xoa-danh-sach-phat")
+    Call<ResponseDefault> xoaDanhSachPhatById(@Query("idDanhSachPhat") String idDanhSachPhat, @Header("authorization") String authorization);
 
     /* Get
     1. Truyền tham số ?access_key=access_key

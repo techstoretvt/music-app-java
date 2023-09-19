@@ -3,6 +3,8 @@
     <!-- Màu nền chính -->
     <color name="primary_color">#BDB3FF</color>
 
+    <color name="color_transparent">#00000020</color>
+
     <!-- Màu nền thứ cấp -->
     <color name="secondary_color">#000000</color>
 

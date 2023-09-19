@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
-            app:title="KHÁM PHÁ"
+            app:title="THƯ VIỆN"
             app:menu="@menu/top_app_bar"
             android:background="@android:color/transparent"
             android:elevation="0dp"

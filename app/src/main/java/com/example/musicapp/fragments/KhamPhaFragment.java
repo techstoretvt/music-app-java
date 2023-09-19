@@ -186,8 +186,6 @@ public class KhamPhaFragment extends Fragment {
 
 
                         });
-                        Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT)
-                                .show();
                     } else {
                         Toast.makeText(getActivity(), res.getErrMessage(), Toast.LENGTH_SHORT)
                                 .show();
