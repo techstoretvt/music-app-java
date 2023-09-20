@@ -1,12 +1,12 @@
 package com.example.musicapp.fragments;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.AddPlayListActivity;
 import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.adapters.AdapterKhamPha;
-import com.example.musicapp.adapters.AdapterThuVien;
+import com.example.musicapp.adapters.BaiHatAdapter;
+import com.example.musicapp.adapters.DanhSachPhatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
@@ -35,21 +35,21 @@ public class BottomSheetThemBHVaoDS extends BottomSheetDialogFragment {
 
     RecyclerView recyclerView;
     LinearLayoutManager manager;
-    AdapterThuVien adapter;
+    DanhSachPhatAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.item_bottom_sheet_them_bh_vao_ds, container, false);
 
-        ImageView btnAddNew = view.findViewById(R.id.btnAddNew);
+        LinearLayout btnAddNew = view.findViewById(R.id.btnAddNew);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
         manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-        AdapterThuVien.isAddDS = true;
+        DanhSachPhatAdapter.isAddDS = true;
 
         if (ThuVienFragment.danhSachPhats != null) {
-            adapter = new AdapterThuVien(ThuVienFragment.danhSachPhats, getActivity());
+            adapter = new DanhSachPhatAdapter(ThuVienFragment.danhSachPhats, getActivity());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(manager);
         } else {
@@ -69,8 +69,6 @@ public class BottomSheetThemBHVaoDS extends BottomSheetDialogFragment {
     }
 
     private void getDanhSachPhat() {
-        Toast.makeText(getContext(), "vao",
-                Toast.LENGTH_SHORT).show();
 
         String header = "bearer " + MainActivity.accessToken;
         ApiServiceV1.apiServiceV1.getDanhSachPhat(header).enqueue(new Callback<GetListPlaylist>() {
@@ -81,12 +79,9 @@ public class BottomSheetThemBHVaoDS extends BottomSheetDialogFragment {
                     if (res.getErrCode() == 0) {
                         ThuVienFragment.danhSachPhats = res.getData();
 
-                        adapter = new AdapterThuVien(ThuVienFragment.danhSachPhats, getActivity());
+                        adapter = new DanhSachPhatAdapter(ThuVienFragment.danhSachPhats, getActivity());
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(manager);
-
-                        Toast.makeText(getContext(), "Success",
-                                Toast.LENGTH_SHORT).show();
 
                     } else {
                         if (res.getStatus() == 401) {
@@ -118,8 +113,8 @@ public class BottomSheetThemBHVaoDS extends BottomSheetDialogFragment {
 
     @Override
     public void onDestroy() {
-        AdapterThuVien.isAddDS = false;
-        AdapterKhamPha.idBaiHat = null;
+        DanhSachPhatAdapter.isAddDS = false;
+        BaiHatAdapter.idBaiHat = null;
         super.onDestroy();
     }
 }

@@ -82,9 +82,10 @@
             android:contentDescription="anh header"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
             android:src="@drawable/baseline_more_vert_24"/>
 
     </LinearLayout>
-
 
 </LinearLayout>

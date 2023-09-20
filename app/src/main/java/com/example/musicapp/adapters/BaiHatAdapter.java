@@ -1,11 +1,6 @@
 package com.example.musicapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,26 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
-import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.fragments.KhamPhaFragment;
-import com.example.musicapp.fragments.ModalBottomSheet;
+import com.example.musicapp.fragments.BsBaiHat;
+import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
-import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 
-public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder> {
+public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
     public static String idBaiHat = null;
 
-    public static ModalBottomSheet md = new ModalBottomSheet();
+    public static BsBaiHat md = new BsBaiHat();
     ArrayList<BaiHat> data;
     Context context;
 
-    public AdapterKhamPha(ArrayList<BaiHat> data, Context context) {
+    public BaiHatAdapter(ArrayList<BaiHat> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -46,7 +38,7 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
     @Override
     public VHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_khampha, parent, false);
+        View view = inflater.inflate(R.layout.item_baihat, parent, false);
         return new VHolder(view);
     }
 
@@ -79,7 +71,17 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.currentBaiHat = data.get(holder.getAdapterPosition());
+
+                MediaCustom.position = holder.getAdapterPosition();
+                MediaCustom.danhSachPhats = data;
+
+                if (ChiTietThuVienFragment.isChiTietDS) {
+
+                } else {
+                    //kham pha
+                    MediaCustom.typeDanhSachPhat = 1;
+                    MediaCustom.tenLoai = "Khám phá";
+                }
 
                 // Create a new thread
                 MainActivity.phatNhacMini(data.get(holder.getAdapterPosition()).getAnhBia(),
@@ -87,8 +89,6 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
                         data.get(holder.getAdapterPosition()).getCasi().getTenCaSi());
 
                 MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat());
-                MainActivity.typePlay = 1;
-                MainActivity.positionPlay = holder.getAdapterPosition();
 
                 if (holder.getAdapterPosition() == 0) {
                     MainActivity.btnPrev.setVisibility(View.GONE);
@@ -99,7 +99,8 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
 //                ColorDrawable colorDrawable = new ColorDrawable(Color.GREEN);
 //                holder.linearLayout.setBackground(colorDrawable);
 
-                MainActivity.layoutTencasi.callOnClick();
+
+//                MainActivity.layoutTencasi.callOnClick();
 
 
             }
@@ -110,7 +111,7 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
             public void onClick(View view) {
                 //
 
-                md.show(MainActivity.supportFragmentManager, ModalBottomSheet.TAG);
+                md.show(MainActivity.supportFragmentManager, BsBaiHat.TAG);
 
                 idBaiHat = data.get(holder.getAdapterPosition()).getId();
             }
@@ -123,6 +124,7 @@ public class AdapterKhamPha extends RecyclerView.Adapter<AdapterKhamPha.VHolder>
         LinearLayout linearLayout;
 
         ImageView imgView, btnMore;
+
 
         public VHolder(@NonNull View itemView) {
             super(itemView);

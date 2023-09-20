@@ -2,12 +2,18 @@ package com.example.musicapp.utils;
 
 import android.media.MediaPlayer;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,12 +21,23 @@ public class MediaCustom {
 
     public static MediaPlayer mediaPlayer = new MediaPlayer();
 
+    public static ArrayList<BaiHat> danhSachPhats = null;
+
+    public static int typeDanhSachPhat;
+
+    public static String tenLoai;
+
+    public static int position = -1;
+
+    public static Boolean loading = false;
+    public static Boolean isPlay = false;
+
     public static Boolean isData = false;
 
     public static String strTotalTime = "";
     public static int totalTime = 0;
 
-    public static void phatNhac(String url) {
+    public static Boolean phatNhac(String url) {
         try {
             mediaPlayer.reset();
             mediaPlayer.setDataSource(url);
@@ -31,7 +48,7 @@ public class MediaCustom {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    MainActivity.isPlay = false;
+                    isPlay = false;
                     if (MainActivity.dungNhac != null) {
                         MainActivity.dungNhac.setImageResource(R.drawable.baseline_play_arrow_24);
                     }
@@ -40,6 +57,14 @@ public class MediaCustom {
                         ChiTietNhacActivity.btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
                     }
 
+                }
+            });
+
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    Log.e("vao", "");
+                    loading = false;
                 }
             });
 
@@ -54,12 +79,16 @@ public class MediaCustom {
 
             isData = true;
 
-            MainActivity.isPlay = true;
-
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+
+
+            isPlay = true;
+
+            return true;
 
         } catch (IOException e) {
             Log.e("error phat am thanh", e.getMessage());
+            return false;
 
         }
     }
@@ -67,15 +96,97 @@ public class MediaCustom {
     public static void play() {
         if (isData) {
             mediaPlayer.start();
-            MainActivity.isPlay = true;
+            isPlay = true;
         }
     }
 
     public static void pause() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            MainActivity.isPlay = false;
+            isPlay = false;
         }
+    }
+
+    public static Boolean next() {
+        if (loading) {
+            return false;
+        }
+        loading = true;
+
+        int size = danhSachPhats.size();
+
+        if (typeDanhSachPhat == 1) {
+            //kham pha
+            int newPosition = (position + 1) % size;
+            Boolean statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+
+            if (statusPhatNhac) {
+                position = newPosition;
+
+                String anhBia = MediaCustom.danhSachPhats.get(position)
+                        .getAnhBia();
+                Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
+                        .into(MainActivity.imgNhac);
+
+                MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+                MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+                MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+
+                if (newPosition > 0) {
+                    MainActivity.btnPrev.setVisibility(View.VISIBLE);
+                } else {
+                    MainActivity.btnPrev.setVisibility(View.GONE);
+                }
+
+            } else {
+                Toast.makeText(MainActivity.dungNhac.getContext(), "sfsdf", Toast.LENGTH_SHORT)
+                        .show();
+            }
+            return statusPhatNhac;
+        }
+
+        return false;
+    }
+
+    public static Boolean prev() {
+        if (loading) {
+            return false;
+        }
+        loading = true;
+
+        int size = danhSachPhats.size();
+
+        if (typeDanhSachPhat == 1) {
+            //kham pha
+            int newPosition = position - 1;
+            Boolean statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+
+            if (statusPhatNhac) {
+                position = newPosition;
+
+                String anhBia = MediaCustom.danhSachPhats.get(position)
+                        .getAnhBia();
+                Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
+                        .into(MainActivity.imgNhac);
+
+                MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+                MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+                MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+
+                if (newPosition > 0) {
+                    MainActivity.btnPrev.setVisibility(View.VISIBLE);
+                } else {
+                    MainActivity.btnPrev.setVisibility(View.GONE);
+                }
+
+            } else {
+                Toast.makeText(MainActivity.dungNhac.getContext(), "sfsdf", Toast.LENGTH_SHORT)
+                        .show();
+            }
+            return statusPhatNhac;
+        }
+
+        return false;
     }
 
     public static String getStrCurrentTime() {

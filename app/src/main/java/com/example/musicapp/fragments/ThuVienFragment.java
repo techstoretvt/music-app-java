@@ -1,41 +1,29 @@
 package com.example.musicapp.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
 import com.example.musicapp.activities.AddPlayListActivity;
 import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.adapters.AdapterKhamPha;
-import com.example.musicapp.adapters.AdapterThuVien;
+import com.example.musicapp.adapters.DanhSachPhatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
-import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +47,7 @@ public class ThuVienFragment extends Fragment {
 
     RecyclerView recyclerView;
     LinearLayoutManager manager;
-    public static AdapterThuVien adapter;
+    public static DanhSachPhatAdapter adapter;
     Button btnAddNew;
 
     public static ArrayList<DanhSachPhat> danhSachPhats = null;
@@ -111,7 +99,7 @@ public class ThuVienFragment extends Fragment {
 
         //get danh sach phat
         if (danhSachPhats != null) {
-            adapter = new AdapterThuVien(danhSachPhats, getActivity());
+            adapter = new DanhSachPhatAdapter(danhSachPhats, getActivity());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(manager);
         } else {
@@ -142,7 +130,7 @@ public class ThuVienFragment extends Fragment {
                     if (res.getErrCode() == 0) {
                         danhSachPhats = res.getData();
 
-                        adapter = new AdapterThuVien(danhSachPhats, getActivity());
+                        adapter = new DanhSachPhatAdapter(danhSachPhats, getActivity());
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(manager);
 

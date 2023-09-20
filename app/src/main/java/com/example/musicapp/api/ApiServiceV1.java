@@ -85,7 +85,13 @@ public interface ApiServiceV1 {
     Call<ResponseDefault> themBaiHatVaoDS(@Body BodyThemBHVaoDS body, @Header("authorization") String authorization);
 
     @DELETE("/api/v2/xoa-danh-sach-phat")
-    Call<ResponseDefault> xoaDanhSachPhatById(@Query("idDanhSachPhat") String idDanhSachPhat, @Header("authorization") String authorization);
+    Call<ResponseDefault> xoaDanhSachPhatById(@Query("idDanhSachPhat") String idDanhSachPhat,
+                                              @Header("authorization") String authorization);
+
+    @DELETE("/api/v2/xoa-bai-hat-khoi-danh-sach")
+    Call<ResponseDefault> xoaBaiHatKhoiDS(@Query("idDanhSachPhat") String idDanhSachPhat,
+                                          @Query("idBaiHat") String idBaiHat,
+                                          @Header("authorization") String authorization);
 
     /* Get
     1. Truyền tham số ?access_key=access_key

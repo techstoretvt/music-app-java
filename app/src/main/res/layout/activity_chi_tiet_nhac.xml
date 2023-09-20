@@ -49,8 +49,10 @@
 
 
         <ImageView
+            android:id="@+id/btnMore"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:cropToPadding="true"
             android:src="@drawable/baseline_more_vert_24"/>
     </LinearLayout>
 
@@ -178,21 +180,27 @@
 
             <ImageView
                 android:id="@+id/btnPrev"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
                 android:src="@drawable/baseline_skip_previous_white"/>
 
             <ImageView
                 android:id="@+id/btnPausePlay"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
                 android:layout_marginHorizontal="10dp"
                 android:src="@drawable/baseline_pause_white"/>
 
             <ImageView
                 android:id="@+id/btnNext"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="10dp"
                 android:src="@drawable/baseline_skip_next_white"/>
         </LinearLayout>
 

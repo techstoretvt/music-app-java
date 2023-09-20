@@ -2,6 +2,7 @@ package com.example.musicapp.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,10 +28,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.adapters.AdapterKhamPha;
+import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
-import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.modal.anhxajson.ChiTietDanhSachPhat;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
@@ -62,14 +62,20 @@ public class ChiTietThuVienFragment extends Fragment {
     RelativeLayout layoutBtn;
     RecyclerView recyclerView;
     LinearLayoutManager manager;
-    AdapterKhamPha adapter;
 
-    ArrayList<BaiHat> list;
 
-    TextView chuaCoBaihat, tenDS, slBaiHat;
+    TextView chuaCoBaihat, tenDS;
+    public static TextView slBaiHat;
 
     ImageView btnBack, btnMore, img1anh, anh1, anh2, anh3, anh4;
     LinearLayout layout4anh;
+
+    public static Boolean isChiTietDS = false;
+    public static String idDanhSachPhat = null;
+
+    public static ArrayList<BaiHat> danhBaiHats = null;
+    public static BaiHatAdapter adapter;
+
 
     public ChiTietThuVienFragment() {
         // Required empty public constructor
@@ -99,7 +105,6 @@ public class ChiTietThuVienFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chi_tiet_thu_vien, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-//        manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         manager = new GridLayoutManager(getActivity(), 1);
         layoutBtn = view.findViewById(R.id.layoutBtn);
         chuaCoBaihat = view.findViewById(R.id.chuaCoBaihat);
@@ -114,8 +119,10 @@ public class ChiTietThuVienFragment extends Fragment {
         anh3 = view.findViewById(R.id.anh3);
         anh4 = view.findViewById(R.id.anh4);
 
+        isChiTietDS = true;
 
-        list = new ArrayList<>();
+
+        danhBaiHats = new ArrayList<>();
 
         layDanhSachBaiHat();
 
@@ -157,7 +164,7 @@ public class ChiTietThuVienFragment extends Fragment {
                                 // Xử lý khi người dùng nhấn vào nút OK
 
 
-                                String idDanhSachPhat = MainActivity.idDanhSachPhat;
+                                String idDanhSachPhat = ChiTietThuVienFragment.idDanhSachPhat;
                                 String header = "bearer " + MainActivity.accessToken;
                                 BodyXoaDSPhat body = new BodyXoaDSPhat(idDanhSachPhat);
 
@@ -167,8 +174,9 @@ public class ChiTietThuVienFragment extends Fragment {
                                         ResponseDefault res = response.body();
                                         if (res != null) {
                                             if (res.getErrCode() == 0) {
-                                                for (DanhSachPhat i : ThuVienFragment.danhSachPhats) {
-                                                    if (i.getId() == idDanhSachPhat) {
+                                                ArrayList<DanhSachPhat> arr = ThuVienFragment.danhSachPhats;
+                                                for (DanhSachPhat i : arr) {
+                                                    if (i.getId().equals(idDanhSachPhat)) {
                                                         ThuVienFragment.danhSachPhats.remove(i);
                                                     }
                                                 }
@@ -212,8 +220,16 @@ public class ChiTietThuVienFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isChiTietDS = false;
+        idDanhSachPhat = null;
+        danhBaiHats = null;
+    }
+
     private void layDanhSachBaiHat() {
-        String idDanhSachPhat = MainActivity.idDanhSachPhat;
+        String idDanhSachPhat = ChiTietThuVienFragment.idDanhSachPhat;
         String header = "bearer " + MainActivity.accessToken;
 
         ApiServiceV1.apiServiceV1.getDanhSachPhatById(idDanhSachPhat, header).enqueue(new Callback<GetDSPhatById>() {
@@ -263,10 +279,10 @@ public class ChiTietThuVienFragment extends Fragment {
                         long tgDanhSach = 0;
 
 
-                        ArrayList<BaiHat> listbh = new ArrayList<>();
+                        danhBaiHats = new ArrayList<>();
 
                         for (ChiTietDanhSachPhat i : res.getData().getChiTietDanhSachPhats()) {
-                            listbh.add(i.getBaihat());
+                            danhBaiHats.add(i.getBaihat());
                             tgDanhSach += (long) i.getBaihat().getThoiGian();
                         }
 
@@ -280,13 +296,11 @@ public class ChiTietThuVienFragment extends Fragment {
 
                         slBaiHat.append(" - " + hours + " giờ " + minutes + " phút " + seconds + " giây");
 
-                        list = listbh;
-
-                        adapter = new AdapterKhamPha(list, getActivity());
+                        adapter = new BaiHatAdapter(danhBaiHats, getActivity());
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(manager);
 
-                        int desiredHeightInDp = list.size() * 84;
+                        int desiredHeightInDp = danhBaiHats.size() * 84;
                         int desiredHeightInPixels = (int) TypedValue.applyDimension(
                                 TypedValue.COMPLEX_UNIT_DIP, desiredHeightInDp, getResources().getDisplayMetrics()
                         );

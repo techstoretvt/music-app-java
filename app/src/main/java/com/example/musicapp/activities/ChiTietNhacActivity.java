@@ -2,6 +2,7 @@ package com.example.musicapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
+import com.example.musicapp.adapters.BaiHatAdapter;
+import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.utils.MediaCustom;
 import com.google.android.material.slider.Slider;
@@ -26,14 +29,21 @@ import com.google.android.material.slider.Slider;
 
 public class ChiTietNhacActivity extends AppCompatActivity {
 
-    ImageView iconClose, imgNhac, btnPrev, btnNext, btnRandom, btnLoop;
+    ImageView iconClose, imgNhac, btnPrev, btnNext, btnRandom, btnLoop, btnMore;
 
     TextView totalTime = null, tgHienTai = null, txtTenBH, txtTenCS, txtLoiBH, txtTypePlay;
 
     Slider sliderProgress = null;
     public static ImageView btnPausePlay = null;
+    public static Boolean isChiTietNhac = false;
+    public static FragmentManager supportFragmentManager;
+    public static BsBaiHat md;
 
     Boolean isStartSlider = false;
+
+    ObjectAnimator animator;
+
+    String idBH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,20 +54,34 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
         //anh xa view va gan gia tri
         anhXaView();
-        Intent intent = getIntent();
-        Glide.with(ChiTietNhacActivity.this).load(intent.getStringExtra("anhBia"))
-                .into(imgNhac);
-        txtTenBH.setText(intent.getStringExtra("tenBH"));
-        txtTenCS.setText(intent.getStringExtra("tenCS"));
-        txtLoiBH.setText(intent.getStringExtra("loiBH"));
+        isChiTietNhac = true;
 
-        if (MainActivity.typePlay == 1) {
-            txtTypePlay.setText("#Khám phá");
+        String tenBh = MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat();
+        String tenCs = MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi();
+        String loiBh = MediaCustom.danhSachPhats.get(MediaCustom.position).getLoiBaiHat();
+        String anhBia = MediaCustom.danhSachPhats.get(MediaCustom.position).getAnhBia();
+        idBH = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
+
+        Intent intent = getIntent();
+        Glide.with(ChiTietNhacActivity.this).load(anhBia)
+                .into(imgNhac);
+        txtTenBH.setText(tenBh);
+        txtTenCS.setText(tenCs);
+        txtLoiBH.setText(loiBh);
+
+        if (MediaCustom.typeDanhSachPhat == 1) {
+            txtTypePlay.setText(MediaCustom.tenLoai);
             btnRandom.setVisibility(View.GONE);
             btnLoop.setVisibility(View.GONE);
+            if (MediaCustom.position == 0) {
+                btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
+            }
         }
-        if (MainActivity.positionPlay == 0) {
-            btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
+
+        if (MediaCustom.isPlay) {
+            btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
+        } else {
+            btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
         }
 
 
@@ -65,24 +89,27 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         iconClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ChiTietNhacActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+//                Intent intent = new Intent(ChiTietNhacActivity.this, MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                startActivity(intent);
+
+                finish();
 
             }
         });
 
         //animtion anh nhac
-        ObjectAnimator animator = ObjectAnimator.ofFloat(imgNhac, "rotation", 0, 360);
-        animator.setDuration(3000);
+        animator = ObjectAnimator.ofFloat(imgNhac, "rotation", 0, 360);
+        animator.setDuration(6000);
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();
+
 
         //event
         btnPausePlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MainActivity.isPlay) {
+                if (MediaCustom.isPlay) {
                     btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
                     if (MainActivity.dungNhac != null) {
                         MainActivity.dungNhac.setImageResource(R.drawable.baseline_play_arrow_24);
@@ -118,73 +145,65 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MainActivity.typePlay != 0) {
-                    if (MainActivity.typePlay == 1 && MainActivity.positionPlay != -1) {
-                        int len = KhamPhaFragment.list.size();
-                        int newPosition = (MainActivity.positionPlay + 1) % len;
-                        MainActivity.positionPlay = newPosition;
-                        String url = KhamPhaFragment.list.get(newPosition).getLinkBaiHat();
-                        MediaCustom.phatNhac(url);
+                Boolean statusPhatNhac = MediaCustom.next();
+                if (statusPhatNhac) {
+                    tgHienTai.setText(MediaCustom.getStrCurrentTime());
+                    totalTime.setText(MediaCustom.strTotalTime);
+                    sliderProgress.setValueTo(MediaCustom.totalTime);
+                    String anhBia = MediaCustom.danhSachPhats.get(MediaCustom.position)
+                            .getAnhBia();
+                    Glide.with(ChiTietNhacActivity.this).load(anhBia)
+                            .into(imgNhac);
+                    txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat());
+                    txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi());
+                    txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getLoiBaiHat());
+                    btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
 
-                        //update giao dien
-                        tgHienTai.setText(MediaCustom.getStrCurrentTime());
-                        totalTime.setText(MediaCustom.strTotalTime);
-                        sliderProgress.setValueTo(MediaCustom.totalTime);
-                        String anhBia = KhamPhaFragment.list.get(newPosition).getAnhBia();
-                        Glide.with(ChiTietNhacActivity.this).load(anhBia)
-                                .into(imgNhac);
-                        txtTenBH.setText(KhamPhaFragment.list.get(newPosition).getTenBaiHat());
-                        txtTenCS.setText(KhamPhaFragment.list.get(newPosition).getCasi().getTenCaSi());
-                        txtLoiBH.setText(KhamPhaFragment.list.get(newPosition).getLoiBaiHat());
-
-                        btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
-
-                        if (newPosition > 0) {
-                            btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
-                            MainActivity.btnPrev.setVisibility(View.VISIBLE);
-                        } else {
-                            btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
-                            MainActivity.btnPrev.setVisibility(View.GONE);
-                        }
-
-                        //tai them danh sach
-
+                    if (MediaCustom.position == 0 && MediaCustom.typeDanhSachPhat == 1) {
+                        btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
+                    } else {
+                        btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
                     }
+
                 }
+
             }
         });
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MainActivity.typePlay != 0) {
-                    if (MainActivity.typePlay == 1 && MainActivity.positionPlay != -1) {
-                        if (MainActivity.positionPlay == 0) return;
+                if (MediaCustom.position == 0) return;
+                Boolean statusPhatNhac = MediaCustom.prev();
+                if (statusPhatNhac) {
+                    tgHienTai.setText(MediaCustom.getStrCurrentTime());
+                    totalTime.setText(MediaCustom.strTotalTime);
+                    sliderProgress.setValueTo(MediaCustom.totalTime);
+                    String anhBia = MediaCustom.danhSachPhats.get(MediaCustom.position)
+                            .getAnhBia();
+                    Glide.with(ChiTietNhacActivity.this).load(anhBia)
+                            .into(imgNhac);
+                    txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat());
+                    txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi());
+                    txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getLoiBaiHat());
+                    btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
 
-                        int newPosition = MainActivity.positionPlay - 1;
-                        MainActivity.positionPlay = newPosition;
-                        String url = KhamPhaFragment.list.get(newPosition).getLinkBaiHat();
-                        MediaCustom.phatNhac(url);
-
-                        //update giao dien
-                        tgHienTai.setText(MediaCustom.getStrCurrentTime());
-                        totalTime.setText(MediaCustom.strTotalTime);
-                        sliderProgress.setValueTo(MediaCustom.totalTime);
-                        String anhBia = KhamPhaFragment.list.get(newPosition).getAnhBia();
-                        Glide.with(ChiTietNhacActivity.this).load(anhBia)
-                                .into(imgNhac);
-                        txtTenBH.setText(KhamPhaFragment.list.get(newPosition).getTenBaiHat());
-                        txtTenCS.setText(KhamPhaFragment.list.get(newPosition).getCasi().getTenCaSi());
-                        txtLoiBH.setText(KhamPhaFragment.list.get(newPosition).getLoiBaiHat());
-
-                        btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
-
-                        if (newPosition == 0) {
-                            btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
-                            MainActivity.btnPrev.setVisibility(View.GONE);
-                        }
+                    if (MediaCustom.position == 0 && MediaCustom.typeDanhSachPhat == 1) {
+                        btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
+                    } else {
+                        btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
                     }
                 }
+            }
+        });
+
+        btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BaiHatAdapter.idBaiHat = idBH;
+                md = new BsBaiHat();
+                supportFragmentManager = getSupportFragmentManager();
+                md.show(supportFragmentManager, BsBaiHat.TAG);
             }
         });
     }
@@ -193,6 +212,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         tgHienTai = null;
+        animator.cancel();
+        isChiTietNhac = false;
     }
 
     private void anhXaView() {
@@ -210,8 +231,9 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         txtTypePlay = findViewById(R.id.txtTypePlay);
         btnRandom = findViewById(R.id.btnRandom);
         btnLoop = findViewById(R.id.btnLoop);
+        btnMore = findViewById(R.id.btnMore);
 
-        if (MediaCustom.isData) {
+        if (MediaCustom.danhSachPhats != null) {
             totalTime.setText(MediaCustom.strTotalTime);
             sliderProgress.setValueTo(MediaCustom.totalTime);
 
@@ -224,7 +246,7 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (MainActivity.isPlay) {
+                                if (MediaCustom.isPlay) {
                                     if (!isStartSlider) {
                                         sliderProgress.setValue(MediaCustom.getFloatCurrentTime());
                                     }
@@ -245,12 +267,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
             }).start();
         }
 
-        if (MainActivity.isPlay) {
-            btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
-        } else {
-            btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
-        }
+
     }
 
-   
+
 }

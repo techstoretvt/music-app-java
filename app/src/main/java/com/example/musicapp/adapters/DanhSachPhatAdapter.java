@@ -12,22 +12,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.api.ApiServiceV1;
-import com.example.musicapp.fragments.BottomSheetThemBHVaoDS;
+import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
-import com.example.musicapp.fragments.ModalBottomSheet;
-import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.body.BodyThemBHVaoDS;
-import com.example.musicapp.utils.MediaCustom;
 
 import java.util.ArrayList;
 
@@ -35,14 +30,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AdapterThuVien extends RecyclerView.Adapter<AdapterThuVien.VHolder> {
+public class DanhSachPhatAdapter extends RecyclerView.Adapter<DanhSachPhatAdapter.VHolder> {
 
 
     public static Boolean isAddDS = false;
     ArrayList<DanhSachPhat> data;
     Context context;
 
-    public AdapterThuVien(ArrayList<DanhSachPhat> data, Context context) {
+    public DanhSachPhatAdapter(ArrayList<DanhSachPhat> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -51,7 +46,7 @@ public class AdapterThuVien extends RecyclerView.Adapter<AdapterThuVien.VHolder>
     @Override
     public VHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_thuvien, parent, false);
+        View view = inflater.inflate(R.layout.item_danhsachphat, parent, false);
         return new VHolder(view);
     }
 
@@ -100,11 +95,11 @@ public class AdapterThuVien extends RecyclerView.Adapter<AdapterThuVien.VHolder>
             public void onClick(View view) {
                 if (isAddDS) {
                     Log.e("them vao ds", "sdfsd");
-                    if (AdapterKhamPha.idBaiHat == null) {
+                    if (BaiHatAdapter.idBaiHat == null) {
                         return;
                     }
 
-                    BodyThemBHVaoDS body = new BodyThemBHVaoDS(AdapterKhamPha.idBaiHat,
+                    BodyThemBHVaoDS body = new BodyThemBHVaoDS(BaiHatAdapter.idBaiHat,
                             data.get(holder.getAdapterPosition()).getId());
                     String header = "bearer " + MainActivity.accessToken;
 
@@ -118,7 +113,7 @@ public class AdapterThuVien extends RecyclerView.Adapter<AdapterThuVien.VHolder>
                                                     Toast.LENGTH_SHORT)
                                             .show();
 
-                                    ModalBottomSheet.md.dismiss();
+                                    BsBaiHat.md.dismiss();
 
                                 } else {
                                     if (res.getStatus() == 401) {
@@ -150,9 +145,9 @@ public class AdapterThuVien extends RecyclerView.Adapter<AdapterThuVien.VHolder>
                         .replace(R.id.frame_layout, fragment)
                         .commit();
 
-                MainActivity.isChiTietThuVien = true;
+                ChiTietThuVienFragment.isChiTietDS = true;
 
-                MainActivity.idDanhSachPhat = data.get(holder.getAdapterPosition()).getId();
+                ChiTietThuVienFragment.idDanhSachPhat = data.get(holder.getAdapterPosition()).getId();
             }
         });
 

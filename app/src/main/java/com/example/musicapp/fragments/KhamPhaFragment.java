@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
-import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.adapters.AdapterKhamPha;
+import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
-import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
-import com.example.musicapp.modal.anhxajson.ResponseDefault;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +46,7 @@ public class KhamPhaFragment extends Fragment {
 
     RecyclerView recyclerView;
     LinearLayoutManager manager;
-    AdapterKhamPha adapter;
+    BaiHatAdapter adapter;
 
     Boolean isScrolling = false;
     int currentItems, totalItems, scrollOutItems, offSetScroll;
@@ -106,7 +102,7 @@ public class KhamPhaFragment extends Fragment {
             list = new ArrayList<BaiHat>();
             getListBaiHat();
         } else {
-            adapter = new AdapterKhamPha(list, getActivity());
+            adapter = new BaiHatAdapter(list, getActivity());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(manager);
 
@@ -156,7 +152,7 @@ public class KhamPhaFragment extends Fragment {
                     if (res.getErrCode() == 0) {
                         ArrayList<BaiHat> baiHats = res.getData();
                         list = baiHats;
-                        adapter = new AdapterKhamPha(list, getActivity());
+                        adapter = new BaiHatAdapter(list, getActivity());
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(manager);
 

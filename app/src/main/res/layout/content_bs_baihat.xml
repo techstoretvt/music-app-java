@@ -69,11 +69,40 @@
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"/>
 
         <LinearLayout
-            android:id="@+id/layoutTaiVe"
+            android:id="@+id/layoutRemove"
+            android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_remove_circle_outline_24"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xóa khỏi danh sách này"
+                android:textColor="#fff"
+                android:layout_marginLeft="14dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutTaiVe"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
@@ -97,10 +126,10 @@
 
         <LinearLayout
             android:id="@+id/layoutThemVaoDS"
+            android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -124,10 +153,10 @@
 
         <LinearLayout
             android:id="@+id/layoutPhatKeTiep"
+            android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -151,10 +180,10 @@
 
         <LinearLayout
             android:id="@+id/layoutXemAlbum"
+            android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -178,10 +207,10 @@
 
         <LinearLayout
             android:id="@+id/layoutXemNS"
+            android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -205,10 +234,10 @@
 
         <LinearLayout
             android:id="@+id/layoutChan"
+            android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <ImageView
