@@ -72,6 +72,7 @@ public class ChiTietThuVienFragment extends Fragment {
 
     public static Boolean isChiTietDS = false;
     public static String idDanhSachPhat = null;
+    public static String tenDanhSach = null;
 
     public static ArrayList<BaiHat> danhBaiHats = null;
     public static BaiHatAdapter adapter;
@@ -238,6 +239,7 @@ public class ChiTietThuVienFragment extends Fragment {
                 GetDSPhatById res = response.body();
                 if (res != null) {
                     if (res.getErrCode() == 0) {
+                        tenDanhSach = res.getData().getTenDanhSach();
 
                         if (res.getData().getChiTietDanhSachPhats().size() == 0) {
 

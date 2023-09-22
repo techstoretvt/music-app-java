@@ -29,8 +29,8 @@ import com.google.android.material.slider.Slider;
 
 public class ChiTietNhacActivity extends AppCompatActivity {
 
-    ImageView iconClose, imgNhac, btnPrev, btnNext, btnRandom, btnLoop, btnMore;
-
+    ImageView iconClose, imgNhac, btnPrev, btnRandom, btnLoop, btnMore;
+    public static ImageView btnNext;
     TextView totalTime = null, tgHienTai = null, txtTenBH, txtTenCS, txtLoiBH, txtTypePlay;
 
     Slider sliderProgress = null;
@@ -69,13 +69,16 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         txtTenCS.setText(tenCs);
         txtLoiBH.setText(loiBh);
 
+        txtTypePlay.setText("#" + MediaCustom.tenLoai);
         if (MediaCustom.typeDanhSachPhat == 1) {
-            txtTypePlay.setText(MediaCustom.tenLoai);
             btnRandom.setVisibility(View.GONE);
             btnLoop.setVisibility(View.GONE);
             if (MediaCustom.position == 0) {
                 btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
             }
+        } else if (MediaCustom.typeDanhSachPhat == 2) {
+            btnRandom.setVisibility(View.VISIBLE);
+            btnLoop.setVisibility(View.VISIBLE);
         }
 
         if (MediaCustom.isPlay) {
@@ -204,6 +207,49 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                 md = new BsBaiHat();
                 supportFragmentManager = getSupportFragmentManager();
                 md.show(supportFragmentManager, BsBaiHat.TAG);
+
+                BaiHatAdapter.idCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position)
+                        .getCasi().getId();
+
+            }
+        });
+
+        btnRandom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MediaCustom.isRandom = !MediaCustom.isRandom;
+                if (MediaCustom.isRandom) {
+                    btnRandom.setImageResource(R.drawable.random_enable);
+                    MediaCustom.isLoop = false;
+                    btnLoop.setImageResource(R.drawable.arrows_rotate_solid);
+                } else {
+                    btnRandom.setImageResource(R.drawable.random);
+                }
+            }
+        });
+
+        btnLoop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (MediaCustom.isLoop == false) {
+                    MediaCustom.isLoop = true;
+                    MediaCustom.typeLoop = 1;
+                    btnLoop.setImageResource(R.drawable.arrows_rotate_solid_enable);
+                    MediaCustom.isRandom = false;
+                    btnRandom.setImageResource(R.drawable.random);
+
+                } else {
+                    if (MediaCustom.typeLoop == 1) {
+                        MediaCustom.typeLoop = 2;
+                        btnLoop.setImageResource(R.drawable.arrows_rotate_solid_one);
+                        MediaCustom.isRandom = false;
+                        btnRandom.setImageResource(R.drawable.random);
+                    } else {
+                        MediaCustom.isLoop = false;
+                        MediaCustom.typeLoop = 1;
+                        btnLoop.setImageResource(R.drawable.arrows_rotate_solid);
+                    }
+                }
             }
         });
     }
@@ -269,6 +315,5 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
 
     }
-
 
 }

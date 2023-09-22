@@ -22,12 +22,15 @@ import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.fragments.CaNhanFragment;
+import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
+import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.utils.MediaCustom;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,12 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
     public static FragmentManager supportFragmentManager;
 
+    public static BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replace_fragment(new KhamPhaFragment());
+        replace_fragment(new TimKiemFragment());
 
         anhXaView();
 
@@ -145,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 //                    intent.putExtra("idBH", idBH);
 
 
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
 
@@ -183,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         btnPrev = findViewById(R.id.btnPrev);
         btnNext = findViewById(R.id.btnNext);
         supportFragmentManager = getSupportFragmentManager();
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
     }
 

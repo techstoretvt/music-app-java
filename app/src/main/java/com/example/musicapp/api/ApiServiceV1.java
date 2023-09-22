@@ -1,5 +1,7 @@
 package com.example.musicapp.api;
 
+import com.example.musicapp.modal.anhxajson.DanhSachCaSi;
+import com.example.musicapp.modal.anhxajson.GetCaSiByID;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
@@ -92,6 +94,18 @@ public interface ApiServiceV1 {
     Call<ResponseDefault> xoaBaiHatKhoiDS(@Query("idDanhSachPhat") String idDanhSachPhat,
                                           @Query("idBaiHat") String idBaiHat,
                                           @Header("authorization") String authorization);
+
+    @GET("/api/v2/lay-bai-hat-cua-ca-si")
+    Call<GetListBaiHat> layBaiHatCuaCaSi(@Query("idCaSi") String idCaSi
+            , @Header("authorization") String authorization);
+
+    @GET("/api/v2/goi-y-ca-si")
+    Call<DanhSachCaSi> layDSGoiYCaSi(@Query("idCaSi") String idCaSi
+            , @Header("authorization") String authorization);
+
+    @GET("/api/v2/lay-ca-si-by-id")
+    Call<GetCaSiByID> layCaSiById(@Query("idCaSi") String idCaSi
+            , @Header("authorization") String authorization);
 
     /* Get
     1. Truyền tham số ?access_key=access_key

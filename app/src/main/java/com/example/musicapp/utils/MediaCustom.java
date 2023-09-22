@@ -14,6 +14,7 @@ import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +38,11 @@ public class MediaCustom {
     public static String strTotalTime = "";
     public static int totalTime = 0;
 
+    public static Boolean isRandom = false;
+    public static Boolean isLoop = false;
+    public static int typeLoop = 1;
+    public static ArrayList<Integer> positionRandom = new ArrayList<>();
+
     public static Boolean phatNhac(String url) {
         try {
             mediaPlayer.reset();
@@ -48,14 +54,34 @@ public class MediaCustom {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    isPlay = false;
-                    if (MainActivity.dungNhac != null) {
-                        MainActivity.dungNhac.setImageResource(R.drawable.baseline_play_arrow_24);
+
+                    if (position == danhSachPhats.size() - 1 && !isLoop && !isRandom) {
+                        //Xử lý khi dừng phát
+                        isPlay = false;
+                        if (MainActivity.dungNhac != null) {
+                            MainActivity.dungNhac.setImageResource(R.drawable.baseline_play_arrow_24);
+                        }
+
+                        if (ChiTietNhacActivity.btnPausePlay != null) {
+                            ChiTietNhacActivity.btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
+                        }
+                        return;
                     }
 
-                    if (ChiTietNhacActivity.btnPausePlay != null) {
-                        ChiTietNhacActivity.btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
+
+                    if (typeDanhSachPhat == 2) {
+                        if (isLoop && typeLoop == 2) {
+                            mediaPlayer.start();
+                            return;
+                        }
                     }
+
+                    if (ChiTietNhacActivity.isChiTietNhac) {
+                        ChiTietNhacActivity.btnNext.callOnClick();
+                    } else {
+                        next();
+                    }
+
 
                 }
             });
@@ -108,29 +134,18 @@ public class MediaCustom {
     }
 
     public static Boolean next() {
-        if (loading) {
-            return false;
-        }
-        loading = true;
 
         int size = danhSachPhats.size();
+
+        Boolean statusPhatNhac = false;
 
         if (typeDanhSachPhat == 1) {
             //kham pha
             int newPosition = (position + 1) % size;
-            Boolean statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+            statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
 
             if (statusPhatNhac) {
                 position = newPosition;
-
-                String anhBia = MediaCustom.danhSachPhats.get(position)
-                        .getAnhBia();
-                Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
-                        .into(MainActivity.imgNhac);
-
-                MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-                MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
-                MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
 
                 if (newPosition > 0) {
                     MainActivity.btnPrev.setVisibility(View.VISIBLE);
@@ -139,54 +154,116 @@ public class MediaCustom {
                 }
 
             } else {
-                Toast.makeText(MainActivity.dungNhac.getContext(), "sfsdf", Toast.LENGTH_SHORT)
+                Toast.makeText(MainActivity.dungNhac.getContext(), "Lỗi", Toast.LENGTH_SHORT)
                         .show();
             }
-            return statusPhatNhac;
+        } else if (typeDanhSachPhat == 2) {
+            if (isRandom) {
+                if (positionRandom.size() == 0) {
+                    taoListRandom();
+                }
+
+                int newPosition = positionRandom.get((position + 1) % size);
+
+                statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+                if (statusPhatNhac) {
+                    position = (position + 1) % size;
+                } else {
+                    Toast.makeText(MainActivity.dungNhac.getContext(), "Lỗi", Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+            } else {
+                int newPosition = (position + 1) % size;
+                statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+                if (statusPhatNhac) {
+                    position = newPosition;
+                } else {
+                    Toast.makeText(MainActivity.dungNhac.getContext(), "Lỗi", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
         }
 
-        return false;
+
+        //update giao dien
+        String anhBia = MediaCustom.danhSachPhats.get(position)
+                .getAnhBia();
+        Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
+                .into(MainActivity.imgNhac);
+        MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+        MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+        MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+
+        return statusPhatNhac;
     }
 
     public static Boolean prev() {
-        if (loading) {
-            return false;
-        }
-        loading = true;
+//        if (loading) {
+//            return false;
+//        }
+//        loading = true;
+        Boolean statusPhatNhac = false;
 
         int size = danhSachPhats.size();
 
         if (typeDanhSachPhat == 1) {
             //kham pha
             int newPosition = position - 1;
-            Boolean statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+            statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
 
             if (statusPhatNhac) {
                 position = newPosition;
-
-                String anhBia = MediaCustom.danhSachPhats.get(position)
-                        .getAnhBia();
-                Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
-                        .into(MainActivity.imgNhac);
-
-                MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-                MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
-                MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
-
-                if (newPosition > 0) {
-                    MainActivity.btnPrev.setVisibility(View.VISIBLE);
-                } else {
-                    MainActivity.btnPrev.setVisibility(View.GONE);
-                }
 
             } else {
                 Toast.makeText(MainActivity.dungNhac.getContext(), "sfsdf", Toast.LENGTH_SHORT)
                         .show();
             }
-            return statusPhatNhac;
+        } else if (typeDanhSachPhat == 2) {
+            if (isRandom) {
+                if (positionRandom.size() == 0) {
+                    taoListRandom();
+                }
+
+                int newPosition = positionRandom.get((position - 1) % size);
+
+                statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+                if (statusPhatNhac) {
+                    position = (position - 1 + size) % size;
+                } else {
+                    Toast.makeText(MainActivity.dungNhac.getContext(), "Lỗi", Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+            } else {
+                int newPosition = (position - 1 + size) % size;
+                statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+                if (statusPhatNhac) {
+                    position = newPosition;
+                } else {
+                    Toast.makeText(MainActivity.dungNhac.getContext(), "Lỗi", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
         }
 
-        return false;
+        //update giao dien
+        String anhBia = MediaCustom.danhSachPhats.get(position)
+                .getAnhBia();
+        Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
+                .into(MainActivity.imgNhac);
+
+        MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+        MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+        MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+
+        if (position > 0) {
+            MainActivity.btnPrev.setVisibility(View.VISIBLE);
+        } else {
+            MainActivity.btnPrev.setVisibility(View.GONE);
+        }
+
+        return statusPhatNhac;
     }
 
     public static String getStrCurrentTime() {
@@ -210,6 +287,16 @@ public class MediaCustom {
         if (isData) {
             newTime = newTime * 1000;
             mediaPlayer.seekTo(newTime);
+        }
+    }
+
+    public static void taoListRandom() {
+        positionRandom = new ArrayList<>();
+        Random random = new Random();
+        while (positionRandom.size() < danhSachPhats.size()) {
+            int number = random.nextInt(danhSachPhats.size());
+            if (!positionRandom.contains(number))
+                positionRandom.add(number);
         }
     }
 }

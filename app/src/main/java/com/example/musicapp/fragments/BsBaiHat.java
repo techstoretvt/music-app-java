@@ -1,6 +1,8 @@
 package com.example.musicapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,8 +142,37 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutXemNS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Tính năng này chưa cập nhật", Toast.LENGTH_SHORT)
-                        .show();
+                ChiTietCaSiFragment.idCaSi = BaiHatAdapter.idCaSi;
+
+                //set type back
+                if (ChiTietThuVienFragment.isChiTietDS && !ChiTietNhacActivity.isChiTietNhac) {
+                    ChiTietCaSiFragment.typeBack = 1;
+                    ChiTietCaSiFragment.idDanhSachPhat = ChiTietThuVienFragment.idDanhSachPhat;
+
+                    Common.replace_fragment(new ChiTietCaSiFragment());
+                    BaiHatAdapter.md.dismiss();
+
+                } else if (ChiTietNhacActivity.isChiTietNhac) {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    ChiTietCaSiFragment.typeBack = 2;
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Common.replace_fragment(new ChiTietCaSiFragment());
+                        }
+                    }, 100);
+
+
+                } else {
+                    ChiTietCaSiFragment.typeBack = 0;
+                    Common.replace_fragment(new ChiTietCaSiFragment());
+                    BaiHatAdapter.md.dismiss();
+                }
+
             }
         });
 
@@ -150,6 +181,7 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Tính năng này chưa cập nhật", Toast.LENGTH_SHORT)
                         .show();
+
             }
         });
         return view;
