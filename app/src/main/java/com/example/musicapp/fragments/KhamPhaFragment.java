@@ -3,11 +3,14 @@ package com.example.musicapp.fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -19,6 +22,8 @@ import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
+import com.example.musicapp.utils.Common;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +57,8 @@ public class KhamPhaFragment extends Fragment {
     int currentItems, totalItems, scrollOutItems, offSetScroll;
     public static ArrayList<BaiHat> list = null;
     ProgressBar progressBar;
+
+    MaterialToolbar topAppBar;
 
     int page = 1;
     int maxCount = 15;
@@ -96,6 +103,7 @@ public class KhamPhaFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
         manager = new LinearLayoutManager(getActivity());
+        topAppBar = view.findViewById(R.id.topAppBar);
 
 
         if (list == null) {
@@ -133,6 +141,18 @@ public class KhamPhaFragment extends Fragment {
 
             });
         }
+
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.e(String.valueOf(item), "");
+                if (String.valueOf(item).equals("search")) {
+                    TimKiemFragment.typeBack = 1;
+                    Common.replace_fragment(new TimKiemFragment());
+                }
+                return false;
+            }
+        });
 
 
         return view;

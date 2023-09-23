@@ -8,11 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
+import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.utils.Common;
 
@@ -45,15 +47,25 @@ public class TimKiemGanDayAdapter extends RecyclerView.Adapter<TimKiemGanDayAdap
     public void onBindViewHolder(@NonNull VHolder holder, int position) {
         holder.txtTuKhoa.setText(data.get(holder.getAdapterPosition()));
 
+        holder.layoutText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimKiemFragment.valueSearch.setText(data.get(holder.getAdapterPosition()));
+            }
+        });
+
     }
 
     public class VHolder extends RecyclerView.ViewHolder {
 
         TextView txtTuKhoa;
 
+        CardView layoutText;
+
         public VHolder(@NonNull View itemView) {
             super(itemView);
             txtTuKhoa = itemView.findViewById(R.id.txtTuKhoa);
+            layoutText = itemView.findViewById(R.id.layoutText);
         }
     }
 }

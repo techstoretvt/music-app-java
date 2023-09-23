@@ -8,6 +8,8 @@ import com.example.musicapp.modal.anhxajson.GetListPlaylist;
 import com.example.musicapp.modal.anhxajson.Login;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.anhxajson.ThemDSPhat;
+import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
+import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
 import com.example.musicapp.modal.body.BodyChangePass;
 import com.example.musicapp.modal.body.BodyLogin;
 import com.example.musicapp.modal.body.BodySignUp;
@@ -106,6 +108,24 @@ public interface ApiServiceV1 {
     @GET("/api/v2/lay-ca-si-by-id")
     Call<GetCaSiByID> layCaSiById(@Query("idCaSi") String idCaSi
             , @Header("authorization") String authorization);
+
+    @GET("/api/v2/tim-kiem-bai-hat")
+    Call<TimKiemBaiHat> timKiemBaiHat(@Query("tenBaiHat") String tenBH,
+                                      @Query("offset") String offset,
+                                      @Query("limit") String limit,
+                                      @Header("authorization") String authorization);
+
+    @GET("/api/v2/tim-kiem-ca-si")
+    Call<TimKiemCaSi> timKiemCaSi(@Query("tenCaSi") String tenCS,
+                                  @Query("offset") String offset,
+                                  @Query("limit") String limit,
+                                  @Header("authorization") String authorization);
+
+    @PUT("/api/v2/doi-ten-danh-sach")
+    Call<ResponseDefault> doiTenDanhSach(@Query("idDanhSach") String idDS,
+                                         @Query("tenDanhSach") String tenDS,
+                                         @Header("authorization") String authorization
+    );
 
     /* Get
     1. Truyền tham số ?access_key=access_key

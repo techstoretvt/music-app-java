@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,6 +25,8 @@ import com.example.musicapp.adapters.DanhSachPhatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
+import com.example.musicapp.utils.Common;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 
@@ -35,13 +40,8 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class ThuVienFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -50,21 +50,14 @@ public class ThuVienFragment extends Fragment {
     public static DanhSachPhatAdapter adapter;
     Button btnAddNew;
 
+    MaterialToolbar topAppBar;
+
     public static ArrayList<DanhSachPhat> danhSachPhats = null;
 
     public ThuVienFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThuVienFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ThuVienFragment newInstance(String param1, String param2) {
         ThuVienFragment fragment = new ThuVienFragment();
         Bundle args = new Bundle();
@@ -93,6 +86,7 @@ public class ThuVienFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
         manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        topAppBar = view.findViewById(R.id.topAppBar);
 
 //        recyclerView.setHasFixedSize(true);
 //        recyclerView.setNestedScrollingEnabled(false);
@@ -112,6 +106,18 @@ public class ThuVienFragment extends Fragment {
                 Intent intent = new Intent(getContext(), AddPlayListActivity.class);
                 intent.putExtra("email", "dfhasdf");
                 startActivityForResult(intent, 100);
+            }
+        });
+
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.e(String.valueOf(item), "");
+                if (String.valueOf(item).equals("search")) {
+                    TimKiemFragment.typeBack = 2;
+                    Common.replace_fragment(new TimKiemFragment());
+                }
+                return false;
             }
         });
 

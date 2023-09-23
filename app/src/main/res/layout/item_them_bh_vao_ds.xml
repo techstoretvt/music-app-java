@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:background="#000"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/layoutBaiHat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imgView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/anh_header"
+                android:scaleType="centerCrop"
+                android:fitsSystemWindows="true"
+                android:contentDescription="anh header"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tenBaiHat"
+                    android:textColor="#fff"
+                    android:text="Anh đâu muốn thấy em buồn"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_marginBottom="4dp"
+                    android:textSize="16dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tenCaSi"
+                    android:textColor="#737373"
+                    android:text="Châu Khải Phong, ACV"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="14dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="anh header"
+            android:fitsSystemWindows="true"
+            android:scaleType="centerCrop"
+            android:paddingLeft="10dp"
+            android:paddingVertical="5dp"
+            android:src="@drawable/baseline_add_circle_white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

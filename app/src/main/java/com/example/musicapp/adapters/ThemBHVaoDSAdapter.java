@@ -23,7 +23,7 @@ import com.example.musicapp.utils.MediaCustom;
 
 import java.util.ArrayList;
 
-public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
+public class ThemBHVaoDSAdapter extends RecyclerView.Adapter<ThemBHVaoDSAdapter.VHolder> {
 
     public static String idBaiHat = null;
     public static String idCaSi = null;
@@ -32,7 +32,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
     ArrayList<BaiHat> data;
     Context context;
 
-    public BaiHatAdapter(ArrayList<BaiHat> data, Context context) {
+    public ThemBHVaoDSAdapter(ArrayList<BaiHat> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -41,7 +41,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
     @Override
     public VHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_baihat, parent, false);
+        View view = inflater.inflate(R.layout.item_them_bh_vao_ds, parent, false);
         return new VHolder(view);
     }
 
@@ -52,7 +52,6 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull VHolder holder, int position) {
-        holder.stt.setText(String.valueOf(position + 1));
         holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
         holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
         Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
@@ -75,76 +74,26 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
             @Override
             public void onClick(View view) {
 
-                MediaCustom.position = holder.getAdapterPosition();
-                MediaCustom.danhSachPhats = data;
-
-                if (ChiTietThuVienFragment.isChiTietDS) {
-                    MediaCustom.typeDanhSachPhat = 2;
-                    MediaCustom.tenLoai = ChiTietThuVienFragment.tenDanhSach;
-                } else if (ChiTietCaSiFragment.isChiTietCS) {
-                    MediaCustom.typeDanhSachPhat = 1;
-                    MediaCustom.tenLoai = ChiTietCaSiFragment.strTenCS;
-                } else if (TimKiemFragment.isTimKiem) {
-                    MediaCustom.typeDanhSachPhat = 1;
-                    MediaCustom.tenLoai = "Tìm kiếm";
-                } else {
-                    //kham pha
-                    MediaCustom.typeDanhSachPhat = 1;
-                    MediaCustom.tenLoai = "Khám phá";
-                }
-
-                // Create a new thread
-                MainActivity.phatNhacMini(data.get(holder.getAdapterPosition()).getAnhBia(),
-                        data.get(holder.getAdapterPosition()).getTenBaiHat(),
-                        data.get(holder.getAdapterPosition()).getCasi().getTenCaSi());
-
-                MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat());
-
-                if (holder.getAdapterPosition() == 0) {
-                    MainActivity.btnPrev.setVisibility(View.GONE);
-                } else {
-                    MainActivity.btnPrev.setVisibility(View.VISIBLE);
-                }
-
-//                ColorDrawable colorDrawable = new ColorDrawable(Color.GREEN);
-//                holder.linearLayout.setBackground(colorDrawable);
-
-
-                MainActivity.layoutTencasi.callOnClick();
-
 
             }
         });
 
-        holder.btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //
-
-                md.show(MainActivity.supportFragmentManager, BsBaiHat.TAG);
-
-                idBaiHat = data.get(holder.getAdapterPosition()).getId();
-                idCaSi = data.get(holder.getAdapterPosition()).getCasi().getId();
-            }
-        });
 
     }
 
     public class VHolder extends RecyclerView.ViewHolder {
-        TextView stt, tenBaiHat, tenCasi;
+        TextView tenBaiHat, tenCasi;
         LinearLayout linearLayout;
 
-        ImageView imgView, btnMore;
+        ImageView imgView;
 
 
         public VHolder(@NonNull View itemView) {
             super(itemView);
-            stt = itemView.findViewById(R.id.txtStt);
             tenCasi = itemView.findViewById(R.id.tenCaSi);
             tenBaiHat = itemView.findViewById(R.id.tenBaiHat);
             linearLayout = itemView.findViewById(R.id.layoutBaiHat);
             imgView = itemView.findViewById(R.id.imgView);
-            btnMore = itemView.findViewById(R.id.btnMore);
         }
     }
 }

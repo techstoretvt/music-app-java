@@ -125,15 +125,46 @@
 
             </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tenDS"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#fff"
-                android:textStyle="bold"
-                android:textSize="16dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/tenDS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:paddingHorizontal="10dp"
+                    android:background="#000"
+                    android:enabled="false"
+                    android:hint="Tên danh sách"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:lines="1"
+                    android:textColor="#fff"/>
+
+                <ImageView
+                    android:id="@+id/btnEdit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/baseline_edit_white"
+                    android:padding="10dp"/>
+
+                <Button
+                    android:id="@+id/btnSubmitEdit"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:text="Lưu"
+                    android:textSize="10sp"
+                    android:visibility="gone"
+                    android:padding="0dp"/>
+
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/slBaiHat"
@@ -160,6 +191,7 @@
                     android:layout_gravity="center_horizontal"/>
 
                 <LinearLayout
+                    android:id="@+id/btnThemBH"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -168,6 +200,7 @@
 
                     <ImageView
                         android:layout_width="30dp"
+                        android:padding="6dp"
                         android:layout_height="30dp"
                         app:layout_constraintStart_toStartOf="parent"
                         android:src="@drawable/baseline_add_circle_white"
@@ -178,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:text="Thêm bài"
                         android:textColor="#fff"
-                        android:textSize="13dp"/>
+                        android:textSize="10dp"/>
                 </LinearLayout>
             </RelativeLayout>
 

@@ -1,8 +1,11 @@
 package com.example.musicapp.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,10 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,6 +33,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.activities.ThemBHVaoDSActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
@@ -36,6 +42,7 @@ import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.body.BodyXoaDSPhat;
+import com.example.musicapp.utils.Common;
 
 import java.util.ArrayList;
 
@@ -67,8 +74,10 @@ public class ChiTietThuVienFragment extends Fragment {
     TextView chuaCoBaihat, tenDS;
     public static TextView slBaiHat;
 
-    ImageView btnBack, btnMore, img1anh, anh1, anh2, anh3, anh4;
-    LinearLayout layout4anh;
+    ImageView btnBack, btnMore, img1anh, anh1, anh2, anh3, anh4, btnEdit;
+
+    Button btnSubmitEdit;
+    LinearLayout layout4anh, btnThemBH;
 
     public static Boolean isChiTietDS = false;
     public static String idDanhSachPhat = null;
@@ -119,6 +128,9 @@ public class ChiTietThuVienFragment extends Fragment {
         anh2 = view.findViewById(R.id.anh2);
         anh3 = view.findViewById(R.id.anh3);
         anh4 = view.findViewById(R.id.anh4);
+        btnEdit = view.findViewById(R.id.btnEdit);
+        btnSubmitEdit = view.findViewById(R.id.btnSubmitEdit);
+        btnThemBH = view.findViewById(R.id.btnThemBH);
 
         isChiTietDS = true;
 
@@ -218,7 +230,106 @@ public class ChiTietThuVienFragment extends Fragment {
 
         });
 
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tenDS.setEnabled(true);
+                tenDS.setBackground(new ColorDrawable(Color.WHITE));
+                tenDS.setTextColor(Color.BLACK);
+                tenDS.setPadding(20, 10, 20, 10);
+                btnEdit.setVisibility(View.GONE);
+                btnSubmitEdit.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnSubmitEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newName = String.valueOf(tenDS.getText());
+                Boolean check = true;
+                for (DanhSachPhat ds : ThuVienFragment.danhSachPhats) {
+                    if (ds.getId() == idDanhSachPhat && ds.getTenDanhSach().equals(newName))
+                        check = false;
+                }
+                if (check)
+                    submitEditTenDanhSach();
+
+
+            }
+        });
+
+        tenDS.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                String newName = String.valueOf(tenDS.getText());
+                Boolean check = true;
+                for (DanhSachPhat ds : ThuVienFragment.danhSachPhats) {
+                    if (ds.getId() == idDanhSachPhat && ds.getTenDanhSach().equals(newName))
+                        check = false;
+                }
+                if (check)
+                    submitEditTenDanhSach();
+                return false;
+            }
+        });
+
+        btnThemBH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ThemBHVaoDSActivity.class);
+                intent.putExtra("idDanhSach", idDanhSachPhat);
+                startActivity(intent);
+            }
+        });
+
         return view;
+    }
+
+    private void submitEditTenDanhSach() {
+        String tenMoi = String.valueOf(tenDS.getText());
+        String idDS = idDanhSachPhat;
+        String header = Common.getHeader();
+
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Đang xử lý...");
+        progressDialog.show();
+        ApiServiceV1.apiServiceV1.doiTenDanhSach(idDS, tenMoi, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        tenDS.setEnabled(false);
+                        tenDS.setBackground(new ColorDrawable(Color.BLACK));
+                        tenDS.setTextColor(Color.WHITE);
+                        tenDS.setPadding(10, 0, 10, 0);
+                        btnEdit.setVisibility(View.VISIBLE);
+                        btnSubmitEdit.setVisibility(View.GONE);
+
+                        for (DanhSachPhat i : ThuVienFragment.danhSachPhats) {
+                            if (i.getId() == idDanhSachPhat) {
+                                i.setTenDanhSach(tenMoi);
+                            }
+                        }
+
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Toast.makeText(getContext(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                .show();
+
+
+                    }
+                }
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Log.e("Loi doi ten ds", "");
+            }
+        });
     }
 
     @Override
