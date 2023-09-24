@@ -57,19 +57,6 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
         Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
 
-        if (position == 0) {
-//            holder.stt.setTextColor(Color.RED);
-//        }
-//        if (position == 1) {
-//            holder.stt.setTextColor(Color.BLUE);
-//        }
-//        if (position == 2) {
-//            holder.stt.setTextColor(Color.YELLOW);
-//        }
-//
-//        if (position == 0 || position == 1 || position == 2) {
-//            holder.stt.setTextSize(16);
-        }
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +32,17 @@ import retrofit2.Response;
 public class ThemBHVaoDSActivity extends AppCompatActivity {
 
     LinearLayoutManager manager;
-    ThemBHVaoDSAdapter adapterBH;
+    public static ThemBHVaoDSAdapter adapterBH = null;
     RecyclerView rvBaiHat;
     TextInputEditText valueSearch;
     TextInputLayout laValueSearch;
 
     ArrayList<BaiHat> dataBH = new ArrayList<>();
+
+    ImageView btnBack;
+
+    public static String idDanhSach;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +53,12 @@ public class ThemBHVaoDSActivity extends AppCompatActivity {
         rvBaiHat = findViewById(R.id.rvBaiHat);
         valueSearch = findViewById(R.id.valueSearch);
         laValueSearch = findViewById(R.id.laValueSearch);
+        btnBack = findViewById(R.id.btnBack);
 
         layDanhSachBaiHat("a");
+
+        Log.e("idDanhSach", String.valueOf(idDanhSach));
+
 
         laValueSearch.setStartIconOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +77,13 @@ public class ThemBHVaoDSActivity extends AppCompatActivity {
                 String keyword = String.valueOf(valueSearch.getText());
                 layDanhSachBaiHat(keyword);
                 return false;
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -111,5 +129,9 @@ public class ThemBHVaoDSActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+    }
 }

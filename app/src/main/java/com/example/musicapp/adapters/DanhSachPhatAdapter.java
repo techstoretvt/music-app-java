@@ -22,6 +22,7 @@ import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.modal.anhxajson.ThemBHVaoDS;
 import com.example.musicapp.modal.body.BodyThemBHVaoDS;
 
 import java.util.ArrayList;
@@ -103,10 +104,10 @@ public class DanhSachPhatAdapter extends RecyclerView.Adapter<DanhSachPhatAdapte
                             data.get(holder.getAdapterPosition()).getId());
                     String header = "bearer " + MainActivity.accessToken;
 
-                    ApiServiceV1.apiServiceV1.themBaiHatVaoDS(body, header).enqueue(new Callback<ResponseDefault>() {
+                    ApiServiceV1.apiServiceV1.themBaiHatVaoDS(body, header).enqueue(new Callback<ThemBHVaoDS>() {
                         @Override
-                        public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
-                            ResponseDefault res = response.body();
+                        public void onResponse(Call<ThemBHVaoDS> call, Response<ThemBHVaoDS> response) {
+                            ThemBHVaoDS res = response.body();
                             if (res != null) {
                                 if (res.getErrCode() == 0) {
                                     Toast.makeText(view.getContext(), "Đã thêm vào danh sách",
@@ -129,7 +130,7 @@ public class DanhSachPhatAdapter extends RecyclerView.Adapter<DanhSachPhatAdapte
                         }
 
                         @Override
-                        public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                        public void onFailure(Call<ThemBHVaoDS> call, Throwable t) {
                             Log.e("them vao ds fail", "sdfsd");
                         }
                     });

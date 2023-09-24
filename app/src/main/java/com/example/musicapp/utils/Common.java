@@ -9,6 +9,7 @@ import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,5 +41,23 @@ public class Common {
         return matcher.matches();
     }
 
+
+    //check từ khóa
+    public static Boolean checkTuKhoa(String value) {
+        Boolean check = true;
+
+        ArrayList<String> listKeyword = new ArrayList<>();
+        listKeyword.add("concac");
+        listKeyword.add("sex");
+        listKeyword.add("phim sex");
+        listKeyword.add("phim sẽ");
+        listKeyword.add("segay");
+        listKeyword.add("cặc");
+        listKeyword.add("lồn");
+
+        if (listKeyword.contains(value.toLowerCase()))
+            check = false;
+        return check;
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.example.musicapp.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,6 +32,8 @@ import com.example.musicapp.utils.Common;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,6 +121,13 @@ public class ThuVienFragment extends Fragment {
                 if (String.valueOf(item).equals("search")) {
                     TimKiemFragment.typeBack = 2;
                     Common.replace_fragment(new TimKiemFragment());
+                } else if (String.valueOf(item).equals("micro")) {
+                    Log.e("vao", "");
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
+                    startActivityForResult(intent, 1);
+
                 }
                 return false;
             }
@@ -166,6 +178,21 @@ public class ThuVienFragment extends Fragment {
             DanhSachPhat newData = (DanhSachPhat) bundle.getSerializable("newData");
             danhSachPhats.add(newData);
             adapter.notifyDataSetChanged();
+        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+            // Trích xuất văn bản từ giọng nói
+            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String text = results.get(0);
+
+            // Sử dụng văn bản để tìm kiếm
+//            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+//            intent.putExtra(SearchManager.QUERY, text);
+//            startActivity(intent);
+
+            TimKiemFragment.typeBack = 1;
+            TimKiemFragment.strValueSearch = text;
+            Common.replace_fragment(new TimKiemFragment());
+
+
         }
     }
 }

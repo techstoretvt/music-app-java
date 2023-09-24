@@ -1,44 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:padding="16dp"
     android:background="#000"
+    android:paddingTop="10dp"
+    android:paddingBottom="6dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/layoutBaiHat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:orientation="horizontal">
 
+
         <LinearLayout
+            android:id="@+id/layout"
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/imgView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/anh_header"
-                android:scaleType="centerCrop"
-                android:fitsSystemWindows="true"
-                android:contentDescription="anh header"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/anhTB"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/anh_header"
+                    android:scaleType="centerCrop"
+                    android:fitsSystemWindows="true"
+                    android:contentDescription="anh header"/>
+
+            </androidx.cardview.widget.CardView>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
+                android:gravity="start"
                 android:layout_marginLeft="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tenBaiHat"
+                    android:id="@+id/tieuDe"
                     android:textColor="#fff"
                     android:text="Anh đâu muốn thấy em buồn"
                     android:maxLines="1"
@@ -50,35 +62,23 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tenCaSi"
+                    android:id="@+id/noiDung"
                     android:textColor="#737373"
-                    android:text="Châu Khải Phong, ACV"
-                    android:maxLines="1"
+                    android:text="Châu Khải Phong, ACV Châu Khải Phong, ACV Châu Khải Phong, ACV Châu Khải Phong, ACV Châu Khải Phong, ACV Châu Khải Phong, ACV "
+                    android:maxLines="3"
                     android:ellipsize="end"
-                    android:singleLine="true"
+                    android:singleLine="false"
                     android:textSize="14dp"/>
+
             </LinearLayout>
         </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:contentDescription="anh header"
-            android:fitsSystemWindows="true"
-            android:scaleType="centerCrop"
-            android:paddingLeft="10dp"
-            android:paddingVertical="5dp"
-            android:src="@drawable/baseline_add_circle_white"/>
-
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
-
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        app:dividerColor="#111"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replace_fragment(new KhamPhaFragment());
+        replace_fragment(new ThongBaoFragment());
 
         anhXaView();
 
@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 

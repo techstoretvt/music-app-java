@@ -29,7 +29,7 @@ import com.google.android.material.slider.Slider;
 
 public class ChiTietNhacActivity extends AppCompatActivity {
 
-    ImageView iconClose, imgNhac, btnPrev, btnRandom, btnLoop, btnMore;
+    ImageView iconClose, imgNhac, btnPrev, btnRandom, btnLoop, btnMore, btnThaTim, btnShare;
     public static ImageView btnNext;
     TextView totalTime = null, tgHienTai = null, txtTenBH, txtTenCS, txtLoiBH, txtTypePlay;
 
@@ -39,7 +39,7 @@ public class ChiTietNhacActivity extends AppCompatActivity {
     public static FragmentManager supportFragmentManager;
     public static BsBaiHat md;
 
-    Boolean isStartSlider = false;
+    Boolean isStartSlider = false, isLike = false;
 
     ObjectAnimator animator;
 
@@ -252,6 +252,36 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btnThaTim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isLike == false) {
+                    btnThaTim.setImageResource(R.drawable.baseline_favorite_red);
+                    isLike = true;
+                } else {
+                    btnThaTim.setImageResource(R.drawable.baseline_favorite_24);
+                    isLike = false;
+                }
+
+            }
+        });
+
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Tạo một intent chia sẻ
+                String urlToShare = MediaCustom.danhSachPhats.get(MediaCustom.position).getLinkBaiHat();
+
+// Tạo một Intent chia sẻ
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, urlToShare);
+
+// Kiểm tra và chọn ứng dụng để chia sẻ
+                startActivity(Intent.createChooser(shareIntent, "Chia sẻ URL với:"));
+            }
+        });
     }
 
     @Override
@@ -278,6 +308,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         btnRandom = findViewById(R.id.btnRandom);
         btnLoop = findViewById(R.id.btnLoop);
         btnMore = findViewById(R.id.btnMore);
+        btnThaTim = findViewById(R.id.btnThaTim);
+        btnShare = findViewById(R.id.btnShare);
 
         if (MediaCustom.danhSachPhats != null) {
             totalTime.setText(MediaCustom.strTotalTime);

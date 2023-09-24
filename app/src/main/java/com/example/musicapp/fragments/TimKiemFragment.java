@@ -1,6 +1,8 @@
 package com.example.musicapp.fragments;
 
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,11 +12,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +33,7 @@ import com.example.musicapp.adapters.TimKiemGanDayAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.Casi;
+import com.example.musicapp.modal.anhxajson.Keyword;
 import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
 import com.example.musicapp.utils.Common;
@@ -41,6 +48,7 @@ import org.json.JSONException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,13 +82,17 @@ public class TimKiemFragment extends Fragment {
     TextView txtBH, txtCS;
     MaterialDivider lineBH, lineCS;
     LinearLayout laTimBH, laTimCS, laTimKiemGanDay;
-    public static TextInputEditText valueSearch;
+
+    public static AutoCompleteTextView valueSearch;
+    public static String strValueSearch = "";
     TextInputLayout laValueSearch;
 
     ImageView btnBack;
 
     ArrayList<BaiHat> dataBH = new ArrayList<>();
     ArrayList<Casi> dataCS = new ArrayList<>();
+
+    ArrayList<String> dataGoiY = new ArrayList<>();
 
     SharedPreferences sharedPreferences;
 
@@ -140,8 +152,17 @@ public class TimKiemFragment extends Fragment {
 
         loadTimKiemGanDay();
 
-//        layDanhSachBaiHat("chau");
-//        layDanhSachCaSi("Chau");
+        if (!strValueSearch.isEmpty()) {
+            if (loaiTimKiem == 1) {
+                laTimKiemGanDay.setVisibility(View.GONE);
+                valueSearch.setText(strValueSearch);
+                layDanhSachBaiHat(strValueSearch);
+            } else {
+                laTimKiemGanDay.setVisibility(View.GONE);
+                valueSearch.setText(strValueSearch);
+                layDanhSachCaSi(strValueSearch);
+            }
+        }
 
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +176,19 @@ public class TimKiemFragment extends Fragment {
 
             }
         });
+
+
+        dataGoiY.add("Mỹ");
+        dataGoiY.add("Việt Nam");
+        dataGoiY.add("Trung Quốc");
+
+        ArrayAdapter<String> arrAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1,
+                dataGoiY);
+
+        valueSearch.setAdapter(arrAdapter);
+        valueSearch.setThreshold(2);
+
 
         return view;
     }
@@ -175,6 +209,64 @@ public class TimKiemFragment extends Fragment {
                 Log.e("vao", "onClick: ");
                 submitTimKiem();
                 return false;
+            }
+        });
+
+        valueSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                layTuKhoaGoiY(String.valueOf(valueSearch.getText()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void layTuKhoaGoiY(String value) {
+
+        if (value.isEmpty()) return;
+        ApiServiceV1.apiServiceV1.getGoiYTuKhoa(value).enqueue(new Callback<Keyword>() {
+            @Override
+            public void onResponse(Call<Keyword> call, Response<Keyword> response) {
+                Keyword res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        ArrayList<String> newArr = new ArrayList<>();
+
+                        for (int i = 0; i < res.getData().size(); i++) {
+                            newArr.add(res.getKeywordByIndex(i));
+                        }
+
+                        dataGoiY = newArr;
+                        ArrayAdapter<String> arrAdapter = new ArrayAdapter<>(getContext(),
+                                android.R.layout.simple_list_item_1,
+                                dataGoiY);
+
+                        valueSearch.setAdapter(arrAdapter);
+
+
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Toast.makeText(getContext(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Keyword> call, Throwable t) {
+                Toast.makeText(getContext(), "Loi lay tu khoa", Toast.LENGTH_SHORT)
+                        .show();
             }
         });
     }
@@ -257,6 +349,12 @@ public class TimKiemFragment extends Fragment {
         String limit = "";
         String offset = "";
 
+        if (!Common.checkTuKhoa(keyword)) {
+            Toast.makeText(getContext(), "Từ ngữ không được phép trong ứng dụng này", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
         ApiServiceV1.apiServiceV1.timKiemBaiHat(tenBaiHat, offset, limit, header).enqueue(new Callback<TimKiemBaiHat>() {
             @Override
             public void onResponse(Call<TimKiemBaiHat> call, Response<TimKiemBaiHat> response) {
@@ -272,6 +370,12 @@ public class TimKiemFragment extends Fragment {
                         adapterBH = new BaiHatAdapter(dataBH, getContext());
                         rvBaiHat.setAdapter(adapterBH);
                         rvBaiHat.setLayoutManager(managerBH);
+
+                        if (dataBH.size() == 0) {
+                            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                            intent.putExtra(SearchManager.QUERY, keyword);
+                            startActivity(intent);
+                        }
 
 
                     } else {

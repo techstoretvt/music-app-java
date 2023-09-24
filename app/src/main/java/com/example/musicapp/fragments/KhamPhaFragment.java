@@ -1,13 +1,20 @@
 package com.example.musicapp.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,6 +34,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -149,6 +158,13 @@ public class KhamPhaFragment extends Fragment {
                 if (String.valueOf(item).equals("search")) {
                     TimKiemFragment.typeBack = 1;
                     Common.replace_fragment(new TimKiemFragment());
+                } else if (String.valueOf(item).equals("micro")) {
+                    Log.e("vao", "");
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
+                    startActivityForResult(intent, 1);
+
                 }
                 return false;
             }
@@ -254,9 +270,24 @@ public class KhamPhaFragment extends Fragment {
     }
 
 
-    //        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//            }
-//        }, 1000);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            // Trích xuất văn bản từ giọng nói
+            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String text = results.get(0);
+
+            // Sử dụng văn bản để tìm kiếm
+//            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+//            intent.putExtra(SearchManager.QUERY, text);
+//            startActivity(intent);
+
+            TimKiemFragment.typeBack = 1;
+            TimKiemFragment.strValueSearch = text;
+            Common.replace_fragment(new TimKiemFragment());
+
+
+        }
+    }
 }

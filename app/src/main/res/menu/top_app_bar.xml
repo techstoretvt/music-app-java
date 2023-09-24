@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/favorite"
+        android:id="@+id/micro"
         android:icon="@drawable/ic_voice"
-        android:title="favorite"
+        android:title="micro"
         android:contentDescription="content_description_favorite"
         app:showAsAction="ifRoom" />
 

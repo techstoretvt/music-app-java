@@ -5,8 +5,11 @@ import com.example.musicapp.modal.anhxajson.GetCaSiByID;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
+import com.example.musicapp.modal.anhxajson.Keyword;
+import com.example.musicapp.modal.anhxajson.LayDsThongBao;
 import com.example.musicapp.modal.anhxajson.Login;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.modal.anhxajson.ThemBHVaoDS;
 import com.example.musicapp.modal.anhxajson.ThemDSPhat;
 import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
@@ -86,7 +89,7 @@ public interface ApiServiceV1 {
             , @Header("authorization") String authorization);
 
     @POST("/api/v2/them-bai-hat-vao-danh-sach")
-    Call<ResponseDefault> themBaiHatVaoDS(@Body BodyThemBHVaoDS body, @Header("authorization") String authorization);
+    Call<ThemBHVaoDS> themBaiHatVaoDS(@Body BodyThemBHVaoDS body, @Header("authorization") String authorization);
 
     @DELETE("/api/v2/xoa-danh-sach-phat")
     Call<ResponseDefault> xoaDanhSachPhatById(@Query("idDanhSachPhat") String idDanhSachPhat,
@@ -126,6 +129,20 @@ public interface ApiServiceV1 {
                                          @Query("tenDanhSach") String tenDS,
                                          @Header("authorization") String authorization
     );
+
+    @PUT("/api/v2/doi-vi-tri-trong-ds")
+    Call<ResponseDefault> doiViTriBaiHatTrongDS(@Query("idFrom") String idFrom,
+                                                @Query("idTo") String idTo,
+                                                @Query("idDanhSach") String idDanhSach,
+                                                @Header("authorization") String authorization
+    );
+
+    @GET("/api/v2/get-list-keyword-search-mobile")
+    Call<Keyword> getGoiYTuKhoa(@Query("value") String value);
+
+    @GET("/api/v2/lay-danh-sach-thong-bao")
+    Call<LayDsThongBao> layDanhSachTB(
+            @Header("authorization") String authorization);
 
     /* Get
     1. Truyền tham số ?access_key=access_key

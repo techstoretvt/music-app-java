@@ -9,9 +9,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -139,8 +139,17 @@ public class ChiTietThuVienFragment extends Fragment {
 
         layDanhSachBaiHat();
 
+        setItemTouchHelper();
+
 
         //set event
+        initEvent();
+
+
+        return view;
+    }
+
+    private void initEvent() {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,6 +235,7 @@ public class ChiTietThuVienFragment extends Fragment {
                         return false;
                     }
                 });
+
             }
 
         });
@@ -277,12 +287,124 @@ public class ChiTietThuVienFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ThemBHVaoDSActivity.class);
-                intent.putExtra("idDanhSach", idDanhSachPhat);
+                ThemBHVaoDSActivity.idDanhSach = idDanhSachPhat;
                 startActivity(intent);
             }
         });
+    }
 
-        return view;
+    private void setItemTouchHelper() {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN; // Di chuyển lên và xuống
+                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT; // Không cho phép vuốt
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+
+                adapter.notifyItemMoved(fromPosition, toPosition);
+
+                Log.e("from", String.valueOf(fromPosition));
+                Log.e("to", String.valueOf(toPosition));
+                Log.e("ten bh", danhBaiHats.get(fromPosition).getTenBaiHat());
+                Log.e("ten bh", danhBaiHats.get(toPosition).getTenBaiHat());
+
+
+                BaiHat a = danhBaiHats.get(fromPosition);
+                BaiHat b = danhBaiHats.get(toPosition);
+
+                danhBaiHats.remove(fromPosition);
+                danhBaiHats.add(fromPosition, b);
+
+                danhBaiHats.remove(toPosition);
+                danhBaiHats.add(toPosition, a);
+
+                String idFrom = danhBaiHats.get(fromPosition).getId();
+                String idTo = danhBaiHats.get(toPosition).getId();
+
+                doiViTriBaiHat(idFrom, idTo);
+
+
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Log.e("vao", "");
+                int position = viewHolder.getAdapterPosition();
+                deleteBaiHatKhoiDS(danhBaiHats.get(position).getId());
+
+                danhBaiHats.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+
+        });
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private void deleteBaiHatKhoiDS(String idBH) {
+        String header = Common.getHeader();
+
+        ApiServiceV1.apiServiceV1.xoaBaiHatKhoiDS(idDanhSachPhat, idBH, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null && res.getErrCode() != 0) {
+                    Toast.makeText(getContext(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Toast.makeText(getContext(), "Loi server", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+    }
+
+    private void doiViTriBaiHat(String idFrom, String idTo) {
+        String header = Common.getHeader();
+
+//        ProgressDialog progressDialog = new ProgressDialog(getContext());
+//        progressDialog.setTitle("Đang xử lý...");
+//        progressDialog.show();
+        ApiServiceV1.apiServiceV1.doiViTriBaiHatTrongDS(idFrom, idTo, idDanhSachPhat, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+//                        layDanhSachBaiHat();
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Toast.makeText(getContext(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+//                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Toast.makeText(getContext(), "Loi server", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        layDanhSachBaiHat();
     }
 
     private void submitEditTenDanhSach() {
@@ -420,6 +542,7 @@ public class ChiTietThuVienFragment extends Fragment {
                         ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
                         layoutParams.height = desiredHeightInPixels;
                         recyclerView.setLayoutParams(layoutParams);
+
 
                     } else {
                         if (res.getStatus() == 401) {
