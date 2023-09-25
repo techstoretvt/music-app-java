@@ -184,10 +184,12 @@
                 android:layout_height="wrap_content">
 
                 <Button
+                    android:id="@+id/btnPlayRandom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Phát ngẫu nhiên"
                     android:layout_centerHorizontal="true"
+                    android:enabled="false"
                     android:layout_gravity="center_horizontal"/>
 
                 <LinearLayout

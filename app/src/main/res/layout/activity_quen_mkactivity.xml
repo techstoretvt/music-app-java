@@ -36,6 +36,8 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:text="admin@gmail.com"
+            android:lines="1"
+            android:singleLine="true"
             android:textColor="#fff"
             android:layout_height="wrap_content"/>
 

@@ -43,6 +43,7 @@ import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.body.BodyXoaDSPhat;
 import com.example.musicapp.utils.Common;
+import com.example.musicapp.utils.MediaCustom;
 
 import java.util.ArrayList;
 
@@ -76,7 +77,7 @@ public class ChiTietThuVienFragment extends Fragment {
 
     ImageView btnBack, btnMore, img1anh, anh1, anh2, anh3, anh4, btnEdit;
 
-    Button btnSubmitEdit;
+    Button btnSubmitEdit, btnPlayRanDom;
     LinearLayout layout4anh, btnThemBH;
 
     public static Boolean isChiTietDS = false;
@@ -131,6 +132,7 @@ public class ChiTietThuVienFragment extends Fragment {
         btnEdit = view.findViewById(R.id.btnEdit);
         btnSubmitEdit = view.findViewById(R.id.btnSubmitEdit);
         btnThemBH = view.findViewById(R.id.btnThemBH);
+        btnPlayRanDom = view.findViewById(R.id.btnPlayRandom);
 
         isChiTietDS = true;
 
@@ -289,6 +291,24 @@ public class ChiTietThuVienFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ThemBHVaoDSActivity.class);
                 ThemBHVaoDSActivity.idDanhSach = idDanhSachPhat;
                 startActivity(intent);
+            }
+        });
+
+        btnPlayRanDom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MediaCustom.position = 0;
+                MediaCustom.danhSachPhats = danhBaiHats;
+                MediaCustom.typeDanhSachPhat = 2;
+                MediaCustom.tenLoai = tenDanhSach;
+
+                MainActivity.phatNhacMini(danhBaiHats.get(0).getAnhBia(),
+                        danhBaiHats.get(0).getTenBaiHat(),
+                        danhBaiHats.get(0).getCasi().getTenCaSi());
+
+                MediaCustom.phatNhac(danhBaiHats.get(0).getLinkBaiHat());
+                MediaCustom.isRandom = true;
             }
         });
     }
@@ -474,16 +494,19 @@ public class ChiTietThuVienFragment extends Fragment {
                     if (res.getErrCode() == 0) {
                         tenDanhSach = res.getData().getTenDanhSach();
 
-                        if (res.getData().getChiTietDanhSachPhats().size() == 0) {
 
-                            chuaCoBaihat.setVisibility(View.VISIBLE);
-                            return;
-                        }
                         layoutBtn.setVisibility(View.VISIBLE);
                         int slBh = res.getData().getChiTietDanhSachPhats() != null ?
                                 res.getData().getChiTietDanhSachPhats().size() : 0;
                         tenDS.setText(res.getData().getTenDanhSach());
                         slBaiHat.setText(String.valueOf(slBh) + " bài hát");
+
+                        if (res.getData().getChiTietDanhSachPhats().size() == 0) {
+
+                            chuaCoBaihat.setVisibility(View.VISIBLE);
+                            return;
+                        }
+                        btnPlayRanDom.setEnabled(true);
 
                         if (slBh > 0 && slBh < 4) {
                             Glide.with(getContext())

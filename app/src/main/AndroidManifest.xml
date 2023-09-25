@@ -17,6 +17,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.SettingActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
             android:name=".activities.TestActivity"
             android:exported="true">
 

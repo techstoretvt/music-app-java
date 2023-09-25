@@ -5,6 +5,7 @@ public class ThongBao {
     private String content;
     private String urlImage;
 
+
     public String getTitle() {
         return title;
     }

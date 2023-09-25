@@ -3,6 +3,7 @@ package com.example.musicapp.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -76,7 +78,29 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        ipPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (handleCheckValue()) {
+                    Log.e("Dữ liệu đúng", "Tiến hành xử lý");
+                    txtErrMess.setText("");
+                    handleLogin();
+                }
+                return false;
+            }
+        });
 
+        ipEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (handleCheckValue()) {
+                    Log.e("Dữ liệu đúng", "Tiến hành xử lý");
+                    txtErrMess.setText("");
+                    handleLogin();
+                }
+                return false;
+            }
+        });
     }
 
     private void handleLogin() {
@@ -84,6 +108,10 @@ public class LoginActivity extends AppCompatActivity {
         String strPassword = String.valueOf(ipPassword.getText());
 
         BodyLogin bodyLogin = new BodyLogin(strEmail, strPassword);
+
+        ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setTitle("Đang đăng nhập...");
+        progressDialog.show();
 
         ApiServiceV1.apiServiceV1.login(bodyLogin).enqueue(new Callback<Login>() {
             @Override
@@ -93,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (login.getErrCode() == 0) {
                         String accessToken = login.getAccessToken();
                         String refreshToken = login.getRefreshToken();
+                        String idUser = login.getIdUser();
 
                         SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -101,11 +130,12 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("refreshToken", refreshToken);
                         long time = System.currentTimeMillis() + 60000 * 60;
                         editor.putString("timeToken", String.valueOf(time));
+                        editor.putString("idUser", String.valueOf(idUser));
                         editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
-
+                        progressDialog.dismiss();
                         finish();
 
                     } else {

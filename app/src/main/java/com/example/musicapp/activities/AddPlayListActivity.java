@@ -2,6 +2,7 @@ package com.example.musicapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -84,7 +85,9 @@ public class AddPlayListActivity extends AppCompatActivity {
 
                 BodyThemDSPhat body = new BodyThemDSPhat(strNameDS);
 
-
+                ProgressDialog progressDialog = new ProgressDialog(AddPlayListActivity.this);
+                progressDialog.setTitle("Đang đổi mật khẩu...");
+                progressDialog.show();
                 ApiServiceV1.apiServiceV1.themDanhSachPhat(body, header).enqueue(new Callback<ThemDSPhat>() {
                     @Override
                     public void onResponse(Call<ThemDSPhat> call, Response<ThemDSPhat> response) {
@@ -97,6 +100,7 @@ public class AddPlayListActivity extends AppCompatActivity {
                                 bundle.putSerializable("newData", ds);
                                 intent.putExtra("myBundle", bundle);
                                 setResult(101, intent);
+                                progressDialog.dismiss();
                                 finish();
                             } else {
                                 layoutTenDS.setErrorEnabled(true);

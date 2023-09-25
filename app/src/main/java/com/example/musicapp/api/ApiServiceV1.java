@@ -5,6 +5,7 @@ import com.example.musicapp.modal.anhxajson.GetCaSiByID;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
+import com.example.musicapp.modal.anhxajson.GetTaiKhoan;
 import com.example.musicapp.modal.anhxajson.Keyword;
 import com.example.musicapp.modal.anhxajson.LayDsThongBao;
 import com.example.musicapp.modal.anhxajson.Login;
@@ -143,6 +144,10 @@ public interface ApiServiceV1 {
     @GET("/api/v2/lay-danh-sach-thong-bao")
     Call<LayDsThongBao> layDanhSachTB(
             @Header("authorization") String authorization);
+
+    @GET("/api/get-user-login")
+    Call<GetTaiKhoan> getTaiKhoan(@Header("authorization") String authorization);
+
 
     /* Get
     1. Truyền tham số ?access_key=access_key

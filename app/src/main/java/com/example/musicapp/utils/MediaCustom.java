@@ -45,6 +45,8 @@ public class MediaCustom {
 
     public static Boolean phatNhac(String url) {
         try {
+            Log.e(url, "");
+
             mediaPlayer.reset();
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepare();
@@ -159,15 +161,22 @@ public class MediaCustom {
             }
         } else if (typeDanhSachPhat == 2) {
             if (isRandom) {
+                Log.e("random", "");
                 if (positionRandom.size() == 0) {
                     taoListRandom();
                 }
+                for (int i = 0; i < positionRandom.size(); i++) {
+                    Log.e(String.valueOf(positionRandom.get(i)), "");
+                }
 
-                int newPosition = positionRandom.get((position + 1) % size);
+                int newNumber = (positionRandom.indexOf(position) + 1) % size;
+                int newPositionRandom = positionRandom.get(newNumber);
 
-                statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+                String url = danhSachPhats.get(newPositionRandom).getLinkBaiHat();
+
+                statusPhatNhac = phatNhac(url);
                 if (statusPhatNhac) {
-                    position = (position + 1) % size;
+                    position = newPositionRandom;
                 } else {
                     Toast.makeText(MainActivity.dungNhac.getContext(), "Lỗi", Toast.LENGTH_SHORT)
                             .show();
@@ -225,11 +234,14 @@ public class MediaCustom {
                     taoListRandom();
                 }
 
-                int newPosition = positionRandom.get((position - 1) % size);
+                int newNumber = (positionRandom.indexOf(position) - 1 + size) % size;
+                int newPositionRandom = positionRandom.get(newNumber);
 
-                statusPhatNhac = phatNhac(danhSachPhats.get(newPosition).getLinkBaiHat());
+                String url = danhSachPhats.get(newPositionRandom).getLinkBaiHat();
+
+                statusPhatNhac = phatNhac(url);
                 if (statusPhatNhac) {
-                    position = (position - 1 + size) % size;
+                    position = newPositionRandom;
                 } else {
                     Toast.makeText(MainActivity.dungNhac.getContext(), "Lỗi", Toast.LENGTH_SHORT)
                             .show();
@@ -292,6 +304,7 @@ public class MediaCustom {
 
     public static void taoListRandom() {
         positionRandom = new ArrayList<>();
+        positionRandom.add(position);
         Random random = new Random();
         while (positionRandom.size() < danhSachPhats.size()) {
             int number = random.nextInt(danhSachPhats.size());

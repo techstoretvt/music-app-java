@@ -107,7 +107,12 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();
 
-
+        if (MediaCustom.isRandom) {
+            btnRandom.setImageResource(R.drawable.random_enable);
+            btnLoop.setImageResource(R.drawable.arrows_rotate_solid);
+        } else {
+            btnRandom.setImageResource(R.drawable.random);
+        }
         //event
         btnPausePlay.setOnClickListener(new View.OnClickListener() {
             @Override

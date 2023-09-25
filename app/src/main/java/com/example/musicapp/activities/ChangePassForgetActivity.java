@@ -2,6 +2,7 @@ package com.example.musicapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -52,6 +53,9 @@ public class ChangePassForgetActivity extends AppCompatActivity {
                         BodyChangePass body = new BodyChangePass(email, strMa, strPassword);
                         txtErr.setText("");
 
+                        ProgressDialog progressDialog = new ProgressDialog(ChangePassForgetActivity.this);
+                        progressDialog.setTitle("Đang đổi mật khẩu...");
+                        progressDialog.show();
                         ApiServiceV1.apiServiceV1.doiMK(body).enqueue(new Callback<ResponseDefault>() {
                             @Override
                             public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
@@ -60,6 +64,7 @@ public class ChangePassForgetActivity extends AppCompatActivity {
                                     if (res.getErrCode() == 0) {
                                         intent.putExtra("status", "success");
                                         setResult(101, intent);
+                                        progressDialog.dismiss();
                                         finish();
                                     } else {
                                         txtErr.setText(res.getErrMessage());

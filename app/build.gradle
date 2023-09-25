@@ -50,5 +50,12 @@ dependencies {
     implementation 'androidx.transition:transition:1.4.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.google.android.material:material:1.2.1'
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
+    implementation('io.socket:socket.io-client:2.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
 }
+

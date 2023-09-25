@@ -6,22 +6,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.service.controls.actions.CommandAction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
+import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.ThongBaoAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.LayDsThongBao;
 import com.example.musicapp.modal.anhxajson.ThongBao;
 import com.example.musicapp.utils.Common;
-import com.example.musicapp.utils.MyWebSocketClient;
+import com.google.android.material.badge.BadgeDrawable;
 
 import java.util.ArrayList;
 
+import io.socket.emitter.Emitter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +46,8 @@ public class ThongBaoFragment extends Fragment {
     ThongBaoAdapter adapter;
 
     ArrayList<ThongBao> data = new ArrayList<>();
+
+    public static int numberThongBao = 0;
 
     public ThongBaoFragment() {
         // Required empty public constructor
@@ -75,22 +78,48 @@ public class ThongBaoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_thong_bao, container, false);
         manager = new LinearLayoutManager(getContext());
         recyclerView = view.findViewById(R.id.rvThongBao);
-
-
-//        for (int i = 0; i < 10; i++) {
-//            data.add("a");
-//        }
-
+        numberThongBao = 0;
 
         layDanhSachThongBao();
 
-        MyWebSocketClient webSocketClient = new MyWebSocketClient();
+        BadgeDrawable badge = MainActivity.bottomNavigationView.getOrCreateBadge(R.id.thongBao);
+        badge.setVisible(false);
+        badge.setNumber(numberThongBao);
 
-        // Để gửi tin nhắn
-//        webSocketClient.sendMessage("Hello, Server!");
+//        btnTest.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String dataStr = "{\"title\":\"Ca khúc mới có tên \\\"nhạc cười 4\\\"\",\"content\":\"\\\"nhạc cười 4\\\" - một bài hát mới của [tên nghệ sĩ\\/nhóm nhạc] đã chính thức ra mắt. Đây là một bài hát về tình yêu đơn phương, mang đến cho người nghe những cảm xúc lắng đọng và sâu sắc.\\n\\n                    Giai điệu của bài hát du dương, ngọt ngào, kết hợp với giọng hát đầy cảm xúc của [tên nghệ sĩ\\/nhóm nhạc], đã mang đến cho khán giả những cảm xúc lắng đọng.\\n                    \\n                    \\\"nhạc cười 4\\\" là một bài hát dễ nghe, dễ nhớ, và dễ đi vào lòng người. Bài hát chắc chắn sẽ là một bản hit trong thời gian tới.\",\"timeCreate\":1695607515696,\"urlImage\":\"https:\\/\\/source.unsplash.com\\/random?sig=11\"}";
+//
+//
+//                Gson gson = new Gson();
+//                ThongBao newTB = gson.fromJson(dataStr, ThongBao.class);
+//
+//                Log.e("title", newTB.getTitle());
+////                Log.e("content", newTB.getContent());
+////                Log.e("url image", newTB.getUrlImage());
+//
+//                data.add(0, newTB);
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
 
-        // Để đóng kết nối
-        webSocketClient.closeWebSocket();
+        MainActivity.webSocketClient.socket.on("new_thong_bao", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                // Xử lý dữ liệu từ máy chủ ở đây
+//                String dataStr = args[0].toString();
+////                Log.e("data", dataStr);
+//
+//                Gson gson = new Gson();
+//                ThongBao newTB = gson.fromJson(dataStr, ThongBao.class);
+//
+//                data.add(0, newTB);
+//                adapter.notifyDataSetChanged();
+                layDanhSachThongBao();
+
+            }
+        });
 
         return view;
     }

@@ -8,7 +8,7 @@ public class BaiHat {
     private String linkBaiHat;
     private Casi casi;
 
-    private long thoiGian;
+    private double thoiGian;
 
     public BaiHat(String id, String tenBaiHat, String loiBaiHat, String anhBia, String linkBaiHat, Casi casi) {
         this.id = id;
@@ -19,11 +19,11 @@ public class BaiHat {
         this.casi = casi;
     }
 
-    public long getThoiGian() {
+    public double getThoiGian() {
         return thoiGian;
     }
 
-    public void setThoiGian(long thoiGian) {
+    public void setThoiGian(double thoiGian) {
         this.thoiGian = thoiGian;
     }
 

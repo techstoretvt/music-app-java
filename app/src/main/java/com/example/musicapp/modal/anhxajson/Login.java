@@ -3,6 +3,15 @@ package com.example.musicapp.modal.anhxajson;
 class Token {
     private String accessToken;
     private String refreshToken;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAccessToken() {
         return accessToken;
@@ -62,5 +71,9 @@ public class Login {
 
     public String getRefreshToken() {
         return data.getRefreshToken();
+    }
+
+    public String getIdUser() {
+        return data.getId();
     }
 }

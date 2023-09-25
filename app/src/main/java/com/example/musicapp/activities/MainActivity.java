@@ -33,8 +33,15 @@ import com.example.musicapp.fragments.ThuVienFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.utils.MediaCustom;
+import com.example.musicapp.utils.MyWebSocketClient;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import javax.crypto.SecretKey;
+
+import io.jsonwebtoken.Jwts;
+import io.socket.emitter.Emitter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static String accessToken;
+    String idUser;
 
     public static FragmentManager fragmentManager2;
 
@@ -68,15 +76,19 @@ public class MainActivity extends AppCompatActivity {
 
     public static BottomNavigationView bottomNavigationView;
 
+    public static MyWebSocketClient webSocketClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replace_fragment(new ThongBaoFragment());
+        replace_fragment(new KhamPhaFragment());
 
         anhXaView();
+        webSocketClient = new MyWebSocketClient();
+
 
 //        BottomSheetThemBHVaoDS md = new BottomSheetThemBHVaoDS();
 //        md.show(MainActivity.supportFragmentManager, BottomSheetThemBHVaoDS.TAG);
@@ -90,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
 
         accessToken = sharedPreferences.getString("accessToken", null);
+        idUser = sharedPreferences.getString("idUser", null);
+        initEventSocket();
 
         //binding bottom tabs
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -164,6 +178,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void initEventSocket() {
+        webSocketClient.socket.on("new_thong_bao", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                BadgeDrawable badge = bottomNavigationView.getOrCreateBadge(R.id.thongBao);
+                badge.setVisible(true);
+                ThongBaoFragment.numberThongBao++;
+                badge.setNumber(ThongBaoFragment.numberThongBao);
+
+                //thong bao cho nguoi dung
+
+            }
+        });
+
+        webSocketClient.socket.on("khoa_tai_khoan_" + idUser, new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                Log.e("vao", "");
+
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+                finish();
+            }
+        });
     }
 
     @Override
