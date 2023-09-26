@@ -16,6 +16,7 @@ import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
 import com.example.musicapp.modal.body.BodyChangePass;
 import com.example.musicapp.modal.body.BodyLogin;
+import com.example.musicapp.modal.body.BodyLoginGoogle;
 import com.example.musicapp.modal.body.BodySignUp;
 import com.example.musicapp.modal.body.BodyThemBHVaoDS;
 import com.example.musicapp.modal.body.BodyThemDSPhat;
@@ -147,6 +148,17 @@ public interface ApiServiceV1 {
 
     @GET("/api/get-user-login")
     Call<GetTaiKhoan> getTaiKhoan(@Header("authorization") String authorization);
+
+    @POST("/api/login-google")
+    Call<Login> loginGoogle(@Body BodyLoginGoogle body);
+
+    @POST("/api/v2/toggle-yeu-thich-bai-hat")
+    Call<ResponseDefault> toggleLikeBaiHat(@Query("idBaiHat") String idBaiHat,
+                                           @Header("authorization") String authorization);
+
+    @GET("/api/v2/kiem-tra-yeu-thich-bai-hat")
+    Call<ResponseDefault> kiemTraYeuThichBaiHat(@Query("idBaiHat") String idBaiHat,
+                                                @Header("authorization") String authorization);
 
 
     /* Get

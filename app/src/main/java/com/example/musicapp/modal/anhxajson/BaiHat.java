@@ -6,6 +6,7 @@ public class BaiHat {
     private String loiBaiHat;
     private String anhBia;
     private String linkBaiHat;
+    private String linkMV;
     private Casi casi;
 
     private double thoiGian;
@@ -17,6 +18,14 @@ public class BaiHat {
         this.anhBia = anhBia;
         this.linkBaiHat = linkBaiHat;
         this.casi = casi;
+    }
+
+    public String getLinkMV() {
+        return linkMV;
+    }
+
+    public void setLinkMV(String linkMV) {
+        this.linkMV = linkMV;
     }
 
     public double getThoiGian() {

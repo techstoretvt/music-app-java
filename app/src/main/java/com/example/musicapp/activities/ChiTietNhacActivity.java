@@ -17,19 +17,30 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
+import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.KhamPhaFragment;
+import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
+import com.google.android.gms.common.api.Api;
 import com.google.android.material.slider.Slider;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ChiTietNhacActivity extends AppCompatActivity {
 
-    ImageView iconClose, imgNhac, btnPrev, btnRandom, btnLoop, btnMore, btnThaTim, btnShare;
+    ImageView iconClose, imgNhac, btnPrev, btnRandom, btnLoop, btnMore, btnShare;
+
+    public static ImageView btnThaTim;
     public static ImageView btnNext;
     TextView totalTime = null, tgHienTai = null, txtTenBH, txtTenCS, txtLoiBH, txtTypePlay;
 
@@ -39,7 +50,7 @@ public class ChiTietNhacActivity extends AppCompatActivity {
     public static FragmentManager supportFragmentManager;
     public static BsBaiHat md;
 
-    Boolean isStartSlider = false, isLike = false;
+    Boolean isStartSlider = false;
 
     ObjectAnimator animator;
 
@@ -261,14 +272,7 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         btnThaTim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isLike == false) {
-                    btnThaTim.setImageResource(R.drawable.baseline_favorite_red);
-                    isLike = true;
-                } else {
-                    btnThaTim.setImageResource(R.drawable.baseline_favorite_24);
-                    isLike = false;
-                }
-
+                handleToggleLike();
             }
         });
 
@@ -287,6 +291,74 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(shareIntent, "Chia sẻ URL với:"));
             }
         });
+
+        checkLike();
+    }
+
+    public static void checkLike() {
+        String header = Common.getHeader();
+        String idBH = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
+
+        ApiServiceV1.apiServiceV1.kiemTraYeuThichBaiHat(idBH, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        if (res.getErrMessage().equals("like")) {
+                            btnThaTim.setImageResource(R.drawable.baseline_favorite_red);
+                        } else {
+                            btnThaTim.setImageResource(R.drawable.baseline_favorite_24);
+                        }
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Log.e("Loi", res.getErrMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Log.e("Loi", "Loi call api toggle like bai hat");
+            }
+        });
+    }
+
+
+    public static void handleToggleLike() {
+
+        String header = Common.getHeader();
+        String idBH = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
+
+        ApiServiceV1.apiServiceV1.toggleLikeBaiHat(idBH, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        if (res.getErrMessage().equals("like")) {
+                            btnThaTim.setImageResource(R.drawable.baseline_favorite_red);
+                        } else {
+                            btnThaTim.setImageResource(R.drawable.baseline_favorite_24);
+                        }
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Log.e("Loi", res.getErrMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Log.e("Loi", "Loi call api toggle like bai hat");
+            }
+        });
+
+
     }
 
     @Override

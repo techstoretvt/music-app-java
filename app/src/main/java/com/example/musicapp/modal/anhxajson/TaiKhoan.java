@@ -8,6 +8,24 @@ public class TaiKhoan {
     private String typeAccount;
     private String avatar;
     private String avatarUpdate;
+    private String avatarGoogle;
+    private String avatarFacebook;
+
+    public String getAvatarFacebook() {
+        return avatarFacebook;
+    }
+
+    public void setAvatarFacebook(String avatarFacebook) {
+        this.avatarFacebook = avatarFacebook;
+    }
+
+    public String getAvatarGoogle() {
+        return avatarGoogle;
+    }
+
+    public void setAvatarGoogle(String avatarGoogle) {
+        this.avatarGoogle = avatarGoogle;
+    }
 
     public String getId() {
         return id;

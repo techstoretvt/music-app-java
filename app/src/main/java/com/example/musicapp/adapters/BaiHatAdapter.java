@@ -1,6 +1,7 @@
 package com.example.musicapp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
     public static String idBaiHat = null;
     public static String idCaSi = null;
+
+    public static String linkMV = null;
 
     public static BsBaiHat md = new BsBaiHat();
     ArrayList<BaiHat> data;
@@ -107,11 +110,13 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
             @Override
             public void onClick(View view) {
                 //
-
-                md.show(MainActivity.supportFragmentManager, BsBaiHat.TAG);
-
                 idBaiHat = data.get(holder.getAdapterPosition()).getId();
                 idCaSi = data.get(holder.getAdapterPosition()).getCasi().getId();
+                linkMV = data.get(holder.getAdapterPosition()).getLinkMV();
+
+                Log.e("link mv", String.valueOf(data.get(holder.getAdapterPosition()).getLinkMV()));
+
+                md.show(MainActivity.supportFragmentManager, BsBaiHat.TAG);
             }
         });
 

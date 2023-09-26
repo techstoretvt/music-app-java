@@ -1,6 +1,7 @@
 package com.example.musicapp.activities;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -8,9 +9,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,6 +29,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
+import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
@@ -32,16 +39,25 @@ import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.modal.anhxajson.DanhSachPhat;
+import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.modal.body.BodyXoaDSPhat;
 import com.example.musicapp.utils.MediaCustom;
 import com.example.musicapp.utils.MyWebSocketClient;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 import javax.crypto.SecretKey;
 
 import io.jsonwebtoken.Jwts;
 import io.socket.emitter.Emitter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -55,11 +71,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView btnNext;
     public static TextView txtTenBaiHat, txtTenCaSi;
 
-//    public static BaiHat currentBaiHat = null;
-
-//    public static Boolean isPlay = false;
-
-//    public static int typePlay = 0; //0: khong co - 1: kham pha
+    Boolean isNetwork = true;
 
 
     public static String accessToken;
@@ -78,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static MyWebSocketClient webSocketClient;
 
+    Boolean isActive = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,17 +102,8 @@ public class MainActivity extends AppCompatActivity {
 
         anhXaView();
         webSocketClient = new MyWebSocketClient();
+        isActive = true;
 
-
-//        BottomSheetThemBHVaoDS md = new BottomSheetThemBHVaoDS();
-//        md.show(MainActivity.supportFragmentManager, BottomSheetThemBHVaoDS.TAG);
-
-//        SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//
-//        editor.remove("accessToken");
-//        editor.remove("refreshToken");
-//        editor.apply();
         SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
 
         accessToken = sharedPreferences.getString("accessToken", null);
@@ -179,6 +184,56 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onLost(Network network) {
+                isNetwork = false;
+
+//                Toast.makeText(MainActivity.this, "Mat mang", Toast.LENGTH_SHORT)
+//                        .show();
+
+                if (isActive) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Không có kết nối");
+                    builder.setMessage("Bạn có có muốn chuyển sang nghe nhạc offline không?");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Xử lý khi người dùng nhấn vào nút OK
+
+
+                        }
+                    });
+                    builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Xử lý khi người dùng nhấn vào nút Hủy
+                        }
+                    });
+                    builder.show();
+                }
+
+
+            }
+
+            @Override
+            public void onAvailable(@NonNull Network network) {
+                super.onAvailable(network);
+
+                if (isNetwork == false) {
+                    Toast.makeText(MainActivity.this, "Đã kết nối lại", Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+
+                isNetwork = true;
+            }
+        };
+
+        connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkCallback);
+
     }
 
     private void initEventSocket() {
@@ -223,6 +278,18 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Nhấn back lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show();
         }
         lastBackPressedTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isActive = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isActive = true;
     }
 
     private void anhXaView() {

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -64,6 +65,10 @@
             android:exported="true">
 
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.auth.api.signin.293679478289-2ivcn0cfajfov6j5bajl6crvlr135317.apps.googleusercontent.com"
+            android:value="293679478289-2ivcn0cfajfov6j5bajl6crvlr135317.apps.googleusercontent.com"/>
     </application>
 
 </manifest>

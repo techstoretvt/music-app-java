@@ -1,6 +1,7 @@
 package com.example.musicapp.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -20,8 +21,17 @@ import android.widget.Toast;
 import com.example.musicapp.R;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.Login;
+import com.example.musicapp.modal.anhxajson.ThemBHVaoDS;
 import com.example.musicapp.modal.body.BodyLogin;
+import com.example.musicapp.modal.body.BodyLoginGoogle;
 import com.example.musicapp.utils.Common;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -33,7 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    Button btnLogin, btnSignUp, btnQuenMK;
+    Button btnLogin, btnSignUp, btnQuenMK, btnGoogle;
     TextView txtErrMess;
     TextInputEditText ipEmail, ipPassword;
     TextInputLayout layoutEmail, layoutPassword;
@@ -101,6 +111,107 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+//        btnGoogle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//            }
+//        });
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(LoginActivity.this,
+                gso);
+
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
+        
+
+        btnGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, 100);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100) {
+            // Đăng nhập thành công
+
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+//            Toast.makeText(this, account.getId(), Toast.LENGTH_SHORT).show();
+
+            String idGoogle = account.getId();
+            String firstName = account.getGivenName();
+            String lastName = account.getFamilyName();
+            String avatar = account.getPhotoUrl().toString();
+
+            BodyLoginGoogle body = new BodyLoginGoogle(firstName, lastName, avatar, idGoogle);
+
+            ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setTitle("Đang đăng nhập...");
+            progressDialog.show();
+            ApiServiceV1.apiServiceV1.loginGoogle(body).enqueue(new Callback<Login>() {
+                @Override
+                public void onResponse(Call<Login> call, Response<Login> response) {
+                    Login res = response.body();
+                    if (res != null) {
+                        if (res.getErrCode() == 0) {
+                            String accessToken = res.getAccessToken();
+                            String refreshToken = res.getRefreshToken();
+                            String idUser = res.getIdUser();
+
+                            SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                            editor.putString("accessToken", accessToken);
+                            editor.putString("refreshToken", refreshToken);
+                            long time = System.currentTimeMillis() + 60000 * 60;
+                            editor.putString("timeToken", String.valueOf(time));
+                            editor.putString("idUser", String.valueOf(idUser));
+                            editor.apply();
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            progressDialog.dismiss();
+                            finish();
+                        } else {
+                            txtErrMess.setText(res.getErrMessage());
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Login> call, Throwable t) {
+                    Toast.makeText(LoginActivity.this,
+                            "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        } catch (ApiException e) {
+
+            Log.w("error", "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void handleLogin() {
@@ -228,6 +339,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
         btnQuenMK = findViewById(R.id.btnQuenMatKhau);
+        btnGoogle = findViewById(R.id.btnGoogle);
 
         ipEmail = findViewById(R.id.email);
         ipPassword = findViewById(R.id.password);

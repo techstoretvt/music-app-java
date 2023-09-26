@@ -196,22 +196,27 @@ public class MediaCustom {
 
 
         //update giao dien
-        String anhBia = MediaCustom.danhSachPhats.get(position)
-                .getAnhBia();
-        Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
-                .into(MainActivity.imgNhac);
-        MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-        MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
-        MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+        if (MainActivity.dungNhac != null) {
+            String anhBia = MediaCustom.danhSachPhats.get(position)
+                    .getAnhBia();
+            Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
+                    .into(MainActivity.imgNhac);
+            MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+            MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+            MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+        }
+
+        if (ChiTietNhacActivity.isChiTietNhac) {
+            ChiTietNhacActivity.checkLike();
+        }
+
 
         return statusPhatNhac;
     }
 
     public static Boolean prev() {
-//        if (loading) {
-//            return false;
-//        }
-//        loading = true;
+
+        
         Boolean statusPhatNhac = false;
 
         int size = danhSachPhats.size();
@@ -260,19 +265,26 @@ public class MediaCustom {
         }
 
         //update giao dien
-        String anhBia = MediaCustom.danhSachPhats.get(position)
-                .getAnhBia();
-        Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
-                .into(MainActivity.imgNhac);
+        if (MainActivity.dungNhac != null) {
+            String anhBia = MediaCustom.danhSachPhats.get(position)
+                    .getAnhBia();
+            Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
+                    .into(MainActivity.imgNhac);
 
-        MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-        MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
-        MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+            MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+            MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+            MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+        }
+
 
         if (position > 0) {
             MainActivity.btnPrev.setVisibility(View.VISIBLE);
         } else {
             MainActivity.btnPrev.setVisibility(View.GONE);
+        }
+
+        if (ChiTietNhacActivity.isChiTietNhac) {
+            ChiTietNhacActivity.checkLike();
         }
 
         return statusPhatNhac;

@@ -1,5 +1,6 @@
 package com.example.musicapp.fragments;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,7 +43,7 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         LinearLayout layoutThemVaoDS = view.findViewById(R.id.layoutThemVaoDS);
         LinearLayout layoutTaiVe = view.findViewById(R.id.layoutTaiVe);
         LinearLayout layoutPhatKeTiep = view.findViewById(R.id.layoutPhatKeTiep);
-        LinearLayout layoutXemAlbum = view.findViewById(R.id.layoutXemAlbum);
+        LinearLayout layoutXemMV = view.findViewById(R.id.layoutXemMV);
         LinearLayout layoutXemNS = view.findViewById(R.id.layoutXemNS);
         LinearLayout layoutChan = view.findViewById(R.id.layoutChan);
         LinearLayout removeBH = view.findViewById(R.id.layoutRemove);
@@ -101,6 +102,12 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             removeBH.setVisibility(View.GONE);
         }
 
+        if (BaiHatAdapter.linkMV == null || BaiHatAdapter.linkMV.equals("false")) {
+            layoutXemMV.setVisibility(View.GONE);
+        } else {
+            layoutXemMV.setVisibility(View.VISIBLE);
+        }
+
         layoutThemVaoDS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,11 +138,12 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             }
         });
 
-        layoutXemAlbum.setOnClickListener(new View.OnClickListener() {
+        layoutXemMV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Tính năng này chưa cập nhật", Toast.LENGTH_SHORT)
-                        .show();
+                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                intent.putExtra(SearchManager.QUERY, BaiHatAdapter.linkMV);
+                startActivity(intent);
             }
         });
 

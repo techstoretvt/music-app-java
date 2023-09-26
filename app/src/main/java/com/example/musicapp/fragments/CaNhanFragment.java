@@ -124,15 +124,32 @@ public class CaNhanFragment extends Fragment {
                             typeUser.setText("Người dùng mới");
                         }
 
-                        if (!tk.getAvatarUpdate().isEmpty()) {
-                            Glide.with(getContext()).load(tk.getAvatarUpdate())
-                                    .into(anhUser);
-                        } else if (!tk.getAvatar().isEmpty()) {
-                            Glide.with(getContext()).load(tk.getAvatar())
-                                    .into(anhUser);
-                        } else {
-                            Glide.with(getContext()).load("https://res.cloudinary.com/dultkpqjp/image/upload/v1683860764/avatar_user/no-user-image_axhl6d.png")
-                                    .into(anhUser);
+                        //set avatar
+
+                        if (tk.getTypeAccount().equals("web")) {
+                            if (tk.getAvatarUpdate() != null) {
+                                Glide.with(getContext()).load(tk.getAvatarUpdate())
+                                        .into(anhUser);
+                            } else {
+                                Glide.with(getContext()).load("https://res.cloudinary.com/dultkpqjp/image/upload/v1683860764/avatar_user/no-user-image_axhl6d.png")
+                                        .into(anhUser);
+                            }
+                        } else if (tk.getTypeAccount().equals("google")) {
+                            if (tk.getAvatarUpdate() != null) {
+                                Glide.with(getContext()).load(tk.getAvatarUpdate())
+                                        .into(anhUser);
+                            } else {
+                                Glide.with(getContext()).load(tk.getAvatarGoogle())
+                                        .into(anhUser);
+                            }
+                        } else if (tk.getTypeAccount().equals("facebook")) {
+                            if (tk.getAvatarUpdate() != null) {
+                                Glide.with(getContext()).load(tk.getAvatarUpdate())
+                                        .into(anhUser);
+                            } else {
+                                Glide.with(getContext()).load(tk.getAvatarFacebook())
+                                        .into(anhUser);
+                            }
                         }
 
 
