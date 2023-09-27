@@ -10,14 +10,19 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,18 +35,23 @@ import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
+import com.example.musicapp.fragments.NgheSiQuanTamFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
+import com.example.musicapp.fragments.YeuThichFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
+import com.example.musicapp.modal.anhxajson.QuanTamCS;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.body.BodyXoaDSPhat;
+import com.example.musicapp.utils.DownloadReceiver;
 import com.example.musicapp.utils.MediaCustom;
 import com.example.musicapp.utils.MyWebSocketClient;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -91,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     public static MyWebSocketClient webSocketClient;
 
     Boolean isActive = false;
+
+    DownloadReceiver downloadReceiver;
 
 
     @Override
@@ -184,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //set su kien mat mang
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
@@ -234,6 +247,10 @@ public class MainActivity extends AppCompatActivity {
 
         connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkCallback);
 
+
+        //sqlite
+
+
     }
 
     private void initEventSocket() {
@@ -270,7 +287,12 @@ public class MainActivity extends AppCompatActivity {
             replace_fragment(new ThuVienFragment());
             ChiTietThuVienFragment.isChiTietDS = false;
             return;
+        } else if (YeuThichFragment.isYeuThich || NgheSiQuanTamFragment.isQuanTamNgheSi ||
+                ChiTietThuVienFragment.isChiTietDS) {
+            replace_fragment(new ThuVienFragment());
+            return;
         }
+
 
         if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
             finish();
@@ -334,7 +356,37 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                String linkBaiHat = BaiHatAdapter.linkBaiHat;
+                String linkAnh = BaiHatAdapter.linkAnh;
+
+                DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                Uri uri = Uri.parse(linkBaiHat);
+                DownloadManager.Request request = new DownloadManager.Request(uri);
+                request.setTitle("Tải nhạc");
+                request.setDescription("Tải nhạc từ link");
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC,
+                        BaiHatAdapter.idBaiHat + ".mp3");
+                downloadManager.enqueue(request);
+
+                downloadReceiver = new DownloadReceiver();
+                IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+                registerReceiver(downloadReceiver, filter);
+
+
+            } else {
+                // Người dùng từ chối quyền
+                // Cung cấp cho người dùng một giải pháp thay thế
+
+            }
+        }
+    }
 }
 
 

@@ -19,6 +19,7 @@ import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
+import com.example.musicapp.fragments.NgheSiQuanTamFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.utils.Common;
@@ -60,6 +61,10 @@ public class CaSiAdapter extends RecyclerView.Adapter<CaSiAdapter.VHolder> {
             public void onClick(View view) {
                 ChiTietCaSiFragment.idCaSi = data.get(holder.getAdapterPosition()).getId();
                 Common.replace_fragment(new ChiTietCaSiFragment());
+
+                if (NgheSiQuanTamFragment.isQuanTamNgheSi) {
+                    ChiTietCaSiFragment.typeBack = 3;
+                }
             }
         });
 

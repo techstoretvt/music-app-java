@@ -1,6 +1,8 @@
 package com.example.musicapp.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,7 +15,9 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +35,10 @@ import com.example.musicapp.modal.anhxajson.DanhSachCaSi;
 import com.example.musicapp.modal.anhxajson.GetCaSiByID;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
+import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.utils.Common;
+import com.example.musicapp.utils.MediaCustom;
+import com.google.android.gms.common.api.Api;
 
 import java.util.ArrayList;
 
@@ -39,19 +46,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChiTietCaSiFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ChiTietCaSiFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -63,9 +63,12 @@ public class ChiTietCaSiFragment extends Fragment {
     CaSiAdapter adapterCS;
     ArrayList<BaiHat> dsBaiHats = null;
 
-    TextView chuaCoBaihat, thongTin, tenCS;
+    TextView chuaCoBaihat, thongTin, tenCS, numberQuanTam;
 
     ImageView anhCS, btnBack;
+
+    Button btnQuanTam, btnPhatNhac;
+
 
     public static String idCaSi = "e0e1064e-2f2f-40a9-8d0d-2cee76da27f5";
     public static Boolean isChiTietCS = false;
@@ -115,6 +118,18 @@ public class ChiTietCaSiFragment extends Fragment {
         anhCS = view.findViewById(R.id.anhCS);
         btnBack = view.findViewById(R.id.btnBack);
         isChiTietCS = true;
+        btnQuanTam = view.findViewById(R.id.btnQuanTam);
+        numberQuanTam = view.findViewById(R.id.numberQuanTam);
+        btnPhatNhac = view.findViewById(R.id.btnPhatNhac);
+
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
+        );
+        LinearLayout linearLayout = view.findViewById(R.id.layoutInfo);
+        linearLayout.setBackground(gradientDrawable);
+
 
         layThongTinCaSi();
 
@@ -142,12 +157,83 @@ public class ChiTietCaSiFragment extends Fragment {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
+                } else if (typeBack == 3) {
+
+                    Common.replace_fragment(new NgheSiQuanTamFragment());
+
+                } else if (typeBack == 4) {
+
+                    Common.replace_fragment(new YeuThichFragment());
+
                 }
+            }
+        });
+
+        btnQuanTam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleToggleQuanTam();
+            }
+        });
+
+        btnPhatNhac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MediaCustom.position = 0;
+                MediaCustom.danhSachPhats = dsBaiHats;
+                MediaCustom.typeDanhSachPhat = 2;
+                MediaCustom.tenLoai = tenCS.getText().toString();
+
+                MainActivity.phatNhacMini(dsBaiHats.get(0).getAnhBia(),
+                        dsBaiHats.get(0).getTenBaiHat(),
+                        dsBaiHats.get(0).getCasi().getTenCaSi());
+
+                MediaCustom.phatNhac(dsBaiHats.get(0).getLinkBaiHat());
             }
         });
 
 
         return view;
+    }
+
+    private void handleToggleQuanTam() {
+        String header = Common.getHeader();
+
+        ApiServiceV1.apiServiceV1.toggleQuanTamCasi(idCaSi, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        if (res.getErrMessage().equals("yes")) {
+                            btnQuanTam.setText("ĐÃ QUAN TÂM");
+                            int number = Integer.parseInt(numberQuanTam.getText().toString());
+                            number++;
+                            numberQuanTam.setText(String.valueOf(number));
+
+                        } else {
+                            btnQuanTam.setText("QUAN TÂM");
+                            int number = Integer.parseInt(numberQuanTam.getText().toString());
+                            number--;
+                            numberQuanTam.setText(String.valueOf(number));
+                        }
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Toast.makeText(getContext(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Log.e("Loi", "Loi toggle quan tam ca si");
+            }
+        });
+
+
     }
 
     private void layThongTinCaSi() {
@@ -162,6 +248,7 @@ public class ChiTietCaSiFragment extends Fragment {
                         strTenCS = res.getData().getTenCaSi();
                         tenCS.setText(res.getData().getTenCaSi());
                         thongTin.setText((res.getData().getMoTa()));
+                        numberQuanTam.setText(String.valueOf(res.getCountQuanTam()));
 
                         Glide.with(getContext()).load(res.getData().getAnh()).into(anhCS);
 
@@ -234,6 +321,7 @@ public class ChiTietCaSiFragment extends Fragment {
 
                         dsBaiHats = res.getData();
 
+
                         adapter = new BaiHatAdapter(dsBaiHats, getActivity());
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(manager);
@@ -245,6 +333,8 @@ public class ChiTietCaSiFragment extends Fragment {
                         ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
                         layoutParams.height = desiredHeightInPixels;
                         recyclerView.setLayoutParams(layoutParams);
+                        recyclerView.setNestedScrollingEnabled(false);
+
 
                     } else {
                         if (res.getStatus() == 401) {
@@ -269,4 +359,5 @@ public class ChiTietCaSiFragment extends Fragment {
         super.onDestroy();
         isChiTietCS = false;
     }
+
 }

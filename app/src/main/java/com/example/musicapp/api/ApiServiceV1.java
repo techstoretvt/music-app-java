@@ -3,7 +3,9 @@ package com.example.musicapp.api;
 import com.example.musicapp.modal.anhxajson.DanhSachCaSi;
 import com.example.musicapp.modal.anhxajson.GetCaSiByID;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
+import com.example.musicapp.modal.anhxajson.GetListBHYeuThich;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
+import com.example.musicapp.modal.anhxajson.GetListCSQuanTam;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
 import com.example.musicapp.modal.anhxajson.GetTaiKhoan;
 import com.example.musicapp.modal.anhxajson.Keyword;
@@ -159,6 +161,19 @@ public interface ApiServiceV1 {
     @GET("/api/v2/kiem-tra-yeu-thich-bai-hat")
     Call<ResponseDefault> kiemTraYeuThichBaiHat(@Query("idBaiHat") String idBaiHat,
                                                 @Header("authorization") String authorization);
+
+    @GET("/api/v2/lay-danh-sach-bai-hat-yeu-thich")
+    Call<GetListBHYeuThich> getListBHYeuThich(@Query("order_by") String order_by,
+                                              @Query("order_type") String order_type,
+                                              @Header("authorization") String authorization);
+
+    @POST("/api/v2/toggle-quan-tam-ca-si")
+    Call<ResponseDefault> toggleQuanTamCasi(@Query("idCaSi") String idCaSi,
+                                            @Header("authorization") String authorization);
+
+    @GET("/api/v2/lay-ds-ca-si-quan-tam")
+    Call<GetListCSQuanTam> getListCaSiQuanTam(
+            @Header("authorization") String authorization);
 
 
     /* Get

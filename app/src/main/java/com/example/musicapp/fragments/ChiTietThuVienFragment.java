@@ -563,6 +563,7 @@ public class ChiTietThuVienFragment extends Fragment {
                         ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
                         layoutParams.height = desiredHeightInPixels;
                         recyclerView.setLayoutParams(layoutParams);
+                        recyclerView.setNestedScrollingEnabled(false);
 
 
                     } else {

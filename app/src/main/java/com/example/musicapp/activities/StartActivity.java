@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.musicapp.R;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 
 import retrofit2.Call;
@@ -27,6 +28,19 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         checkStartServer();
+
+        MusicAppHelper musicAppHelper = new MusicAppHelper(this,
+                "MusicApp.sqlite", null, 1);
+
+        musicAppHelper.QueryData("CREATE TABLE IF NOT EXISTS BaiHat(" +
+                "id VARCHAR(200) PRIMARY KEY," +
+                "tenBaiHat VARCHAR(200)," +
+                "tenCaSi VARCHAR(200), " +
+                "linkbaiHat VARCHAR(200)," +
+                "linkAnh VARCHAR(200)," +
+                "loiBaiHat VARCHAR(1000)" +
+                ")"
+        );
 
     }
 

@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
@@ -57,6 +58,8 @@ public class ThuVienFragment extends Fragment {
 
     MaterialToolbar topAppBar;
 
+    LinearLayout layoutYeuThich, layoutNgheSi;
+
     public static ArrayList<DanhSachPhat> danhSachPhats = null;
 
     public ThuVienFragment() {
@@ -92,6 +95,8 @@ public class ThuVienFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
         manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         topAppBar = view.findViewById(R.id.topAppBar);
+        layoutYeuThich = view.findViewById(R.id.layoutYeuThich);
+        layoutNgheSi = view.findViewById(R.id.layoutNgheSi);
 
 //        recyclerView.setHasFixedSize(true);
 //        recyclerView.setNestedScrollingEnabled(false);
@@ -133,6 +138,20 @@ public class ThuVienFragment extends Fragment {
             }
         });
 
+
+        layoutYeuThich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.replace_fragment(new YeuThichFragment());
+            }
+        });
+
+        layoutNgheSi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.replace_fragment(new NgheSiQuanTamFragment());
+            }
+        });
 
         return view;
     }

@@ -1,7 +1,7 @@
 package com.example.musicapp.modal.anhxajson;
 
 public class GetCaSiByID {
-    private int errCode, status;
+    private int errCode, status, countQuanTam;
     private String errMessage;
     private Casi data;
 
@@ -10,6 +10,14 @@ public class GetCaSiByID {
         this.status = status;
         this.errMessage = errMessage;
         this.data = data;
+    }
+
+    public int getCountQuanTam() {
+        return countQuanTam;
+    }
+
+    public void setCountQuanTam(int countQuanTam) {
+        this.countQuanTam = countQuanTam;
     }
 
     public int getErrCode() {

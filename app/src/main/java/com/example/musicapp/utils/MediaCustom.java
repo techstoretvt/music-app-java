@@ -26,7 +26,7 @@ public class MediaCustom {
 
     public static int typeDanhSachPhat;
 
-    public static String tenLoai;
+    public static String tenLoai = "";
 
     public static int position = -1;
 
@@ -216,7 +216,7 @@ public class MediaCustom {
 
     public static Boolean prev() {
 
-        
+
         Boolean statusPhatNhac = false;
 
         int size = danhSachPhats.size();

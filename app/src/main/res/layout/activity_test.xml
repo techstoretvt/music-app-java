@@ -6,12 +6,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".activities.TestActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello TestActivity"/>
+    <EditText
+        android:id="@+id/url"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:hint="nhap link"/>
+
+    <Button
+        android:id="@+id/btnHandle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Handle"/>
 
 
 </LinearLayout>

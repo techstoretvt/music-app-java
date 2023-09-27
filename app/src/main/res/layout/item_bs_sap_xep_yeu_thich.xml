@@ -13,52 +13,13 @@
         android:background="#000"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/btnMore"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="14dp"
-                android:contentDescription="anh header"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/anh_tram_2"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tat ca khong la gi ca"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="#fff"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cao Thai Son"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="#ccc"/>
-
-
-            </LinearLayout>
-
-
-        </LinearLayout>
+            android:text="Sắp xếp theo"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -68,37 +29,9 @@
             app:dividerColor="#fff"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"/>
 
-        <LinearLayout
-            android:id="@+id/layoutRemove"
-            android:paddingVertical="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:visibility="gone"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="14dp"
-                android:contentDescription="anh header"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/baseline_remove_circle_outline_24"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Xóa khỏi danh sách này"
-                android:textColor="#fff"
-                android:layout_marginLeft="14dp"/>
-
-        </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutTaiVe"
+            android:id="@+id/laMoiNhat"
             android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,27 +46,18 @@
                 android:contentDescription="anh header"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_arrow_circle_down_24"/>
+                android:src="@drawable/arrow_up_9_1"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tải về"
+                android:text="Thời gian them vào (Mới nhất)"
                 android:textColor="#fff"
+                android:layout_weight="1"
                 android:layout_marginLeft="14dp"/>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layouYeuThich"
-            android:paddingVertical="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
             <ImageView
-                android:id="@+id/iconYeuThich"
+                android:id="@+id/checkMoiNhat"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -141,20 +65,13 @@
                 android:contentDescription="anh header"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_favorite_24"/>
-
-            <TextView
-                android:id="@+id/txtYeuThich"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thêm vào yêu thích"
-                android:textColor="#fff"
-                android:layout_marginLeft="14dp"/>
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutThemVaoDS"
+            android:id="@+id/laCuNhat"
             android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -169,19 +86,32 @@
                 android:contentDescription="anh header"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_music_note_24"/>
+                android:src="@drawable/arrow_up_1_9"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thêm vào danh sach phát"
+                android:text="Thời gian them vào (Cũ nhất)"
                 android:textColor="#fff"
+                android:layout_weight="1"
                 android:layout_marginLeft="14dp"/>
+
+            <ImageView
+                android:id="@+id/checkCuNhat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutPhatKeTiep"
+            android:id="@+id/laAdenZ"
             android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,19 +126,32 @@
                 android:contentDescription="anh header"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_queue_music_24"/>
+                android:src="@drawable/arrow_up_a_z"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phát kế tiếp"
+                android:text="Tên (A-Z)"
                 android:textColor="#fff"
+                android:layout_weight="1"
                 android:layout_marginLeft="14dp"/>
+
+            <ImageView
+                android:id="@+id/checkAdenZ"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutXemMV"
+            android:id="@+id/laZdenA"
             android:paddingVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -223,26 +166,18 @@
                 android:contentDescription="anh header"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_music_video_24"/>
+                android:src="@drawable/arrow_up_z_a"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xem MV"
+                android:text="Tên (Z-A)"
                 android:textColor="#fff"
+                android:layout_weight="1"
                 android:layout_marginLeft="14dp"/>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layoutXemNS"
-            android:paddingVertical="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
             <ImageView
+                android:id="@+id/checkZdenA"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -250,43 +185,12 @@
                 android:contentDescription="anh header"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_note_alt_24"/>
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Xem nghệ sĩ"
-                android:textColor="#fff"
-                android:layout_marginLeft="14dp"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layoutChan"
-            android:paddingVertical="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="14dp"
-                android:contentDescription="anh header"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/baseline_block_24"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chặn"
-                android:textColor="#fff"
-                android:layout_marginLeft="14dp"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 

@@ -1,27 +1,39 @@
 package com.example.musicapp.fragments;
 
+import android.Manifest;
+import android.app.DownloadManager;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.activities.TestActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.utils.Common;
+import com.example.musicapp.utils.DownloadReceiver;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
@@ -36,6 +48,9 @@ public class BsBaiHat extends BottomSheetDialogFragment {
 
     public static BottomSheetThemBHVaoDS md = new BottomSheetThemBHVaoDS();
 
+    ImageView iconYeuThich;
+    TextView txtYeuThich;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,6 +62,11 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         LinearLayout layoutXemNS = view.findViewById(R.id.layoutXemNS);
         LinearLayout layoutChan = view.findViewById(R.id.layoutChan);
         LinearLayout removeBH = view.findViewById(R.id.layoutRemove);
+        LinearLayout layoutYeuThich = view.findViewById(R.id.layouYeuThich);
+        iconYeuThich = view.findViewById(R.id.iconYeuThich);
+        txtYeuThich = view.findViewById(R.id.txtYeuThich);
+
+        checkYeuThich();
 
         if (ChiTietThuVienFragment.isChiTietDS && ChiTietNhacActivity.isChiTietNhac == false) {
             removeBH.setVisibility(View.VISIBLE);
@@ -127,6 +147,21 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Tính năng này chưa cập nhật", Toast.LENGTH_SHORT)
                         .show();
+
+                // Kiểm tra xem người dùng đã cấp quyền chưa
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Giải thích lý do tại sao ứng dụng của bạn cần quyền
+                    Toast.makeText(getContext(),
+                            "Ứng dụng cần quyền truy cập bộ nhớ để lưu trữ dữ liệu",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Yêu cầu quyền truy cập bộ nhớ
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
+
+
             }
         });
 
@@ -175,6 +210,11 @@ public class BsBaiHat extends BottomSheetDialogFragment {
                     }, 100);
 
 
+                } else if (YeuThichFragment.isYeuThich) {
+                    ChiTietCaSiFragment.typeBack = 4;
+                    Common.replace_fragment(new ChiTietCaSiFragment());
+                    BaiHatAdapter.md.dismiss();
+
                 } else {
                     ChiTietCaSiFragment.typeBack = 0;
                     Common.replace_fragment(new ChiTietCaSiFragment());
@@ -192,7 +232,79 @@ public class BsBaiHat extends BottomSheetDialogFragment {
 
             }
         });
+
+        layoutYeuThich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String header = Common.getHeader();
+                String idBaiHat = BaiHatAdapter.idBaiHat;
+
+                ApiServiceV1.apiServiceV1.toggleLikeBaiHat(idBaiHat, header).enqueue(new Callback<ResponseDefault>() {
+                    @Override
+                    public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                        ResponseDefault res = response.body();
+                        if (res != null) {
+                            if (res.getErrCode() == 0) {
+                                if (res.getErrMessage().equals("like")) {
+                                    iconYeuThich.setImageResource(R.drawable.baseline_favorite_red);
+                                    txtYeuThich.setText("Đã thêm vao yêu thích");
+                                } else {
+                                    iconYeuThich.setImageResource(R.drawable.baseline_favorite_24);
+                                    txtYeuThich.setText("Thêm vao yêu thích");
+                                }
+                            } else {
+                                if (res.getStatus() == 401) {
+                                    System.exit(0);
+                                }
+                                Toast.makeText(getContext(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                        Log.e("Loi", "Loi kiem tra yeu thich bai hat");
+                    }
+                });
+            }
+        });
+
         return view;
+    }
+
+    private void checkYeuThich() {
+        String header = Common.getHeader();
+        String idBaiHat = BaiHatAdapter.idBaiHat;
+
+        ApiServiceV1.apiServiceV1.kiemTraYeuThichBaiHat(idBaiHat, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        if (res.getErrMessage().equals("like")) {
+                            iconYeuThich.setImageResource(R.drawable.baseline_favorite_red);
+                            txtYeuThich.setText("Đã thêm vao yêu thích");
+                        } else {
+                            iconYeuThich.setImageResource(R.drawable.baseline_favorite_24);
+                            txtYeuThich.setText("Thêm vao yêu thích");
+                        }
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Toast.makeText(getContext(), res.getErrMessage(), Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Log.e("Loi", "Loi kiem tra yeu thich bai hat");
+            }
+        });
     }
 
 
@@ -200,4 +312,6 @@ public class BsBaiHat extends BottomSheetDialogFragment {
     public void onDestroy() {
         super.onDestroy();
     }
+
+
 }

@@ -47,6 +47,8 @@
                 app:cardBackgroundColor="#2BE6F8">
 
                 <LinearLayout
+                    android:id="@+id/layoutYeuThich"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20dp"
@@ -66,11 +68,6 @@
                         android:textStyle="bold"
                         android:textColor="#fff"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="146"
-                        android:textColor="#666"/>
                 </LinearLayout>
 
 
@@ -104,11 +101,6 @@
                         android:textStyle="bold"
                         android:textColor="#fff"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="146"
-                        android:textColor="#666"/>
                 </LinearLayout>
 
 
@@ -122,6 +114,8 @@
                 app:cardBackgroundColor="#E6A76D">
 
                 <LinearLayout
+                    android:id="@+id/layoutNgheSi"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20dp"
@@ -142,11 +136,6 @@
                         android:textStyle="bold"
                         android:textColor="#fff"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="146"
-                        android:textColor="#666"/>
                 </LinearLayout>
 
 
@@ -180,11 +169,6 @@
                         android:textStyle="bold"
                         android:textColor="#fff"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="146"
-                        android:textColor="#666"/>
                 </LinearLayout>
 
 
@@ -218,11 +202,6 @@
                         android:textStyle="bold"
                         android:textColor="#fff"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="146"
-                        android:textColor="#666"/>
                 </LinearLayout>
 
 

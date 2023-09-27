@@ -19,6 +19,7 @@ import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
+import com.example.musicapp.fragments.YeuThichFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.utils.MediaCustom;
 
@@ -30,6 +31,13 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
     public static String idCaSi = null;
 
     public static String linkMV = null;
+    public static String linkBaiHat = null;
+    public static String linkAnh = null;
+
+    public static BaiHat currentBaiHat = null;
+
+    public static ImageView iconDownLoad = null;
+
 
     public static BsBaiHat md = new BsBaiHat();
     ArrayList<BaiHat> data;
@@ -77,6 +85,9 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 } else if (TimKiemFragment.isTimKiem) {
                     MediaCustom.typeDanhSachPhat = 1;
                     MediaCustom.tenLoai = "Tìm kiếm";
+                } else if (YeuThichFragment.isYeuThich) {
+                    MediaCustom.typeDanhSachPhat = 2;
+                    MediaCustom.tenLoai = "Yêu thích";
                 } else {
                     //kham pha
                     MediaCustom.typeDanhSachPhat = 1;
@@ -113,6 +124,11 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 idBaiHat = data.get(holder.getAdapterPosition()).getId();
                 idCaSi = data.get(holder.getAdapterPosition()).getCasi().getId();
                 linkMV = data.get(holder.getAdapterPosition()).getLinkMV();
+                linkBaiHat = data.get(holder.getAdapterPosition()).getLinkBaiHat();
+                linkAnh = data.get(holder.getAdapterPosition()).getAnhBia();
+
+                currentBaiHat = data.get(holder.getAdapterPosition());
+                iconDownLoad = holder.iconDownLoad;
 
                 Log.e("link mv", String.valueOf(data.get(holder.getAdapterPosition()).getLinkMV()));
 
@@ -126,7 +142,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         TextView stt, tenBaiHat, tenCasi;
         LinearLayout linearLayout;
 
-        ImageView imgView, btnMore;
+        ImageView imgView, btnMore, iconDownLoad;
 
 
         public VHolder(@NonNull View itemView) {
@@ -137,6 +153,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
             linearLayout = itemView.findViewById(R.id.layoutBaiHat);
             imgView = itemView.findViewById(R.id.imgView);
             btnMore = itemView.findViewById(R.id.btnMore);
+            iconDownLoad = itemView.findViewById(R.id.iconDownLoad);
         }
     }
 }
