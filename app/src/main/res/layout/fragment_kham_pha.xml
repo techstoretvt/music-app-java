@@ -6,13 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.KhamPhaFragment"
     android:id="@+id/coordinatorLayout"
-    android:background="@color/purple_200">
+    android:background="#000">
 
-    <!-- TODO: Update blank fragment layout -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         app:liftOnScroll="true"
-        android:layout_height="128dp">
+        android:layout_height="300dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -31,10 +30,10 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/anh_header"
+                android:src="@drawable/anh_chuot"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
-                android:contentDescription="anh header" />
+                android:contentDescription="anh header"/>
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
@@ -45,19 +44,22 @@
                 app:menu="@menu/top_app_bar"
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#000"
+        android:paddingTop="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </androidx.recyclerview.widget.RecyclerView>
+
 
     <ProgressBar
         android:id="@+id/progress"
@@ -67,5 +69,6 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.LoginActivity"
+    android:id="@+id/layoutLogin"
     android:paddingHorizontal="20dp"
     android:background="#000">
 
@@ -83,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quên mật khẩu"
-            android:textSize="10dp"
+            android:textSize="10sp"
             style="@style/Widget.MaterialComponents.Button.TextButton"/>
     </LinearLayout>
 

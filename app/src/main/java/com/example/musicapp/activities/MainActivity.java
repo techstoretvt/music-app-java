@@ -40,6 +40,7 @@ import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
+import com.example.musicapp.fragments.DaTaiFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.fragments.NgheSiQuanTamFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
@@ -51,6 +52,7 @@ import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 import com.example.musicapp.modal.anhxajson.QuanTamCS;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.body.BodyXoaDSPhat;
+import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.DownloadReceiver;
 import com.example.musicapp.utils.MediaCustom;
 import com.example.musicapp.utils.MyWebSocketClient;
@@ -110,7 +112,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replace_fragment(new KhamPhaFragment());
+
+        Intent intent = getIntent();
+        String isNetworkStr = intent.getStringExtra("isNetwork");
+        if (isNetworkStr.equals("true")) {
+            replace_fragment(new KhamPhaFragment());
+        } else {
+            replace_fragment(new DaTaiFragment());
+        }
+
 
         anhXaView();
         webSocketClient = new MyWebSocketClient();
@@ -215,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Xử lý khi người dùng nhấn vào nút OK
-
+                            Common.replace_fragment(new DaTaiFragment());
+//                            bottomNavigationView.setSelectedItemId(R.id.thuVien);
 
                         }
                     });
@@ -288,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
             ChiTietThuVienFragment.isChiTietDS = false;
             return;
         } else if (YeuThichFragment.isYeuThich || NgheSiQuanTamFragment.isQuanTamNgheSi ||
-                ChiTietThuVienFragment.isChiTietDS) {
+                ChiTietThuVienFragment.isChiTietDS || DaTaiFragment.isFragmentDaTai) {
             replace_fragment(new ThuVienFragment());
             return;
         }
@@ -363,21 +374,27 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                String linkBaiHat = BaiHatAdapter.linkBaiHat;
-                String linkAnh = BaiHatAdapter.linkAnh;
+                if (!DownloadReceiver.isDownload) {
+                    DownloadReceiver.isDownload = true;
 
-                DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                Uri uri = Uri.parse(linkBaiHat);
-                DownloadManager.Request request = new DownloadManager.Request(uri);
-                request.setTitle("Tải nhạc");
-                request.setDescription("Tải nhạc từ link");
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC,
-                        BaiHatAdapter.idBaiHat + ".mp3");
-                downloadManager.enqueue(request);
+                    String linkBaiHat = BaiHatAdapter.linkBaiHat;
 
-                downloadReceiver = new DownloadReceiver();
-                IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-                registerReceiver(downloadReceiver, filter);
+                    DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    Uri uri = Uri.parse(linkBaiHat);
+                    DownloadManager.Request request = new DownloadManager.Request(uri);
+                    request.setTitle("Tải nhạc");
+                    request.setDescription("Tải nhạc từ link");
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC,
+                            BaiHatAdapter.idBaiHat + ".mp3");
+                    downloadManager.enqueue(request);
+
+                    downloadReceiver = new DownloadReceiver();
+                    IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+                    registerReceiver(downloadReceiver, filter);
+                } else {
+                    Toast.makeText(MainActivity.this,
+                            "Đang tải file khác 2", Toast.LENGTH_SHORT).show();
+                }
 
 
             } else {
@@ -387,6 +404,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
 
 

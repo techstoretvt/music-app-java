@@ -86,7 +86,7 @@ public class AddPlayListActivity extends AppCompatActivity {
                 BodyThemDSPhat body = new BodyThemDSPhat(strNameDS);
 
                 ProgressDialog progressDialog = new ProgressDialog(AddPlayListActivity.this);
-                progressDialog.setTitle("Đang đổi mật khẩu...");
+                progressDialog.setTitle("Đang xử lý...");
                 progressDialog.show();
                 ApiServiceV1.apiServiceV1.themDanhSachPhat(body, header).enqueue(new Callback<ThemDSPhat>() {
                     @Override

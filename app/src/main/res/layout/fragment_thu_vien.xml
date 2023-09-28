@@ -6,7 +6,7 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ThuVienFragment"
-    android:background="#000">
+    android:background="@drawable/anh_ga">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -81,6 +81,7 @@
                 app:cardBackgroundColor="#CF62F0">
 
                 <LinearLayout
+                    android:id="@+id/layoutDaTai"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minWidth="120dp"
@@ -219,24 +220,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:padding="20dp"
+            android:padding="10dp"
             android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Danh sách phát"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:textColor="#fff"/>
 
             <LinearLayout
                 android:id="@+id/listDanhSach"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="#111"
-                android:paddingHorizontal="10dp"
+
                 android:paddingVertical="20dp"
                 android:orientation="vertical">
 
@@ -249,14 +241,9 @@
                         android:id="@+id/btnAddNew"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="Tạo danh sách mới"
-                        android:textColor="#fff"
-                        android:layout_marginLeft="10dp"/>
+                        app:icon="@drawable/baseline_add_circle_white"/>
+
 
                 </LinearLayout>
 

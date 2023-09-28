@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,10 +23,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
+import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
@@ -105,6 +109,12 @@ public class KhamPhaFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
         manager = new LinearLayoutManager(getActivity());
         topAppBar = view.findViewById(R.id.topAppBar);
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
+        );
+        recyclerView.setBackground(gradientDrawable);
 
 
         if (list == null) {

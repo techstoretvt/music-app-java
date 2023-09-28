@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -58,7 +60,7 @@ public class ThuVienFragment extends Fragment {
 
     MaterialToolbar topAppBar;
 
-    LinearLayout layoutYeuThich, layoutNgheSi;
+    LinearLayout layoutYeuThich, layoutNgheSi, layoutDaTai;
 
     public static ArrayList<DanhSachPhat> danhSachPhats = null;
 
@@ -97,9 +99,16 @@ public class ThuVienFragment extends Fragment {
         topAppBar = view.findViewById(R.id.topAppBar);
         layoutYeuThich = view.findViewById(R.id.layoutYeuThich);
         layoutNgheSi = view.findViewById(R.id.layoutNgheSi);
+        layoutDaTai = view.findViewById(R.id.layoutDaTai);
 
 //        recyclerView.setHasFixedSize(true);
 //        recyclerView.setNestedScrollingEnabled(false);
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
+        );
+        recyclerView.setBackground(gradientDrawable);
 
         //get danh sach phat
         if (danhSachPhats != null) {
@@ -152,6 +161,14 @@ public class ThuVienFragment extends Fragment {
                 Common.replace_fragment(new NgheSiQuanTamFragment());
             }
         });
+
+        layoutDaTai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.replace_fragment(new DaTaiFragment());
+            }
+        });
+
 
         return view;
     }

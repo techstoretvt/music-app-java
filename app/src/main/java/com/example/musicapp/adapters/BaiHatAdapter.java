@@ -1,6 +1,7 @@
 package com.example.musicapp.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
@@ -40,6 +42,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
 
     public static BsBaiHat md = new BsBaiHat();
+
     ArrayList<BaiHat> data;
     Context context;
 
@@ -67,6 +70,18 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
         holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
         Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
+
+        MusicAppHelper musicAppHelper = new MusicAppHelper(context,
+                "MusicApp.sqlite", null, 1);
+
+        Cursor dataBaiHat = musicAppHelper.GetData(String.format(
+                "SELECT * FROM BaiHat where id = '%s'",
+                data.get(position).getId()
+        ));
+
+        while (dataBaiHat.moveToNext()) {
+            holder.iconDownLoad.setVisibility(View.VISIBLE);
+        }
 
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {

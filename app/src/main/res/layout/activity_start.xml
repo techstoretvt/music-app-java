@@ -11,12 +11,13 @@
         android:layout_height="match_parent"
         android:contentDescription="anh header"
         android:fitsSystemWindows="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/anh_tram_3"
+        android:scaleType="centerCrop"
+        android:src="@drawable/anh_nen_start"
         tools:ignore="MissingConstraints"/>
 
 
     <LinearLayout
+        android:id="@+id/layoutLoading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
@@ -38,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-
+            android:textColor="#fff"
             android:text="Đang phát hiện mạng"/>
 
     </LinearLayout>

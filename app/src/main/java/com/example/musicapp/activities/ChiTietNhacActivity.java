@@ -5,9 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.animation.ObjectAnimator;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +33,7 @@ import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.utils.Common;
+import com.example.musicapp.utils.DownloadReceiver;
 import com.example.musicapp.utils.MediaCustom;
 import com.google.android.gms.common.api.Api;
 import com.google.android.material.slider.Slider;
@@ -226,6 +233,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
                 BaiHatAdapter.idCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position)
                         .getCasi().getId();
+                BaiHatAdapter.currentBaiHat = MediaCustom.danhSachPhats.get(MediaCustom.position);
+                BaiHatAdapter.iconDownLoad = null;
 
             }
         });
@@ -424,5 +433,6 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
 
     }
+
 
 }

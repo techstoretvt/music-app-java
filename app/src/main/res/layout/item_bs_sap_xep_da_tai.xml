@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:background="#000"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sắp xếp theo"
+            android:textColor="#fff"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            app:dividerColor="#fff"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"/>
+
+
+        <LinearLayout
+            android:id="@+id/laMoiNhat"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/arrow_up_9_1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thời gian them vào (Mới nhất)"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:layout_marginLeft="14dp"/>
+
+            <ImageView
+                android:id="@+id/checkMoiNhat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/laCuNhat"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/arrow_up_1_9"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thời gian them vào (Cũ nhất)"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:layout_marginLeft="14dp"/>
+
+            <ImageView
+                android:id="@+id/checkCuNhat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/laAdenZ"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/arrow_up_a_z"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên (A-Z)"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:layout_marginLeft="14dp"/>
+
+            <ImageView
+                android:id="@+id/checkAdenZ"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/laZdenA"
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/arrow_up_z_a"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên (Z-A)"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:layout_marginLeft="14dp"/>
+
+            <ImageView
+                android:id="@+id/checkZdenA"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:contentDescription="anh header"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_green"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -48,6 +48,9 @@ public class BsBaiHat extends BottomSheetDialogFragment {
 
     public static BottomSheetThemBHVaoDS md = new BottomSheetThemBHVaoDS();
 
+    public static ImageView iconDownLoad = null;
+    public static BaiHat currentBaiHat = null;
+
     ImageView iconYeuThich;
     TextView txtYeuThich;
 
@@ -122,6 +125,10 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             removeBH.setVisibility(View.GONE);
         }
 
+        if (ChiTietNhacActivity.isChiTietNhac || DaTaiFragment.isFragmentDaTai) {
+            layoutTaiVe.setVisibility(View.GONE);
+        }
+
         if (BaiHatAdapter.linkMV == null || BaiHatAdapter.linkMV.equals("false")) {
             layoutXemMV.setVisibility(View.GONE);
         } else {
@@ -145,8 +152,17 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutTaiVe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Tính năng này chưa cập nhật", Toast.LENGTH_SHORT)
-                        .show();
+
+
+                if (DownloadReceiver.isDownload) {
+                    Toast.makeText(getContext(), "Đang tải file khác 1",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                iconDownLoad = BaiHatAdapter.iconDownLoad;
+                currentBaiHat = BaiHatAdapter.currentBaiHat;
+
 
                 // Kiểm tra xem người dùng đã cấp quyền chưa
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),

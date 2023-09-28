@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -140,6 +141,12 @@ public class ChiTietThuVienFragment extends Fragment {
         layDanhSachBaiHat();
 
         setItemTouchHelper();
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#332733"), Color.BLACK}
+        );
+        recyclerView.setBackground(gradientDrawable);
 
 
         //set event

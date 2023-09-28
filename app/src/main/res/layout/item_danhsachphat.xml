@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:padding="16dp"
     android:id="@+id/layoutBaiHat"
-    android:background="#000"
     android:layout_height="wrap_content">
 
     <LinearLayout

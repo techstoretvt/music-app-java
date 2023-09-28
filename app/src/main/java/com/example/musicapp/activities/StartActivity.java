@@ -1,21 +1,32 @@
 package com.example.musicapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.fingerprint.FingerprintManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.database.MusicAppHelper;
+import com.example.musicapp.fragments.DaTaiFragment;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.utils.Common;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,7 +38,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        checkStartServer();
+
 
         MusicAppHelper musicAppHelper = new MusicAppHelper(this,
                 "MusicApp.sqlite", null, 1);
@@ -41,6 +52,30 @@ public class StartActivity extends AppCompatActivity {
                 "loiBaiHat VARCHAR(1000)" +
                 ")"
         );
+
+
+        //kiem tra mạng
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Có kết nối mạng
+            checkStartServer();
+        } else {
+            // Không có kết nối mạng
+            Toast.makeText(StartActivity.this, "khong co mang", Toast.LENGTH_SHORT)
+                    .show();
+            Intent intent = new Intent(StartActivity.this, MainActivity.class);
+            intent.putExtra("isNetwork", "false");
+            startActivity(intent);
+        }
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
+        );
+        LinearLayout linearLayout = findViewById(R.id.layoutLoading);
+        linearLayout.setBackground(gradientDrawable);
 
     }
 
@@ -76,6 +111,7 @@ public class StartActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             intent = new Intent(StartActivity.this, MainActivity.class);
+                            intent.putExtra("isNetwork", "true");
                             startActivity(intent);
                         }
 
@@ -92,7 +128,6 @@ public class StartActivity extends AppCompatActivity {
                 TextView textView = findViewById(R.id.txtText);
                 textView.setText("Server đang gặp sự cố vui lòng thử lại sau!");
                 textView.setTextColor(Color.RED);
-                Toast.makeText(StartActivity.this, "Call api error", Toast.LENGTH_SHORT).show();
             }
         });
     }
