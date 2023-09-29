@@ -1,15 +1,9 @@
 package com.example.musicapp.fragments;
 
 import android.Manifest;
-import android.app.DownloadManager;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.activities.TestActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
@@ -212,18 +205,19 @@ public class BsBaiHat extends BottomSheetDialogFragment {
                     BaiHatAdapter.md.dismiss();
 
                 } else if (ChiTietNhacActivity.isChiTietNhac) {
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-                    ChiTietCaSiFragment.typeBack = 2;
-
+//                    BaiHatAdapter.md.dismiss();
+                    getActivity().finish();
+//                    Intent intent = new Intent(getContext(), MainActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                    startActivity(intent);
+//                    ChiTietCaSiFragment.typeBack = 2;
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             Common.replace_fragment(new ChiTietCaSiFragment());
                         }
-                    }, 100);
+                    }, 500);
 
 
                 } else if (YeuThichFragment.isYeuThich) {

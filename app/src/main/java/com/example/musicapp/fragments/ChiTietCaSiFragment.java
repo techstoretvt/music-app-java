@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,16 +28,12 @@ import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.adapters.CaSiAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
-import com.example.musicapp.modal.anhxajson.Casi;
-import com.example.musicapp.modal.anhxajson.ChiTietDanhSachPhat;
 import com.example.musicapp.modal.anhxajson.DanhSachCaSi;
 import com.example.musicapp.modal.anhxajson.GetCaSiByID;
-import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
-import com.google.android.gms.common.api.Api;
 
 import java.util.ArrayList;
 
@@ -137,6 +132,8 @@ public class ChiTietCaSiFragment extends Fragment {
 
         layDanhSachCaSi();
 
+        kiemTraQuanTam();
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,6 +191,32 @@ public class ChiTietCaSiFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void kiemTraQuanTam() {
+        String header = Common.getHeader();
+
+        ApiServiceV1.apiServiceV1.kiemTraQuanTamCaSi(idCaSi, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+                ResponseDefault res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        btnQuanTam.setText("Đã quan tâm");
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Log.e("Loi", res.getErrMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+                Log.e("Loi", "Loi kiem tra quan tam ca si");
+            }
+        });
     }
 
     private void handleToggleQuanTam() {

@@ -1,5 +1,7 @@
 package com.example.musicapp.fragments;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
@@ -24,7 +27,6 @@ import com.example.musicapp.modal.anhxajson.GetListBHYeuThich;
 import com.example.musicapp.modal.anhxajson.YeuThichBaiHat;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
-import com.google.android.gms.common.api.Api;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +34,6 @@ import java.util.Collections;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 public class YeuThichFragment extends Fragment {
 
@@ -92,6 +93,13 @@ public class YeuThichFragment extends Fragment {
         bs = new BsSapXepYeuThich();
         isYeuThich = true;
         btnRandom = view.findViewById(R.id.btnRandom);
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#38383894"), Color.BLACK}
+        );
+        LinearLayout layoutYeuThich = view.findViewById(R.id.layoutYeuThich);
+        layoutYeuThich.setBackground(gradientDrawable);
 
         getListBaiHat();
 

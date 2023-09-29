@@ -4,19 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
-import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
-import com.example.musicapp.modal.anhxajson.Casi;
-import com.example.musicapp.utils.Common;
 
 import java.util.ArrayList;
 

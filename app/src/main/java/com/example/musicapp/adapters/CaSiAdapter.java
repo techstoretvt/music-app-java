@@ -1,29 +1,21 @@
 package com.example.musicapp.adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
-import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
-import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.NgheSiQuanTamFragment;
-import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.utils.Common;
-import com.example.musicapp.utils.MediaCustom;
 
 import java.util.ArrayList;
 

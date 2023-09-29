@@ -10,13 +10,10 @@ import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.modal.anhxajson.BaiHat;
-import com.example.musicapp.modal.anhxajson.DanhSachPhat;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MediaCustom {
 

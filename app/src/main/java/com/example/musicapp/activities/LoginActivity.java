@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.example.musicapp.R;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.Login;
-import com.example.musicapp.modal.anhxajson.ThemBHVaoDS;
 import com.example.musicapp.modal.body.BodyLogin;
 import com.example.musicapp.modal.body.BodyLoginGoogle;
 import com.example.musicapp.utils.Common;
@@ -32,14 +31,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText ipEmail, ipPassword;
     TextInputLayout layoutEmail, layoutPassword;
 
+    Boolean isLogin = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +57,13 @@ public class LoginActivity extends AppCompatActivity {
 
         //Ánh xạ view
         anhXaView();
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#38383894"), Color.BLACK}
+        );
+        LinearLayout layoutFromLogin = findViewById(R.id.layoutFromLogin);
+        layoutFromLogin.setBackground(gradientDrawable);
 
         //onchange input
         setChangeInput();
@@ -137,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isLogin) return;
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, 100);
             }
@@ -173,6 +180,8 @@ public class LoginActivity extends AppCompatActivity {
             ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
             progressDialog.setTitle("Đang đăng nhập...");
             progressDialog.show();
+
+            isLogin = true;
             ApiServiceV1.apiServiceV1.loginGoogle(body).enqueue(new Callback<Login>() {
                 @Override
                 public void onResponse(Call<Login> call, Response<Login> response) {
@@ -194,20 +203,34 @@ public class LoginActivity extends AppCompatActivity {
                             editor.apply();
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("isNetwork", "false");
+                            intent.putExtra("isNetwork", "true");
                             startActivity(intent);
                             progressDialog.dismiss();
                             finish();
                         } else {
                             txtErrMess.setText(res.getErrMessage());
+
+                            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(LoginActivity.this,
+                                    GoogleSignInOptions.DEFAULT_SIGN_IN);
+                            googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+//                        Toast.makeText(SettingActivity.this,
+//                                        "Dang xuat", Toast.LENGTH_SHORT)
+//                                .show();
+                                }
+                            });
                         }
                     }
+                    progressDialog.dismiss();
+                    isLogin = false;
                 }
 
                 @Override
                 public void onFailure(Call<Login> call, Throwable t) {
                     Toast.makeText(LoginActivity.this,
                             "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                    isLogin = false;
                 }
             });
 
@@ -216,10 +239,12 @@ public class LoginActivity extends AppCompatActivity {
 
             Log.w("error", "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+            isLogin = false;
         }
     }
 
     private void handleLogin() {
+        if (isLogin) return;
         String strEmail = String.valueOf(ipEmail.getText());
         String strPassword = String.valueOf(ipPassword.getText());
 
@@ -228,6 +253,8 @@ public class LoginActivity extends AppCompatActivity {
         ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setTitle("Đang đăng nhập...");
         progressDialog.show();
+
+        isLogin = true;
 
         ApiServiceV1.apiServiceV1.login(bodyLogin).enqueue(new Callback<Login>() {
             @Override
@@ -257,14 +284,18 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else {
                         txtErrMess.setText(login.getErrMessage());
+                        progressDialog.dismiss();
                     }
 
                 }
+                isLogin = false;
             }
 
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Lối api login", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                isLogin = false;
             }
         });
     }

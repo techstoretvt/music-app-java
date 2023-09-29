@@ -1,6 +1,8 @@
 package com.example.musicapp.fragments;
 
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
@@ -84,6 +87,13 @@ public class DaTaiFragment extends Fragment {
         btnFilter = view.findViewById(R.id.btnFilter);
         bs = new BsSapXepDaTai();
 
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#38383894"), Color.BLACK}
+        );
+        LinearLayout layoutDaTai = view.findViewById(R.id.layoutDaTai);
+        layoutDaTai.setBackground(gradientDrawable);
+
         getData();
 
         setEvent();
@@ -149,6 +159,10 @@ public class DaTaiFragment extends Fragment {
             BaiHat bh = new BaiHat(idBaiHat, tenBaiHat, loiBH, linkAnh, linkBH, cs);
             danhSachBaiHat.add(bh);
 
+        }
+        if (danhSachBaiHat.size() == 0) {
+            btnPhatNgauNhien.setEnabled(false);
+            btnFilter.setEnabled(false);
         }
 
         adapter = new BaiHatAdapter(danhSachBaiHat, getContext());

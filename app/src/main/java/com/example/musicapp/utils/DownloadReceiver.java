@@ -5,22 +5,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.musicapp.R;
-import com.example.musicapp.activities.TestActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
-import com.example.musicapp.modal.anhxajson.ChiTietDanhSachPhat;
 
 import java.io.File;
-import java.io.IOException;
 
 public class DownloadReceiver extends BroadcastReceiver {
 

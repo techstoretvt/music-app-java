@@ -2,7 +2,6 @@ package com.example.musicapp.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,12 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.musicapp.R;
-import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.modal.anhxajson.BaiHat;
@@ -46,11 +42,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link KhamPhaFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class KhamPhaFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -67,6 +58,7 @@ public class KhamPhaFragment extends Fragment {
     BaiHatAdapter adapter;
 
     Boolean isScrolling = false;
+    public static Boolean isEnd = false;
     int currentItems, totalItems, scrollOutItems, offSetScroll;
     public static ArrayList<BaiHat> list = null;
     ProgressBar progressBar;
@@ -115,12 +107,19 @@ public class KhamPhaFragment extends Fragment {
                 new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
         );
         recyclerView.setBackground(gradientDrawable);
+        View bgTitle = view.findViewById(R.id.bgTitle);
+        GradientDrawable gradientDrawable2 = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#4c4951d6"), Color.BLACK}
+        );
+        bgTitle.setBackground(gradientDrawable2);
 
 
         if (list == null) {
             list = new ArrayList<BaiHat>();
             getListBaiHat();
         } else {
+            page = (int) list.size() / maxCount;
             adapter = new BaiHatAdapter(list, getActivity());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(manager);
@@ -139,6 +138,7 @@ public class KhamPhaFragment extends Fragment {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
+                    if (isEnd) return;
                     currentItems = manager.getChildCount();
                     totalItems = manager.getItemCount();
                     scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
@@ -208,6 +208,7 @@ public class KhamPhaFragment extends Fragment {
                             @Override
                             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                 super.onScrolled(recyclerView, dx, dy);
+                                if (isEnd) return;
                                 currentItems = manager.getChildCount();
                                 totalItems = manager.getItemCount();
                                 scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
@@ -236,7 +237,7 @@ public class KhamPhaFragment extends Fragment {
     }
 
     private void fetchData() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
 
         page++;
 
@@ -250,16 +251,16 @@ public class KhamPhaFragment extends Fragment {
             public void onResponse(Call<GetListBaiHat> call, Response<GetListBaiHat> response) {
                 GetListBaiHat res = response.body();
                 if (res != null) {
-                    if (res.getErrCode() == 0) {
+                    if (res.getErrCode() == 0 && res.getData() != null && res.getData().size() != 0) {
                         ArrayList<BaiHat> baiHats = res.getData();
                         list.addAll(baiHats);
                         offSetScroll += 3;
                         adapter.notifyDataSetChanged();
-                        progressBar.setVisibility(View.GONE);
-                    } else {
-                        Toast.makeText(getActivity(), res.getErrMessage(), Toast.LENGTH_SHORT)
-                                .show();
+
+                    } else if (res.getData().size() == 0) {
+                        isEnd = true;
                     }
+//                    progressBar.setVisibility(View.GONE);
                 }
             }
 

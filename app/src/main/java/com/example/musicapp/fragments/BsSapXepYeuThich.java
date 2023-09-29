@@ -1,40 +1,22 @@
 package com.example.musicapp.fragments;
 
-import android.app.SearchManager;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.musicapp.R;
-import com.example.musicapp.activities.ChiTietNhacActivity;
-import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.adapters.BaiHatAdapter;
-import com.example.musicapp.api.ApiServiceV1;
-import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.BaiHatComparator;
-import com.example.musicapp.modal.anhxajson.ResponseDefault;
-import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BsSapXepYeuThich extends BottomSheetDialogFragment {
 
@@ -103,7 +85,7 @@ public class BsSapXepYeuThich extends BottomSheetDialogFragment {
 
                 Collections.sort(YeuThichFragment.data, new BaiHatComparator().reversed());
                 YeuThichFragment.adapter.notifyDataSetChanged();
-                
+
                 if (MediaCustom.tenLoai.equals("Yêu thích")) {
                     MediaCustom.danhSachPhats = YeuThichFragment.data;
                 }

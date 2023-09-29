@@ -1,20 +1,14 @@
 package com.example.musicapp.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
-import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -24,9 +18,7 @@ import android.widget.Toast;
 import com.example.musicapp.R;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.database.MusicAppHelper;
-import com.example.musicapp.fragments.DaTaiFragment;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
-import com.example.musicapp.utils.Common;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -117,8 +109,6 @@ public class StartActivity extends AppCompatActivity {
 
 
                     }
-
-
                     finish();
                 }
             }

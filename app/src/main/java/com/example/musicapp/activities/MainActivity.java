@@ -3,7 +3,6 @@ package com.example.musicapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,7 +23,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,42 +32,28 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
-import com.example.musicapp.api.ApiServiceV1;
-import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.fragments.CaNhanFragment;
-import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.DaTaiFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.fragments.NgheSiQuanTamFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
-import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.fragments.YeuThichFragment;
-import com.example.musicapp.modal.anhxajson.BaiHat;
-import com.example.musicapp.modal.anhxajson.DanhSachPhat;
-import com.example.musicapp.modal.anhxajson.QuanTamCS;
-import com.example.musicapp.modal.anhxajson.ResponseDefault;
-import com.example.musicapp.modal.body.BodyXoaDSPhat;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.DownloadReceiver;
 import com.example.musicapp.utils.MediaCustom;
 import com.example.musicapp.utils.MyWebSocketClient;
-import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-
-import javax.crypto.SecretKey;
-
-import io.jsonwebtoken.Jwts;
 import io.socket.emitter.Emitter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -265,6 +249,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEventSocket() {
+        Toast.makeText(this, "init socket", Toast.LENGTH_SHORT)
+                .show();
         webSocketClient.socket.on("new_thong_bao", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
@@ -278,15 +264,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
+
+        idUser = sharedPreferences.getString("idUser", null);
+
         webSocketClient.socket.on("khoa_tai_khoan_" + idUser, new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
                 Log.e("vao", "");
 
+                SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.remove("accessToken");
+                editor.remove("refreshToken");
+                editor.apply();
+
+
+                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(MainActivity.this,
+                        GoogleSignInOptions.DEFAULT_SIGN_IN);
+                googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+//                        Toast.makeText(SettingActivity.this,
+//                                        "Dang xuat", Toast.LENGTH_SHORT)
+//                                .show();
+
+                        finish();
+                    }
+                });
+
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
-
-                finish();
             }
         });
     }

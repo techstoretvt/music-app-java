@@ -9,19 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
-import com.example.musicapp.activities.MainActivity;
-import com.example.musicapp.fragments.BsBaiHat;
-import com.example.musicapp.fragments.ChiTietCaSiFragment;
-import com.example.musicapp.fragments.ChiTietThuVienFragment;
-import com.example.musicapp.fragments.TimKiemFragment;
-import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.ThongBao;
-import com.example.musicapp.utils.MediaCustom;
 
 import java.util.ArrayList;
 

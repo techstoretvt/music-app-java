@@ -3,15 +3,9 @@ package com.example.musicapp.utils;
 import android.util.Log;
 
 import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
 
 public class MyWebSocketClient {
 

@@ -5,37 +5,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.animation.ObjectAnimator;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.media.Image;
-import android.net.Uri;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.BsBaiHat;
-import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.utils.Common;
-import com.example.musicapp.utils.DownloadReceiver;
 import com.example.musicapp.utils.MediaCustom;
-import com.google.android.gms.common.api.Api;
 import com.google.android.material.slider.Slider;
 
 import retrofit2.Call;
@@ -86,6 +73,15 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         txtTenBH.setText(tenBh);
         txtTenCS.setText(tenCs);
         txtLoiBH.setText(loiBh);
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#0f172a"), Color.parseColor("#581c87"),
+                        Color.parseColor("#0f172a")}
+        );
+        LinearLayout layoutChitietbaihat = findViewById(R.id.layoutChitietbaihat);
+        layoutChitietbaihat.setBackground(gradientDrawable);
+
 
         txtTypePlay.setText("#" + MediaCustom.tenLoai);
         if (MediaCustom.typeDanhSachPhat == 1) {
@@ -414,7 +410,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                                     if (!isStartSlider) {
                                         sliderProgress.setValue(MediaCustom.getFloatCurrentTime());
                                     }
-                                    tgHienTai.setText(MediaCustom.getStrCurrentTime());
+                                    if (tgHienTai != null)
+                                        tgHienTai.setText(MediaCustom.getStrCurrentTime());
 
                                 }
                             }

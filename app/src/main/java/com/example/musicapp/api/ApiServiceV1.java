@@ -23,7 +23,6 @@ import com.example.musicapp.modal.body.BodySignUp;
 import com.example.musicapp.modal.body.BodyThemBHVaoDS;
 import com.example.musicapp.modal.body.BodyThemDSPhat;
 import com.example.musicapp.modal.body.BodyXacNhan;
-import com.example.musicapp.modal.body.BodyXoaDSPhat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -174,6 +173,10 @@ public interface ApiServiceV1 {
     @GET("/api/v2/lay-ds-ca-si-quan-tam")
     Call<GetListCSQuanTam> getListCaSiQuanTam(
             @Header("authorization") String authorization);
+
+    @GET("/api/v2/kiem-tra-quan-tam-ca-si")
+    Call<ResponseDefault> kiemTraQuanTamCaSi(@Query("idCaSi") String idCaSi,
+                                             @Header("authorization") String authorization);
 
 
     /* Get

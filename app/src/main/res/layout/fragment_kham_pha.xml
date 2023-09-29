@@ -35,6 +35,13 @@
                 android:fitsSystemWindows="true"
                 android:contentDescription="anh header"/>
 
+            <View
+                android:id="@+id/bgTitle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:background="#111"/>
+
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
@@ -53,7 +60,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#000"
         android:paddingTop="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">

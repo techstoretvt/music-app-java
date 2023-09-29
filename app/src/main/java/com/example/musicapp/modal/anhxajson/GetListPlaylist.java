@@ -1,7 +1,6 @@
 package com.example.musicapp.modal.anhxajson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GetListPlaylist {
     private int errCode, status;

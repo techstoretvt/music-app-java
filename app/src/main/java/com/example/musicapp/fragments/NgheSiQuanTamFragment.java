@@ -1,10 +1,11 @@
 package com.example.musicapp.fragments;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +84,13 @@ public class NgheSiQuanTamFragment extends Fragment {
         numberQuanTam = view.findViewById(R.id.numberQuanTam);
         manager = new GridLayoutManager(getContext(), 2);
         isQuanTamNgheSi = true;
+
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#38383894"), Color.BLACK}
+        );
+        LinearLayout layoutQuanTamNgheSi = view.findViewById(R.id.layoutQuanTamNgheSi);
+        layoutQuanTamNgheSi.setBackground(gradientDrawable);
 
         getListCaSi();
 

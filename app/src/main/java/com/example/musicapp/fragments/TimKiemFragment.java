@@ -38,27 +38,17 @@ import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
 import com.example.musicapp.utils.Common;
 import com.google.android.material.divider.MaterialDivider;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TimKiemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TimKiemFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
@@ -146,6 +136,7 @@ public class TimKiemFragment extends Fragment {
         isTimKiem = true;
         sharedPreferences = getContext()
                 .getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
+
 
         setEventLoaiTK();
         setEventInput();

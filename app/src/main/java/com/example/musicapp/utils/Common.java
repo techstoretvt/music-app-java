@@ -1,14 +1,11 @@
 package com.example.musicapp.utils;
 
-import android.media.MediaPlayer;
-import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
