@@ -1,5 +1,6 @@
 package com.example.musicapp.utils;
 
+import android.media.AudioRouting;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
@@ -42,8 +43,6 @@ public class MediaCustom {
 
     public static Boolean phatNhac(String url) {
         try {
-            Log.e(url, "");
-
             mediaPlayer.reset();
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepare();
@@ -80,8 +79,6 @@ public class MediaCustom {
                     } else {
                         next();
                     }
-
-
                 }
             });
 
@@ -203,9 +200,9 @@ public class MediaCustom {
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
         }
 
-        if (ChiTietNhacActivity.isChiTietNhac) {
-            ChiTietNhacActivity.checkLike();
-        }
+//        if (ChiTietNhacActivity.isChiTietNhac) {
+//            ChiTietNhacActivity.checkLike();
+//        }
 
 
         return statusPhatNhac;
@@ -281,7 +278,7 @@ public class MediaCustom {
         }
 
         if (ChiTietNhacActivity.isChiTietNhac) {
-            ChiTietNhacActivity.checkLike();
+//            ChiTietNhacActivity.checkLike();
         }
 
         return statusPhatNhac;

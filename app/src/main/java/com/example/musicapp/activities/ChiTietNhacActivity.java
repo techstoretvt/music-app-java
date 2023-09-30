@@ -3,6 +3,8 @@ package com.example.musicapp.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -20,10 +22,13 @@ import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.BsBaiHat;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
+import com.example.musicapp.adapters.ViewPagerAdapter;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
 import com.google.android.material.slider.Slider;
+import com.google.android.material.tabs.TabLayout;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,23 +37,21 @@ import retrofit2.Response;
 
 public class ChiTietNhacActivity extends AppCompatActivity {
 
-    ImageView iconClose, imgNhac, btnPrev, btnRandom, btnLoop, btnMore, btnShare;
-
-    public static ImageView btnThaTim;
+    ImageView iconClose, btnPrev, btnRandom, btnLoop, btnMore;
     public static ImageView btnNext;
-    TextView totalTime = null, tgHienTai = null, txtTenBH, txtTenCS, txtLoiBH, txtTypePlay;
+    TextView totalTime = null, tgHienTai = null, txtTypePlay;
+    public static ImageView btnPausePlay = null;
 
     Slider sliderProgress = null;
-    public static ImageView btnPausePlay = null;
+
     public static Boolean isChiTietNhac = false;
     public static FragmentManager supportFragmentManager;
     public static BsBaiHat md;
 
     Boolean isStartSlider = false;
 
-    ObjectAnimator animator;
-
-    String idBH;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,75 +62,24 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
         //anh xa view va gan gia tri
         anhXaView();
+
         isChiTietNhac = true;
 
-        String tenBh = MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat();
-        String tenCs = MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi();
-        String loiBh = MediaCustom.danhSachPhats.get(MediaCustom.position).getLoiBaiHat();
-        String anhBia = MediaCustom.danhSachPhats.get(MediaCustom.position).getAnhBia();
-        idBH = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
-
-        Intent intent = getIntent();
-        Glide.with(ChiTietNhacActivity.this).load(anhBia)
-                .into(imgNhac);
-        txtTenBH.setText(tenBh);
-        txtTenCS.setText(tenCs);
-        txtLoiBH.setText(loiBh);
-
-        GradientDrawable gradientDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[]{Color.parseColor("#0f172a"), Color.parseColor("#581c87"),
-                        Color.parseColor("#0f172a")}
-        );
-        LinearLayout layoutChitietbaihat = findViewById(R.id.layoutChitietbaihat);
-        layoutChitietbaihat.setBackground(gradientDrawable);
-
-
-        txtTypePlay.setText("#" + MediaCustom.tenLoai);
-        if (MediaCustom.typeDanhSachPhat == 1) {
-            btnRandom.setVisibility(View.GONE);
-            btnLoop.setVisibility(View.GONE);
-            if (MediaCustom.position == 0) {
-                btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
-            }
-        } else if (MediaCustom.typeDanhSachPhat == 2) {
-            btnRandom.setVisibility(View.VISIBLE);
-            btnLoop.setVisibility(View.VISIBLE);
-        }
-
-        if (MediaCustom.isPlay) {
-            btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
-        } else {
-            btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
-        }
-
-
-        //su kien close
-        iconClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(ChiTietNhacActivity.this, MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                startActivity(intent);
-
-                finish();
-
-            }
-        });
-
-        //animtion anh nhac
-        animator = ObjectAnimator.ofFloat(imgNhac, "rotation", 0, 360);
-        animator.setDuration(6000);
-        animator.setRepeatCount(ObjectAnimator.INFINITE);
-        animator.start();
-
-        if (MediaCustom.isRandom) {
-            btnRandom.setImageResource(R.drawable.random_enable);
-            btnLoop.setImageResource(R.drawable.arrows_rotate_solid);
-        } else {
-            btnRandom.setImageResource(R.drawable.random);
-        }
         //event
+        setEvent();
+
+        initUI();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tgHienTai = null;
+        isChiTietNhac = false;
+    }
+
+    private void setEvent() {
         btnPausePlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,13 +124,18 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                     tgHienTai.setText(MediaCustom.getStrCurrentTime());
                     totalTime.setText(MediaCustom.strTotalTime);
                     sliderProgress.setValueTo(MediaCustom.totalTime);
+
                     String anhBia = MediaCustom.danhSachPhats.get(MediaCustom.position)
                             .getAnhBia();
                     Glide.with(ChiTietNhacActivity.this).load(anhBia)
-                            .into(imgNhac);
-                    txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat());
-                    txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi());
-                    txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getLoiBaiHat());
+                            .into(BaiHatFragment.imgNhac);
+                    BaiHatFragment.txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                            getTenBaiHat());
+                    BaiHatFragment.txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                            getCasi().getTenCaSi());
+                    BaiHatFragment.txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                            getLoiBaiHat());
+
                     btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
 
                     if (MediaCustom.position == 0 && MediaCustom.typeDanhSachPhat == 1) {
@@ -201,14 +158,17 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                     tgHienTai.setText(MediaCustom.getStrCurrentTime());
                     totalTime.setText(MediaCustom.strTotalTime);
                     sliderProgress.setValueTo(MediaCustom.totalTime);
+
                     String anhBia = MediaCustom.danhSachPhats.get(MediaCustom.position)
                             .getAnhBia();
                     Glide.with(ChiTietNhacActivity.this).load(anhBia)
-                            .into(imgNhac);
-                    txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat());
-                    txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi());
-                    txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getLoiBaiHat());
-                    btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
+                            .into(BaiHatFragment.imgNhac);
+                    BaiHatFragment.txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                            getTenBaiHat());
+                    BaiHatFragment.txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                            getCasi().getTenCaSi());
+                    BaiHatFragment.txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                            getLoiBaiHat());
 
                     if (MediaCustom.position == 0 && MediaCustom.typeDanhSachPhat == 1) {
                         btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
@@ -222,6 +182,7 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String idBH = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
                 BaiHatAdapter.idBaiHat = idBH;
                 md = new BsBaiHat();
                 supportFragmentManager = getSupportFragmentManager();
@@ -231,7 +192,6 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                         .getCasi().getId();
                 BaiHatAdapter.currentBaiHat = MediaCustom.danhSachPhats.get(MediaCustom.position);
                 BaiHatAdapter.iconDownLoad = null;
-
             }
         });
 
@@ -274,124 +234,71 @@ public class ChiTietNhacActivity extends AppCompatActivity {
             }
         });
 
-        btnThaTim.setOnClickListener(new View.OnClickListener() {
+        iconClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handleToggleLike();
-            }
-        });
+                finish();
 
-        btnShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Tạo một intent chia sẻ
-                String urlToShare = MediaCustom.danhSachPhats.get(MediaCustom.position).getLinkBaiHat();
-
-// Tạo một Intent chia sẻ
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, urlToShare);
-
-// Kiểm tra và chọn ứng dụng để chia sẻ
-                startActivity(Intent.createChooser(shareIntent, "Chia sẻ URL với:"));
-            }
-        });
-
-        checkLike();
-    }
-
-    public static void checkLike() {
-        String header = Common.getHeader();
-        String idBH = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
-
-        ApiServiceV1.apiServiceV1.kiemTraYeuThichBaiHat(idBH, header).enqueue(new Callback<ResponseDefault>() {
-            @Override
-            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
-                ResponseDefault res = response.body();
-                if (res != null) {
-                    if (res.getErrCode() == 0) {
-                        if (res.getErrMessage().equals("like")) {
-                            btnThaTim.setImageResource(R.drawable.baseline_favorite_red);
-                        } else {
-                            btnThaTim.setImageResource(R.drawable.baseline_favorite_24);
-                        }
-                    } else {
-                        if (res.getStatus() == 401) {
-                            System.exit(0);
-                        }
-                        Log.e("Loi", res.getErrMessage());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseDefault> call, Throwable t) {
-                Log.e("Loi", "Loi call api toggle like bai hat");
             }
         });
     }
 
+    private void initUI() {
+        if (MediaCustom.isPlay) {
+            btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
+        } else {
+            btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
+        }
 
-    public static void handleToggleLike() {
+        if (MediaCustom.isRandom) {
+            btnRandom.setImageResource(R.drawable.random_enable);
+            btnLoop.setImageResource(R.drawable.arrows_rotate_solid);
+        } else {
+            btnRandom.setImageResource(R.drawable.random);
+        }
 
-        String header = Common.getHeader();
-        String idBH = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
+        if (MediaCustom.typeDanhSachPhat == 1) {
 
-        ApiServiceV1.apiServiceV1.toggleLikeBaiHat(idBH, header).enqueue(new Callback<ResponseDefault>() {
-            @Override
-            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
-                ResponseDefault res = response.body();
-                if (res != null) {
-                    if (res.getErrCode() == 0) {
-                        if (res.getErrMessage().equals("like")) {
-                            btnThaTim.setImageResource(R.drawable.baseline_favorite_red);
-                        } else {
-                            btnThaTim.setImageResource(R.drawable.baseline_favorite_24);
-                        }
-                    } else {
-                        if (res.getStatus() == 401) {
-                            System.exit(0);
-                        }
-                        Log.e("Loi", res.getErrMessage());
-                    }
-                }
+            if (MediaCustom.position == 0) {
+                btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
             }
+        }
 
-            @Override
-            public void onFailure(Call<ResponseDefault> call, Throwable t) {
-                Log.e("Loi", "Loi call api toggle like bai hat");
-            }
-        });
+        txtTypePlay.setText("#" + MediaCustom.tenLoai);
+
+        mTabLayout = findViewById(R.id.tab_layout);
+        mViewPager = findViewById(R.id.view_pager);
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),
+                FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        mViewPager.setAdapter(viewPagerAdapter);
+        mViewPager.setCurrentItem(1);
+
+        mTabLayout.setupWithViewPager(mViewPager);
 
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        tgHienTai = null;
-        animator.cancel();
-        isChiTietNhac = false;
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#0f172a"), Color.parseColor("#581c87"),
+                        Color.parseColor("#0f172a")}
+        );
+        LinearLayout layoutChitietbaihat = findViewById(R.id.layoutChitietbaihat);
+        layoutChitietbaihat.setBackground(gradientDrawable);
     }
 
     private void anhXaView() {
         iconClose = findViewById(R.id.iconClose);
-        imgNhac = findViewById(R.id.imgNhac);
         btnPrev = findViewById(R.id.btnPrev);
         btnPausePlay = findViewById(R.id.btnPausePlay);
         btnNext = findViewById(R.id.btnNext);
         totalTime = findViewById(R.id.totalTime);
         tgHienTai = findViewById(R.id.tgHienTai);
         sliderProgress = findViewById(R.id.sliderProgress);
-        txtTenBH = findViewById(R.id.txtTenBH);
-        txtTenCS = findViewById(R.id.txtTenCS);
-        txtLoiBH = findViewById(R.id.txtLoiBH);
+
         txtTypePlay = findViewById(R.id.txtTypePlay);
         btnRandom = findViewById(R.id.btnRandom);
         btnLoop = findViewById(R.id.btnLoop);
         btnMore = findViewById(R.id.btnMore);
-        btnThaTim = findViewById(R.id.btnThaTim);
-        btnShare = findViewById(R.id.btnShare);
 
         if (MediaCustom.danhSachPhats != null) {
             totalTime.setText(MediaCustom.strTotalTime);

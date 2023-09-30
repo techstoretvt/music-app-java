@@ -23,6 +23,7 @@ import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.utils.Common;
@@ -258,9 +259,13 @@ public class BsBaiHat extends BottomSheetDialogFragment {
                                 if (res.getErrMessage().equals("like")) {
                                     iconYeuThich.setImageResource(R.drawable.baseline_favorite_red);
                                     txtYeuThich.setText("Đã thêm vao yêu thích");
+                                    if (BaiHatFragment.btnThaTim != null)
+                                        BaiHatFragment.btnThaTim.setImageResource(R.drawable.baseline_favorite_red);
                                 } else {
                                     iconYeuThich.setImageResource(R.drawable.baseline_favorite_24);
                                     txtYeuThich.setText("Thêm vao yêu thích");
+                                    if (BaiHatFragment.btnThaTim != null)
+                                        BaiHatFragment.btnThaTim.setImageResource(R.drawable.baseline_favorite_24);
                                 }
                             } else {
                                 if (res.getStatus() == 401) {

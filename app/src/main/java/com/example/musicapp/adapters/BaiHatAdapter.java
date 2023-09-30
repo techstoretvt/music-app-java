@@ -1,7 +1,9 @@
 package com.example.musicapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
+import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
@@ -23,9 +27,15 @@ import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.fragments.YeuThichFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.modal.anhxajson.GetListBaiHat;
+import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
@@ -87,26 +97,47 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ChiTietNhacActivity.class);
+                view.getContext().startActivity(intent);
+                MainActivity.progess_phatNhac.setProgress(50);
 
-                MediaCustom.position = holder.getAdapterPosition();
-                MediaCustom.danhSachPhats = data;
+                android.os.Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.progess_phatNhac.setProgress(100);
+                    }
+                }, 1000);
+
 
                 if (ChiTietThuVienFragment.isChiTietDS) {
+                    MediaCustom.position = holder.getAdapterPosition();
+                    MediaCustom.danhSachPhats = data;
                     MediaCustom.typeDanhSachPhat = 2;
                     MediaCustom.tenLoai = ChiTietThuVienFragment.tenDanhSach;
                 } else if (ChiTietCaSiFragment.isChiTietCS) {
+                    MediaCustom.position = 0;
                     MediaCustom.typeDanhSachPhat = 1;
                     MediaCustom.tenLoai = ChiTietCaSiFragment.strTenCS;
+
+                    getListRandomBaiHat(data.get(holder.getAdapterPosition()));
                 } else if (TimKiemFragment.isTimKiem) {
+                    MediaCustom.position = 0;
                     MediaCustom.typeDanhSachPhat = 1;
                     MediaCustom.tenLoai = "Tìm kiếm";
+
+                    getListRandomBaiHat(data.get(holder.getAdapterPosition()));
                 } else if (YeuThichFragment.isYeuThich) {
+                    MediaCustom.position = holder.getAdapterPosition();
+                    MediaCustom.danhSachPhats = data;
                     MediaCustom.typeDanhSachPhat = 2;
                     MediaCustom.tenLoai = "Yêu thích";
                 } else {
                     //kham pha
+                    MediaCustom.position = 0;
                     MediaCustom.typeDanhSachPhat = 1;
                     MediaCustom.tenLoai = "Khám phá";
+                    getListRandomBaiHat(data.get(holder.getAdapterPosition()));
                 }
 
                 // Create a new thread
@@ -114,7 +145,9 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                         data.get(holder.getAdapterPosition()).getTenBaiHat(),
                         data.get(holder.getAdapterPosition()).getCasi().getTenCaSi());
 
-                MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat());
+                if (MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat())) {
+//                    MainActivity.progess_phatNhac.setProgress(0);
+                }
 
                 if (holder.getAdapterPosition() == 0) {
                     MainActivity.btnPrev.setVisibility(View.GONE);
@@ -126,7 +159,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 //                holder.linearLayout.setBackground(colorDrawable);
 
 
-                MainActivity.layoutTencasi.callOnClick();
+//                MainActivity.layoutTencasi.callOnClick();
 
 
             }
@@ -150,6 +183,43 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 md.show(MainActivity.supportFragmentManager, BsBaiHat.TAG);
             }
         });
+
+    }
+
+    private void getListRandomBaiHat(BaiHat bh) {
+        String header = Common.getHeader();
+        int limit = 20;
+        String id = bh.getId();
+
+        ApiServiceV1.apiServiceV1.getListRandomBaiHat(limit, new String[]{id, "skfskdfjsdhjfh"}, header).enqueue(new Callback<GetListBaiHat>() {
+            @Override
+            public void onResponse(Call<GetListBaiHat> call, Response<GetListBaiHat> response) {
+                GetListBaiHat res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        ArrayList<BaiHat> listBH;
+                        if (res.getData() != null) listBH = res.getData();
+                        else listBH = new ArrayList<>();
+                        listBH.add(0, bh);
+                        MediaCustom.danhSachPhats = listBH;
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Log.e("loi", res.getErrMessage());
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<GetListBaiHat> call, Throwable t) {
+                Log.e("loi", "loi get list random bai hat");
+                Log.e("loi", t.getMessage());
+            }
+        });
+
 
     }
 

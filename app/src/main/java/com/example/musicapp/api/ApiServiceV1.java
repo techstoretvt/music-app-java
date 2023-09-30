@@ -26,6 +26,7 @@ import com.example.musicapp.modal.body.BodyXacNhan;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -177,6 +178,11 @@ public interface ApiServiceV1 {
     @GET("/api/v2/kiem-tra-quan-tam-ca-si")
     Call<ResponseDefault> kiemTraQuanTamCaSi(@Query("idCaSi") String idCaSi,
                                              @Header("authorization") String authorization);
+
+    @GET("/api/v2/get-list-random-bai-hat")
+    Call<GetListBaiHat> getListRandomBaiHat(@Query("limit") int limit,
+                                            @Query("minusId") String[] minusId,
+                                            @Header("authorization") String authorization);
 
 
     /* Get

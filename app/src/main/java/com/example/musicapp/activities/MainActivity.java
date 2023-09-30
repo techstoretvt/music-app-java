@@ -52,6 +52,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import io.socket.emitter.Emitter;
 
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     Boolean isActive = false;
 
     DownloadReceiver downloadReceiver;
+    public static LinearProgressIndicator progess_phatNhac = null;
 
 
     @Override
@@ -166,21 +168,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (MediaCustom.danhSachPhats != null) {
-//                    String tenBh = currentBaiHat.getTenBaiHat();
-//                    String tenCs = currentBaiHat.getCasi().getTenCaSi();
-//                    String loiBh = currentBaiHat.getLoiBaiHat();
-//                    String anhBia = currentBaiHat.getAnhBia();
-//                    String idBH = currentBaiHat.getId();
 
                     Intent intent = new Intent(MainActivity.this, ChiTietNhacActivity.class);
-//                    intent.putExtra("tenBH", tenBh);
-//                    intent.putExtra("tenCS", tenCs);
-//                    intent.putExtra("loiBH", loiBh);
-//                    intent.putExtra("anhBia", anhBia);
-//                    intent.putExtra("idBH", idBH);
 
-
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
 
 
@@ -249,8 +239,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEventSocket() {
-        Toast.makeText(this, "init socket", Toast.LENGTH_SHORT)
-                .show();
         webSocketClient.socket.on("new_thong_bao", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
@@ -345,6 +333,40 @@ public class MainActivity extends AppCompatActivity {
         btnNext = findViewById(R.id.btnNext);
         supportFragmentManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        progess_phatNhac = findViewById(R.id.progess_phatNhac);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (MediaCustom.isPlay) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (MediaCustom.isPlay) {
+//                                    MediaCustom.getFloatCurrentTime()
+                                    float time1 = MediaCustom.getFloatCurrentTime();
+                                    int time2 = MediaCustom.totalTime;
+                                    int persent = (int) time1 * 100 / time2;
+
+                                    if (progess_phatNhac != null)
+                                        progess_phatNhac.setProgress(persent);
+
+                                }
+                            }
+                        });
+                    }
+
+
+                    // Nghỉ 100 mili giây
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
 
 
     }

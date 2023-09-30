@@ -36,7 +36,9 @@
             android:exported="true"/>
         <activity
             android:name=".activities.ChiTietNhacActivity"
-            android:exported="true"/>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".activities.ChangePassForgetActivity"
             android:exported="true"/>
