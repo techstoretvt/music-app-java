@@ -23,6 +23,7 @@ import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.adapters.ViewPagerAdapter;
 import com.example.musicapp.utils.Common;
@@ -37,12 +38,14 @@ import retrofit2.Response;
 
 public class ChiTietNhacActivity extends AppCompatActivity {
 
-    ImageView iconClose, btnPrev, btnRandom, btnLoop, btnMore;
-    public static ImageView btnNext;
-    TextView totalTime = null, tgHienTai = null, txtTypePlay;
+    ImageView iconClose, btnRandom, btnLoop, btnMore;
+    public static ImageView btnNext, btnPrev;
+    TextView txtTypePlay;
+    public static TextView totalTime = null, tgHienTai = null;
+
     public static ImageView btnPausePlay = null;
 
-    Slider sliderProgress = null;
+    public static Slider sliderProgress = null;
 
     public static Boolean isChiTietNhac = false;
     public static FragmentManager supportFragmentManager;
@@ -73,8 +76,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         tgHienTai = null;
         isChiTietNhac = false;
     }
@@ -206,6 +209,12 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                 } else {
                     btnRandom.setImageResource(R.drawable.random);
                 }
+                if (MediaCustom.typeDanhSachPhat == 1) {
+                    BaiHatAdapter.getListRandomBaiHat(MediaCustom.danhSachPhats.get(MediaCustom.position));
+                } else if (MediaCustom.typeDanhSachPhat == 2) {
+                    ThongTinBaiHatFragment.getData();
+                }
+
             }
         });
 

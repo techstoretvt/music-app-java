@@ -37,8 +37,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/anhBaiHat"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/anh_chuot"/>
 
                         <LinearLayout
@@ -49,6 +51,7 @@
                             android:layout_weight="1">
 
                             <TextView
+                                android:id="@+id/tenBaiHat"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Ten bai hat"
@@ -56,6 +59,7 @@
                                 android:textStyle="bold"/>
 
                             <TextView
+                                android:id="@+id/tenCaSi"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Ten ca si"
@@ -86,6 +90,7 @@
                             android:textColor="#ccc"/>
 
                         <TextView
+                            android:id="@+id/theLoai"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Viet nam,v-pop"
@@ -107,6 +112,7 @@
                             android:textColor="#ccc"/>
 
                         <TextView
+                            android:id="@+id/phatHanh"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="20/9/2023"
@@ -128,6 +134,7 @@
                             android:textColor="#ccc"/>
 
                         <TextView
+                            android:id="@+id/cungCap"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Youtube"

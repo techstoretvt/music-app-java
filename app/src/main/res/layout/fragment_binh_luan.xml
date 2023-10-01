@@ -1,14 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000"
+    android:orientation="vertical"
     tools:context=".fragments.fragment_chi_tiet_bh.BinhLuanFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="binh luan"/>
+        android:layout_height="wrap_content"
+        android:text="623 bình luận"
+        android:paddingVertical="10dp"
+        android:textSize="16sp"
+        android:gravity="center_horizontal"
+        android:textColor="#fff"/>
 
-</FrameLayout>
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:outlineAmbientShadowColor="#ccc"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/layoutReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trả lời: "/>
+
+        <TextView
+            android:id="@+id/nameReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tran Hien"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:textColor="#fff"/>
+
+        <ImageView
+            android:id="@+id/btnCloseReply"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_times"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="30dp">
+
+            <ImageView
+                android:id="@+id/anhUser"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/anh_header"
+                android:scaleType="centerCrop"
+                android:fitsSystemWindows="true"
+                android:contentDescription="anh header"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <EditText
+            android:id="@+id/valueCmt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColorHint="#ccc"
+            android:textSize="12sp"
+            android:paddingHorizontal="10dp"
+            android:textColor="#fff"
+            android:hint="Nhập bình luận..."/>
+
+        <ImageView
+            android:id="@+id/btnSend"
+            android:layout_width="46dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_send"
+            android:scaleType="centerCrop"
+            android:fitsSystemWindows="true"
+            android:padding="8dp"
+            android:rotation="50"
+            android:contentDescription="anh header"/>
+
+    </LinearLayout>
+
+</LinearLayout>

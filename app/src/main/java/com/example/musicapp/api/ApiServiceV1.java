@@ -1,11 +1,13 @@
 package com.example.musicapp.api;
 
+import com.example.musicapp.modal.anhxajson.AddCommentParent;
 import com.example.musicapp.modal.anhxajson.DanhSachCaSi;
 import com.example.musicapp.modal.anhxajson.GetCaSiByID;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBHYeuThich;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.GetListCSQuanTam;
+import com.example.musicapp.modal.anhxajson.GetListCommentById;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
 import com.example.musicapp.modal.anhxajson.GetTaiKhoan;
 import com.example.musicapp.modal.anhxajson.Keyword;
@@ -16,6 +18,8 @@ import com.example.musicapp.modal.anhxajson.ThemBHVaoDS;
 import com.example.musicapp.modal.anhxajson.ThemDSPhat;
 import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
+import com.example.musicapp.modal.body.BodyAddCommentChild;
+import com.example.musicapp.modal.body.BodyAddCommentParent;
 import com.example.musicapp.modal.body.BodyChangePass;
 import com.example.musicapp.modal.body.BodyLogin;
 import com.example.musicapp.modal.body.BodyLoginGoogle;
@@ -183,6 +187,18 @@ public interface ApiServiceV1 {
     Call<GetListBaiHat> getListRandomBaiHat(@Query("limit") int limit,
                                             @Query("minusId") String[] minusId,
                                             @Header("authorization") String authorization);
+
+    @GET("/api/v2/get-list-comment-by-id-bai-hat")
+    Call<GetListCommentById> getListCommentByIdBaiHat(@Query("idBaiHat") String idBaiHat,
+                                                      @Header("authorization") String authorization);
+
+    @POST("/api/v2/add-comment-parent")
+    Call<AddCommentParent> addCommentParent(@Body BodyAddCommentParent body,
+                                            @Header("authorization") String authorization);
+
+//    @POST("/api/v2/add-comment-child")
+//    Call<AddCommentParent> addCommentChild(@Body BodyAddCommentChild body,
+//                                           @Header("authorization") String authorization);
 
 
     /* Get

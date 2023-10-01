@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 
 import java.io.IOException;
@@ -200,9 +202,19 @@ public class MediaCustom {
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
         }
 
-//        if (ChiTietNhacActivity.isChiTietNhac) {
-//            ChiTietNhacActivity.checkLike();
-//        }
+        if (ChiTietNhacActivity.tgHienTai != null) {
+            ChiTietNhacActivity.tgHienTai.setText(MediaCustom.getStrCurrentTime());
+            ChiTietNhacActivity.totalTime.setText(MediaCustom.strTotalTime);
+            ChiTietNhacActivity.sliderProgress.setValueTo(MediaCustom.totalTime);
+        }
+
+        if (BaiHatFragment.btnThaTim != null) {
+            BaiHatFragment.checkLike();
+        }
+
+        if (ThongTinBaiHatFragment.tenBaiHat != null) {
+            ThongTinBaiHatFragment.getData();
+        }
 
 
         return statusPhatNhac;
@@ -277,8 +289,18 @@ public class MediaCustom {
             MainActivity.btnPrev.setVisibility(View.GONE);
         }
 
-        if (ChiTietNhacActivity.isChiTietNhac) {
-//            ChiTietNhacActivity.checkLike();
+        if (ChiTietNhacActivity.tgHienTai != null) {
+            ChiTietNhacActivity.tgHienTai.setText(MediaCustom.getStrCurrentTime());
+            ChiTietNhacActivity.totalTime.setText(MediaCustom.strTotalTime);
+            ChiTietNhacActivity.sliderProgress.setValueTo(MediaCustom.totalTime);
+        }
+
+        if (BaiHatFragment.btnThaTim != null) {
+            BaiHatFragment.checkLike();
+        }
+
+        if (ThongTinBaiHatFragment.tenBaiHat != null) {
+            ThongTinBaiHatFragment.getData();
         }
 
         return statusPhatNhac;

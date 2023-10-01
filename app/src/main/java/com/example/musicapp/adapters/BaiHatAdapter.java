@@ -26,6 +26,8 @@ import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.fragments.YeuThichFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.utils.Common;
@@ -97,24 +99,54 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ChiTietNhacActivity.class);
-                view.getContext().startActivity(intent);
-                MainActivity.progess_phatNhac.setProgress(50);
+                if (!ChiTietNhacActivity.isChiTietNhac) {
+                    Intent intent = new Intent(view.getContext(), ChiTietNhacActivity.class);
+                    view.getContext().startActivity(intent);
+                }
 
-                android.os.Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        MainActivity.progess_phatNhac.setProgress(100);
+                MainActivity.progess_phatNhac.setProgress(100);
+
+                if (ChiTietNhacActivity.isChiTietNhac) {
+                    BaiHat currentBH = data.get(holder.getAdapterPosition());
+                    int indexBH = MediaCustom.danhSachPhats.indexOf(currentBH);
+                    if (indexBH != -1) {
+                        MediaCustom.position = indexBH;
+
+                        String anhBia = currentBH.getAnhBia();
+                        //update ui
+                        ChiTietNhacActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
+                        if (MainActivity.dungNhac != null) {
+                            Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
+                                    .into(MainActivity.imgNhac);
+                            MainActivity.txtTenBaiHat.setText(currentBH.getTenBaiHat());
+                            MainActivity.txtTenCaSi.setText(currentBH.getCasi().getTenCaSi());
+                            MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+                            MainActivity.btnPrev.setVisibility(View.VISIBLE);
+
+                        }
+                        if (BaiHatFragment.imgNhac != null) {
+                            Glide.with(BaiHatFragment.imgNhac.getContext()).load(anhBia)
+                                    .into(BaiHatFragment.imgNhac);
+                            BaiHatFragment.txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                                    getTenBaiHat());
+                            BaiHatFragment.txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                                    getCasi().getTenCaSi());
+                            BaiHatFragment.txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
+                                    getLoiBaiHat());
+
+                            ChiTietNhacActivity.btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
+
+                            BaiHatFragment.checkLike();
+
+                        }
                     }
-                }, 1000);
 
-
-                if (ChiTietThuVienFragment.isChiTietDS) {
+                } else if (ChiTietThuVienFragment.isChiTietDS) {
                     MediaCustom.position = holder.getAdapterPosition();
                     MediaCustom.danhSachPhats = data;
                     MediaCustom.typeDanhSachPhat = 2;
                     MediaCustom.tenLoai = ChiTietThuVienFragment.tenDanhSach;
+
                 } else if (ChiTietCaSiFragment.isChiTietCS) {
                     MediaCustom.position = 0;
                     MediaCustom.typeDanhSachPhat = 1;
@@ -147,20 +179,20 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
                 if (MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat())) {
 //                    MainActivity.progess_phatNhac.setProgress(0);
+                    if (ChiTietNhacActivity.isChiTietNhac) {
+                        ThongTinBaiHatFragment.getData();
+
+                        ChiTietNhacActivity.tgHienTai.setText(MediaCustom.getStrCurrentTime());
+                        ChiTietNhacActivity.totalTime.setText(MediaCustom.strTotalTime);
+                        ChiTietNhacActivity.sliderProgress.setValueTo(MediaCustom.totalTime);
+                    }
                 }
 
-                if (holder.getAdapterPosition() == 0) {
+                if (MediaCustom.position == 0) {
                     MainActivity.btnPrev.setVisibility(View.GONE);
                 } else {
                     MainActivity.btnPrev.setVisibility(View.VISIBLE);
                 }
-
-//                ColorDrawable colorDrawable = new ColorDrawable(Color.GREEN);
-//                holder.linearLayout.setBackground(colorDrawable);
-
-
-//                MainActivity.layoutTencasi.callOnClick();
-
 
             }
         });
@@ -186,7 +218,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
     }
 
-    private void getListRandomBaiHat(BaiHat bh) {
+    public static void getListRandomBaiHat(BaiHat bh) {
         String header = Common.getHeader();
         int limit = 20;
         String id = bh.getId();
@@ -202,6 +234,20 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                         else listBH = new ArrayList<>();
                         listBH.add(0, bh);
                         MediaCustom.danhSachPhats = listBH;
+                        MediaCustom.position = 0;
+
+                        if (MainActivity.btnPrev != null) {
+                            MainActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
+                        }
+                        if (ChiTietNhacActivity.isChiTietNhac) {
+                            ChiTietNhacActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
+                        }
+
+                        if (ThongTinBaiHatFragment.tenBaiHat != null && ChiTietNhacActivity.isChiTietNhac) {
+                            ThongTinBaiHatFragment.getData();
+                        }
+
+
                     } else {
                         if (res.getStatus() == 401) {
                             System.exit(0);
