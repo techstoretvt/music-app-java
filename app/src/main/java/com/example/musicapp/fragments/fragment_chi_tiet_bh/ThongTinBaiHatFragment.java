@@ -82,7 +82,8 @@ public class ThongTinBaiHatFragment extends Fragment {
         tenCaSi.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi());
 
         if (ChiTietNhacActivity.isChiTietNhac)
-            Glide.with(anhBaiHat.getContext()).load(MediaCustom.danhSachPhats.get(MediaCustom.position).getAnhBia())
+            Glide.with(ChiTietNhacActivity.btnPausePlay.getContext()).
+                    load(MediaCustom.danhSachPhats.get(MediaCustom.position).getAnhBia())
                     .into(anhBaiHat);
 
 //        list bai hat tiep theo

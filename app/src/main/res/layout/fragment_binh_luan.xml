@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#000"
     android:orientation="vertical"
     tools:context=".fragments.fragment_chi_tiet_bh.BinhLuanFragment">
 
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="623 bình luận"
         android:paddingVertical="10dp"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:gravity="center_horizontal"
         android:textColor="#fff"/>
 
@@ -72,21 +71,6 @@
         android:paddingHorizontal="20dp"
         android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="30dp">
-
-            <ImageView
-                android:id="@+id/anhUser"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/anh_header"
-                android:scaleType="centerCrop"
-                android:fitsSystemWindows="true"
-                android:contentDescription="anh header"/>
-
-        </androidx.cardview.widget.CardView>
 
         <EditText
             android:id="@+id/valueCmt"

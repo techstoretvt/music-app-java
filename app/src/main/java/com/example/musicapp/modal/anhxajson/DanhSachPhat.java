@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class DanhSachPhat implements Serializable {
     private String id;
     private String tenDanhSach;
-    private String idUser;
+    private String idUser, anhDanhSach;
 
     private ArrayList<ChiTietDanhSachPhat> chiTietDanhSachPhats;
 
@@ -15,6 +15,14 @@ public class DanhSachPhat implements Serializable {
         this.tenDanhSach = tenDanhSach;
         this.idUser = idUser;
         this.chiTietDanhSachPhats = chiTietDanhSachPhats;
+    }
+
+    public String getAnhDanhSach() {
+        return anhDanhSach;
+    }
+
+    public void setAnhDanhSach(String anhDanhSach) {
+        this.anhDanhSach = anhDanhSach;
     }
 
     public ArrayList<ChiTietDanhSachPhat> getChiTietDanhSachPhats() {

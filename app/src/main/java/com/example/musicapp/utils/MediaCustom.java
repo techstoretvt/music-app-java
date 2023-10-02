@@ -10,13 +10,21 @@ import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
+import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
+import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
+import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.modal.anhxajson.ResponseDefault;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MediaCustom {
 
@@ -102,9 +110,7 @@ public class MediaCustom {
             else strTotalTime += String.valueOf(duration);
 
             isData = true;
-
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
-
 
             isPlay = true;
 
@@ -157,7 +163,6 @@ public class MediaCustom {
             }
         } else if (typeDanhSachPhat == 2) {
             if (isRandom) {
-                Log.e("random", "");
                 if (positionRandom.size() == 0) {
                     taoListRandom();
                 }
@@ -193,13 +198,26 @@ public class MediaCustom {
 
         //update giao dien
         if (MainActivity.dungNhac != null) {
+            //current
             String anhBia = MediaCustom.danhSachPhats.get(position)
                     .getAnhBia();
-            Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
-                    .into(MainActivity.imgNhac);
-            MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-            MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+            Glide.with(MainActivity.layoutAudio.getContext()).load(anhBia)
+                    .into(CurrentMiniNhacFragment.imgNhac);
+            CurrentMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+            CurrentMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+
+            //next
+            int nextPosition = (position + 1) % danhSachPhats.size();
+            Log.e("nextPosition", String.valueOf(nextPosition));
+            String anhBiaNext = MediaCustom.danhSachPhats.get(nextPosition)
+                    .getAnhBia();
+            Glide.with(MainActivity.layoutAudio.getContext()).load(anhBiaNext)
+                    .into(NextMiniNhacFragment.imgNhac);
+            NextMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(nextPosition).getTenBaiHat());
+            NextMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(nextPosition).getCasi().getTenCaSi());
+
+            MainActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_24);
         }
 
         if (ChiTietNhacActivity.tgHienTai != null) {
@@ -215,6 +233,9 @@ public class MediaCustom {
         if (ThongTinBaiHatFragment.tenBaiHat != null) {
             ThongTinBaiHatFragment.getData();
         }
+
+        //tang view
+        tangView(danhSachPhats.get(position).getId());
 
 
         return statusPhatNhac;
@@ -272,14 +293,23 @@ public class MediaCustom {
 
         //update giao dien
         if (MainActivity.dungNhac != null) {
+            //current
             String anhBia = MediaCustom.danhSachPhats.get(position)
                     .getAnhBia();
-            Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
-                    .into(MainActivity.imgNhac);
-
-            MainActivity.txtTenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-            MainActivity.txtTenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+            Glide.with(MainActivity.layoutAudio.getContext()).load(anhBia)
+                    .into(CurrentMiniNhacFragment.imgNhac);
+            CurrentMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
+            CurrentMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
+
+            //next
+            int nextPosition = (position + 1) % danhSachPhats.size();
+            String anhBiaNext = MediaCustom.danhSachPhats.get(nextPosition)
+                    .getAnhBia();
+            Glide.with(MainActivity.layoutAudio.getContext()).load(anhBiaNext)
+                    .into(NextMiniNhacFragment.imgNhac);
+            NextMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(nextPosition).getTenBaiHat());
+            NextMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(nextPosition).getCasi().getTenCaSi());
         }
 
 
@@ -339,5 +369,21 @@ public class MediaCustom {
             if (!positionRandom.contains(number))
                 positionRandom.add(number);
         }
+    }
+
+    public static void tangView(String idBaiHat) {
+        String header = Common.getHeader();
+
+        ApiServiceV1.apiServiceV1.tangViewBaiHat(idBaiHat, header).enqueue(new Callback<ResponseDefault>() {
+            @Override
+            public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDefault> call, Throwable t) {
+
+            }
+        });
     }
 }

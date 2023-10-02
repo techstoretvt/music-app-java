@@ -3,9 +3,13 @@ package com.example.musicapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
@@ -22,8 +26,10 @@ import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +38,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
+import com.example.musicapp.adapters.ViewPagerMiniNhacAdapter;
 import com.example.musicapp.databinding.ActivityMainBinding;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
@@ -41,6 +48,7 @@ import com.example.musicapp.fragments.NgheSiQuanTamFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
 import com.example.musicapp.fragments.YeuThichFragment;
+import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.DownloadReceiver;
 import com.example.musicapp.utils.MediaCustom;
@@ -53,6 +61,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.tabs.TabLayout;
 
 import io.socket.emitter.Emitter;
 
@@ -63,12 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static LinearLayout layoutTencasi;
 
-    public static LinearLayout layoutAudio;
+    public static LinearLayout layoutAudio = null;
     public static ImageView imgNhac, btnPrev, dungNhac = null;
     ImageView btnNext;
     public static TextView txtTenBaiHat, txtTenCaSi;
 
-    Boolean isNetwork = true;
+    Boolean isNetwork = true, isNextBaiHat = false;
 
 
     public static String accessToken;
@@ -87,11 +96,14 @@ public class MainActivity extends AppCompatActivity {
 
     public static MyWebSocketClient webSocketClient;
 
-    Boolean isActive = false;
+    public static Boolean isActive = false;
+
+    ViewPager mViewPager;
 
     DownloadReceiver downloadReceiver;
-    public static LinearProgressIndicator progess_phatNhac = null;
 
+    public static ConstraintLayout constraintLayout;
+    public static LinearProgressIndicator progess_phatNhac = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,20 +176,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        //mo chi tiet nhac
-        layoutTencasi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (MediaCustom.danhSachPhats != null) {
-
-                    Intent intent = new Intent(MainActivity.this, ChiTietNhacActivity.class);
-
-                    startActivity(intent);
-
-
-                }
-
-            }
-        });
+//        layoutTencasi.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (MediaCustom.danhSachPhats != null) {
+//
+//                    Intent intent = new Intent(MainActivity.this, ChiTietNhacActivity.class);
+//                    startActivity(intent);
+//                }
+//
+//            }
+//        });
 
 
         //set su kien mat mang
@@ -311,6 +320,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dungNhac = null;
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         isActive = false;
@@ -334,6 +349,48 @@ public class MainActivity extends AppCompatActivity {
         supportFragmentManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         progess_phatNhac = findViewById(R.id.progess_phatNhac);
+        mViewPager = findViewById(R.id.view_pager);
+        constraintLayout = findViewById(R.id.layout);
+
+        ViewPagerMiniNhacAdapter viewPagerMiniNhacAdapter = new ViewPagerMiniNhacAdapter(getSupportFragmentManager(),
+                FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        mViewPager.setAdapter(viewPagerMiniNhacAdapter);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (!isNextBaiHat) {
+                    isNextBaiHat = true;
+                    Log.e("vao", "");
+
+                    mViewPager.setCurrentItem(0);
+                    Boolean status = MediaCustom.next();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (status) {
+                                isNextBaiHat = false;
+                            } else {
+                                isNextBaiHat = false;
+                            }
+                        }
+                    }, 500);
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         new Thread(new Runnable() {
             @Override
@@ -382,16 +439,20 @@ public class MainActivity extends AppCompatActivity {
 
     //phat nhac mini
     public static void phatNhacMini(String urlAnh, String tenbh, String tencasi) {
-        String tenbhCu = (String) txtTenBaiHat.getText();
+        if (CurrentMiniNhacFragment.tenBaiHat == null) return;
+        String tenbhCu = (String) CurrentMiniNhacFragment.tenBaiHat.getText();
         if (tenbhCu.equals(tenbh)) {
             return;
         }
         layoutAudio.setVisibility(View.VISIBLE);
-        txtTenBaiHat.setText(tenbh);
-        txtTenCaSi.setText(tencasi);
-        Glide.with(MainActivity.imgNhac.getContext()).load(urlAnh).into(imgNhac);
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(imgNhac, "rotation", 0, 360);
+
+        CurrentMiniNhacFragment.tenBaiHat.setText(tenbh);
+        CurrentMiniNhacFragment.tenCaSi.setText(tencasi);
+        Glide.with(MainActivity.layoutAudio.getContext()).load(urlAnh).into(CurrentMiniNhacFragment.imgNhac);
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(CurrentMiniNhacFragment.imgNhac,
+                "rotation", 0, 360);
         animator.setDuration(3000);
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();

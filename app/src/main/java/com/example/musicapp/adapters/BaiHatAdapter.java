@@ -1,5 +1,6 @@
 package com.example.musicapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,10 +25,14 @@ import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
+import com.example.musicapp.fragments.DaTaiFragment;
 import com.example.musicapp.fragments.TimKiemFragment;
 import com.example.musicapp.fragments.YeuThichFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
+import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
+import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.utils.Common;
@@ -76,6 +81,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         return data.size();
     }
 
+    @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(@NonNull VHolder holder, int position) {
         holder.stt.setText(String.valueOf(position + 1));
@@ -99,10 +105,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!ChiTietNhacActivity.isChiTietNhac) {
-                    Intent intent = new Intent(view.getContext(), ChiTietNhacActivity.class);
-                    view.getContext().startActivity(intent);
-                }
+
 
                 MainActivity.progess_phatNhac.setProgress(100);
 
@@ -116,12 +119,23 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                         //update ui
                         ChiTietNhacActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
                         if (MainActivity.dungNhac != null) {
-                            Glide.with(MainActivity.imgNhac.getContext()).load(anhBia)
-                                    .into(MainActivity.imgNhac);
-                            MainActivity.txtTenBaiHat.setText(currentBH.getTenBaiHat());
-                            MainActivity.txtTenCaSi.setText(currentBH.getCasi().getTenCaSi());
+                            //current
+                            Glide.with(MainActivity.layoutAudio.getContext()).load(anhBia)
+                                    .into(CurrentMiniNhacFragment.imgNhac);
+                            CurrentMiniNhacFragment.tenBaiHat.setText(currentBH.getTenBaiHat());
+                            CurrentMiniNhacFragment.tenCaSi.setText(currentBH.getCasi().getTenCaSi());
                             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
-                            MainActivity.btnPrev.setVisibility(View.VISIBLE);
+
+                            //next
+                            int nextPosition = (indexBH + 1) % MediaCustom.danhSachPhats.size();
+                            String anhBiaNext = MediaCustom.danhSachPhats.get(nextPosition)
+                                    .getAnhBia();
+                            Glide.with(MainActivity.layoutAudio.getContext()).load(anhBiaNext)
+                                    .into(NextMiniNhacFragment.imgNhac);
+                            NextMiniNhacFragment.tenBaiHat.setText(MediaCustom.danhSachPhats.get(nextPosition)
+                                    .getTenBaiHat());
+                            NextMiniNhacFragment.tenCaSi.setText(MediaCustom.danhSachPhats.get(nextPosition)
+                                    .getCasi().getTenCaSi());
 
                         }
                         if (BaiHatFragment.imgNhac != null) {
@@ -139,6 +153,9 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                             BaiHatFragment.checkLike();
 
                         }
+
+                        BinhLuanFragment.getListComment(MediaCustom.danhSachPhats.get(MediaCustom.position)
+                                .getId());
                     }
 
                 } else if (ChiTietThuVienFragment.isChiTietDS) {
@@ -164,6 +181,11 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                     MediaCustom.danhSachPhats = data;
                     MediaCustom.typeDanhSachPhat = 2;
                     MediaCustom.tenLoai = "Yêu thích";
+                } else if (DaTaiFragment.isFragmentDaTai) {
+                    MediaCustom.position = holder.getAdapterPosition();
+                    MediaCustom.danhSachPhats = data;
+                    MediaCustom.typeDanhSachPhat = 2;
+                    MediaCustom.tenLoai = "Đã tải";
                 } else {
                     //kham pha
                     MediaCustom.position = 0;
@@ -172,13 +194,12 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                     getListRandomBaiHat(data.get(holder.getAdapterPosition()));
                 }
 
-                // Create a new thread
+                //
                 MainActivity.phatNhacMini(data.get(holder.getAdapterPosition()).getAnhBia(),
                         data.get(holder.getAdapterPosition()).getTenBaiHat(),
                         data.get(holder.getAdapterPosition()).getCasi().getTenCaSi());
 
                 if (MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat())) {
-//                    MainActivity.progess_phatNhac.setProgress(0);
                     if (ChiTietNhacActivity.isChiTietNhac) {
                         ThongTinBaiHatFragment.getData();
 
@@ -192,6 +213,13 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                     MainActivity.btnPrev.setVisibility(View.GONE);
                 } else {
                     MainActivity.btnPrev.setVisibility(View.VISIBLE);
+                }
+
+                MediaCustom.tangView(data.get(position).getId());
+
+                if (!ChiTietNhacActivity.isChiTietNhac) {
+                    Intent intent = new Intent(view.getContext(), ChiTietNhacActivity.class);
+                    view.getContext().startActivity(intent);
                 }
 
             }
@@ -230,8 +258,19 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 if (res != null) {
                     if (res.getErrCode() == 0) {
                         ArrayList<BaiHat> listBH;
-                        if (res.getData() != null) listBH = res.getData();
-                        else listBH = new ArrayList<>();
+                        if (res.getData() != null) {
+                            listBH = res.getData();
+
+                            if (NextMiniNhacFragment.tenBaiHat != null) {
+                                BaiHat bh0 = listBH.get(0);
+                                NextMiniNhacFragment.tenBaiHat.setText(bh0.getTenBaiHat());
+                                NextMiniNhacFragment.tenCaSi.setText(bh0.getCasi().getTenCaSi());
+                                Glide.with(MainActivity.layoutAudio.getContext()).load(bh0.getAnhBia())
+                                        .into(NextMiniNhacFragment.imgNhac);
+                            }
+
+
+                        } else listBH = new ArrayList<>();
                         listBH.add(0, bh);
                         MediaCustom.danhSachPhats = listBH;
                         MediaCustom.position = 0;

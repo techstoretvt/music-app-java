@@ -30,47 +30,25 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="5dp"
         android:gravity="center_vertical"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/imgNhac"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/anh_header"
-            app:civ_border_width="2dp"
-            app:civ_border_color="#FF000000"/>
 
         <LinearLayout
             android:id="@+id/layoutTencasi"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
-            android:orientation="vertical">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tenBaiHat"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chúng ta không thuộc về nhau ha haha ha"
-                android:textColor="#fff"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:singleLine="true"/>
+                android:layout_weight="1"
+                android:layout_height="match_parent"/>
 
-            <TextView
-                android:id="@+id/tenCaSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Son Tung MTP"
-                android:textColor="#ccc"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textSize="12dp"
-                android:singleLine="true"/>
         </LinearLayout>
+
 
         <ImageView
             android:id="@+id/btnPrev"
@@ -103,12 +81,6 @@
         android:layout_width="match_parent"
         android:id="@+id/progess_phatNhac"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"/>
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:dividerColor="#ccc"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

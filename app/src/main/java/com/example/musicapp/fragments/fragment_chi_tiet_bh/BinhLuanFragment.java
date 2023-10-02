@@ -1,5 +1,6 @@
 package com.example.musicapp.fragments.fragment_chi_tiet_bh;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,10 +20,15 @@ import android.widget.TextView;
 import com.example.musicapp.R;
 import com.example.musicapp.adapters.BinhLuanAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.modal.anhxajson.AddCommentCon;
 import com.example.musicapp.modal.anhxajson.AddCommentParent;
 import com.example.musicapp.modal.anhxajson.CommentBaiHat;
+import com.example.musicapp.modal.anhxajson.CommentBaiHatCon;
 import com.example.musicapp.modal.anhxajson.GetListCommentById;
+import com.example.musicapp.modal.anhxajson.GetListIdLikeComment;
+import com.example.musicapp.modal.anhxajson.GetListIdLikeComment_item;
 import com.example.musicapp.modal.anhxajson.TaiKhoan;
+import com.example.musicapp.modal.body.BodyAddCommentCon;
 import com.example.musicapp.modal.body.BodyAddCommentParent;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
@@ -43,11 +50,12 @@ public class BinhLuanFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    RecyclerView recyclerView;
-    LinearLayoutManager manager;
-    BinhLuanAdapter adapter;
+    public static RecyclerView recyclerView;
+    public static LinearLayoutManager manager;
+    public static BinhLuanAdapter adapter;
 
-    ArrayList<CommentBaiHat> listData;
+    public static ArrayList<CommentBaiHat> listData;
+    public static ArrayList<String> listIdLike = null;
 
     public static EditText valueCmt;
     ImageView btnSend, btnCloseReply;
@@ -57,7 +65,7 @@ public class BinhLuanFragment extends Fragment {
     public static LinearLayout layoutReply;
     public static TextView nameReply;
 
-    public static Boolean isReply = false;
+    public static Boolean isReply = false, isOpenMoreCmt = false;
     public static String idCommentCha = null;
 
     public BinhLuanFragment() {
@@ -105,42 +113,12 @@ public class BinhLuanFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (isAddCmt) return;
-                isAddCmt = true;
-                valueCmt.clearFocus();
-                String header = Common.getHeader();
-                String idBaiHat = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
-                String noiDung = valueCmt.getText().toString();
-                if (noiDung.isEmpty()) return;
 
-                BodyAddCommentParent body = new BodyAddCommentParent(idBaiHat, noiDung);
-
-                ApiServiceV1.apiServiceV1.addCommentParent(body, header).enqueue(new Callback<AddCommentParent>() {
-                    @Override
-                    public void onResponse(Call<AddCommentParent> call, Response<AddCommentParent> response) {
-                        AddCommentParent res = response.body();
-                        if (res != null) {
-                            if (res.getErrCode() == 0) {
-                                CommentBaiHat newCmt = res.getData();
-                                listData.add(0, newCmt);
-                                adapter.notifyDataSetChanged();
-
-                                valueCmt.setText("");
-                                isAddCmt = false;
-
-                            } else {
-                                if (res.getStatus() == 401) {
-                                    System.exit(0);
-                                }
-                                Log.e("Loi", res.getErrMessage());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<AddCommentParent> call, Throwable t) {
-                        Log.e("Loi", "Loi add comment parent");
-                    }
-                });
+                if (!isReply) {
+                    addCommentCha();
+                } else {
+                    addCommentCon();
+                }
             }
         });
 
@@ -154,20 +132,39 @@ public class BinhLuanFragment extends Fragment {
         });
     }
 
-    private void getListComment(String idBaiHat) {
+    private void addCommentCon() {
+        isAddCmt = true;
+        String noiDung = valueCmt.getText().toString();
+        BodyAddCommentCon body = new BodyAddCommentCon(idCommentCha, noiDung, nameReply.getText().toString());
         String header = Common.getHeader();
 
-        ApiServiceV1.apiServiceV1.getListCommentByIdBaiHat(idBaiHat, header).enqueue(new Callback<GetListCommentById>() {
+        if (noiDung.isEmpty()) return;
+        ApiServiceV1.apiServiceV1.addCommentChild(body, header).enqueue(new Callback<AddCommentCon>() {
             @Override
-            public void onResponse(Call<GetListCommentById> call, Response<GetListCommentById> response) {
-                GetListCommentById res = response.body();
+            public void onResponse(Call<AddCommentCon> call, Response<AddCommentCon> response) {
+                AddCommentCon res = response.body();
                 if (res != null) {
                     if (res.getErrCode() == 0) {
-                        listData = res.getData();
+                        CommentBaiHatCon newCmt = res.getData();
 
-                        adapter = new BinhLuanAdapter(listData, getContext());
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(manager);
+                        CommentBaiHat cmtCha = null;
+                        for (CommentBaiHat i : listData) {
+                            if (i.getId().equals(idCommentCha))
+                                cmtCha = i;
+                        }
+                        int indexCmtCha = listData.indexOf(cmtCha);
+                        listData.get(indexCmtCha).getCommentBHCons().add(0, newCmt);
+                        adapter.notifyItemChanged(indexCmtCha);
+
+                        valueCmt.clearFocus();
+                        valueCmt.setText("");
+                        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(valueCmt.getWindowToken(), 0);
+                        isReply = false;
+                        layoutReply.setVisibility(View.GONE);
+                        idCommentCha = null;
+
+                        isAddCmt = false;
 
                     } else {
                         if (res.getStatus() == 401) {
@@ -179,10 +176,112 @@ public class BinhLuanFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<GetListCommentById> call, Throwable t) {
-                Log.e("Loi", "Loi get list comment");
+            public void onFailure(Call<AddCommentCon> call, Throwable t) {
+                Log.e("Loi", "Loi add comment con");
             }
         });
+
+    }
+
+    private void addCommentCha() {
+        isAddCmt = true;
+        valueCmt.clearFocus();
+        String header = Common.getHeader();
+        String idBaiHat = MediaCustom.danhSachPhats.get(MediaCustom.position).getId();
+        String noiDung = valueCmt.getText().toString();
+        if (noiDung.isEmpty()) return;
+
+        BodyAddCommentParent body = new BodyAddCommentParent(idBaiHat, noiDung);
+
+        ApiServiceV1.apiServiceV1.addCommentParent(body, header).enqueue(new Callback<AddCommentParent>() {
+            @Override
+            public void onResponse(Call<AddCommentParent> call, Response<AddCommentParent> response) {
+                AddCommentParent res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        CommentBaiHat newCmt = res.getData();
+                        listData.add(0, newCmt);
+                        adapter.notifyDataSetChanged();
+
+                        valueCmt.setText("");
+                        isAddCmt = false;
+
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                        Log.e("Loi", res.getErrMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddCommentParent> call, Throwable t) {
+                Log.e("Loi", "Loi add comment parent");
+            }
+        });
+
+    }
+
+    public static void getListComment(String idBaiHat) {
+        String header = Common.getHeader();
+
+        ApiServiceV1.apiServiceV1.getListIdLikeComment(idBaiHat, header).enqueue(new Callback<GetListIdLikeComment>() {
+            @Override
+            public void onResponse(Call<GetListIdLikeComment> call, Response<GetListIdLikeComment> response) {
+                GetListIdLikeComment res = response.body();
+                if (res != null) {
+                    if (res.getErrCode() == 0) {
+                        ArrayList<String> newListId = new ArrayList<>();
+
+                        for (GetListIdLikeComment_item i : res.getData()) {
+                            newListId.add(i.getIdComment());
+                        }
+                        listIdLike = newListId;
+
+                        ApiServiceV1.apiServiceV1.getListCommentByIdBaiHat(idBaiHat, header).enqueue(new Callback<GetListCommentById>() {
+                            @Override
+                            public void onResponse(Call<GetListCommentById> call, Response<GetListCommentById> response) {
+                                GetListCommentById res = response.body();
+                                if (res != null) {
+                                    if (res.getErrCode() == 0) {
+                                        listData = res.getData();
+
+                                        adapter = new BinhLuanAdapter(listData, recyclerView.getContext());
+                                        recyclerView.setAdapter(adapter);
+                                        recyclerView.setLayoutManager(manager);
+
+                                        isOpenMoreCmt = false;
+                                    } else {
+                                        if (res.getStatus() == 401) {
+                                            System.exit(0);
+                                        }
+                                        Log.e("Loi", res.getErrMessage());
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<GetListCommentById> call, Throwable t) {
+                                Log.e("Loi", "Loi get list comment");
+                            }
+                        });
+
+                    } else {
+                        if (res.getStatus() == 401) {
+                            System.exit(0);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetListIdLikeComment> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
     private void anhXa(View view) {
@@ -193,5 +292,12 @@ public class BinhLuanFragment extends Fragment {
         layoutReply = view.findViewById(R.id.layoutReply);
         nameReply = view.findViewById(R.id.nameReply);
         btnCloseReply = view.findViewById(R.id.btnCloseReply);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isOpenMoreCmt = false;
+        listIdLike = null;
     }
 }

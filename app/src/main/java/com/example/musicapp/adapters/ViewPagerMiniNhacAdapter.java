@@ -9,10 +9,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
+import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
+import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerMiniNhacAdapter extends FragmentStatePagerAdapter {
 
-    public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+    public ViewPagerMiniNhacAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 
@@ -21,17 +23,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 1:
-                return new BaiHatFragment();
-            case 2:
-                return new BinhLuanFragment();
+                return new NextMiniNhacFragment();
             default:
-                return new ThongTinBaiHatFragment();
+                return new CurrentMiniNhacFragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable
@@ -43,9 +43,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 title = "•";
                 break;
             case 1:
-                title = "•";
-                break;
-            case 2:
                 title = "•";
                 break;
         }

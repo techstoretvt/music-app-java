@@ -23,6 +23,7 @@ import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.adapters.ViewPagerAdapter;
@@ -56,12 +57,14 @@ public class ChiTietNhacActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
+    LinearLayout layoutControl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_nhac);
 
-        overridePendingTransition(R.anim.slide_up, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
 
         //anh xa view va gan gia tri
         anhXaView();
@@ -147,6 +150,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                         btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
                     }
 
+                    BinhLuanFragment.getListComment(MediaCustom.danhSachPhats.get(MediaCustom.position)
+                            .getId());
                 }
 
             }
@@ -173,11 +178,16 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                     BaiHatFragment.txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
                             getLoiBaiHat());
 
+                    btnPausePlay.setImageResource(R.drawable.baseline_pause_white);
+
                     if (MediaCustom.position == 0 && MediaCustom.typeDanhSachPhat == 1) {
                         btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
                     } else {
                         btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
                     }
+
+                    BinhLuanFragment.getListComment(MediaCustom.danhSachPhats.get(MediaCustom.position)
+                            .getId());
                 }
             }
         });
@@ -284,6 +294,32 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(1);
 
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                Log.e("vao 1", "");
+                if (position == 0) {
+                    layoutControl.setVisibility(View.VISIBLE);
+                } else if (position == 1) {
+                    layoutControl.setVisibility(View.VISIBLE);
+                } else if (position == 2) {
+                    layoutControl.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.e("vao 2", "");
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+//                Log.e("vao 3", "");
+
+
+            }
+        });
 
 
         GradientDrawable gradientDrawable = new GradientDrawable(
@@ -308,6 +344,7 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         btnRandom = findViewById(R.id.btnRandom);
         btnLoop = findViewById(R.id.btnLoop);
         btnMore = findViewById(R.id.btnMore);
+        layoutControl = findViewById(R.id.layoutControl);
 
         if (MediaCustom.danhSachPhats != null) {
             totalTime.setText(MediaCustom.strTotalTime);

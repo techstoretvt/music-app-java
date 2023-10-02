@@ -59,7 +59,7 @@ public class KhamPhaFragment extends Fragment {
 
     Boolean isScrolling = false;
     public static Boolean isEnd = false;
-    int currentItems, totalItems, scrollOutItems, offSetScroll;
+    int currentItems, totalItems, scrollOutItems, offSetScroll = 0;
     public static ArrayList<BaiHat> list = null;
     ProgressBar progressBar;
 
@@ -124,7 +124,6 @@ public class KhamPhaFragment extends Fragment {
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(manager);
 
-            offSetScroll = 3;
 
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -181,6 +180,7 @@ public class KhamPhaFragment extends Fragment {
         options.put("maxCount", String.valueOf(maxCount));
         options.put("page", "1");
         options.put("order_style", "desc");
+        options.put("orderBy", "luotNghe");
 
         ApiServiceV1.apiServiceV1.getListBaiHatHome(options).enqueue(new Callback<GetListBaiHat>() {
             @Override
@@ -194,7 +194,6 @@ public class KhamPhaFragment extends Fragment {
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(manager);
 
-                        offSetScroll = 3;
 
                         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                             @Override
@@ -245,6 +244,7 @@ public class KhamPhaFragment extends Fragment {
         options.put("maxCount", String.valueOf(maxCount));
         options.put("page", String.valueOf(page));
         options.put("order_style", "desc");
+        options.put("orderBy", "luotNghe");
 
         ApiServiceV1.apiServiceV1.getListBaiHatHome(options).enqueue(new Callback<GetListBaiHat>() {
             @Override
@@ -253,9 +253,13 @@ public class KhamPhaFragment extends Fragment {
                 if (res != null) {
                     if (res.getErrCode() == 0 && res.getData() != null && res.getData().size() != 0) {
                         ArrayList<BaiHat> baiHats = res.getData();
+                        int startChange = list.size();
+                        int endChange = baiHats.size();
                         list.addAll(baiHats);
-                        offSetScroll += 3;
-                        adapter.notifyDataSetChanged();
+//                        offSetScroll += 3;
+
+
+                        adapter.notifyItemRangeChanged(startChange, endChange);
 
                     } else if (res.getData().size() == 0) {
                         isEnd = true;
