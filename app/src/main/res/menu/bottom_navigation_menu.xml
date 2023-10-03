@@ -6,6 +6,10 @@
     <item android:title="Thư viện"
         android:icon="@drawable/baseline_music_video_24"
         android:id="@+id/thuVien"/>
+    <item android:title="Nổi bật"
+        android:icon="@drawable/icon_noi_bat"
+        android:iconTint="#fff"
+        android:id="@+id/noiBat"/>
     <item android:title="Thông báo"
         android:icon="@drawable/baseline_notifications_24"
         android:id="@+id/thongBao"/>

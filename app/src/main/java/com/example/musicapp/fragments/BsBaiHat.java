@@ -1,9 +1,14 @@
 package com.example.musicapp.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +22,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
@@ -28,7 +35,10 @@ import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.DownloadReceiver;
+import com.example.musicapp.utils.MediaCustom;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.util.ArrayList;
 
@@ -45,8 +55,20 @@ public class BsBaiHat extends BottomSheetDialogFragment {
     public static ImageView iconDownLoad = null;
     public static BaiHat currentBaiHat = null;
 
-    ImageView iconYeuThich;
-    TextView txtYeuThich;
+    ImageView iconYeuThich, anhBaiHat;
+    TextView txtYeuThich, tenCaSi, tenBaiHat;
+
+    public static TextView txtHenGio;
+    LinearLayout layoutExtends, btnHenGio, layoutNhacChuong;
+
+    public static MaterialTimePicker picker = null;
+
+    public static CountDownTimer countDownTimer = null;
+
+    public static Boolean isHenGio = false;
+
+    public static ImageView iconHenGio;
+
 
     @Nullable
     @Override
@@ -62,6 +84,31 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         LinearLayout layoutYeuThich = view.findViewById(R.id.layouYeuThich);
         iconYeuThich = view.findViewById(R.id.iconYeuThich);
         txtYeuThich = view.findViewById(R.id.txtYeuThich);
+        anhBaiHat = view.findViewById(R.id.anhBaiHat);
+        tenBaiHat = view.findViewById(R.id.tenBaiHat);
+        tenCaSi = view.findViewById(R.id.tenCaSi);
+        txtHenGio = view.findViewById(R.id.txtHenGio);
+        layoutExtends = view.findViewById(R.id.layoutExtends);
+        btnHenGio = view.findViewById(R.id.btnHenGio);
+        iconHenGio = view.findViewById(R.id.iconHenGio);
+        layoutNhacChuong = view.findViewById(R.id.layoutNhacChuong);
+
+
+        BaiHat currentBH = BaiHatAdapter.currentBaiHat;
+        tenBaiHat.setText(currentBH.getTenBaiHat());
+        tenCaSi.setText(currentBH.getCasi().getTenCaSi());
+        Glide.with(getContext()).load(currentBH.getAnhBia()).into(anhBaiHat);
+
+
+        if (picker == null) {
+            picker = new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setHour(12)
+                    .setMinute(10)
+                    .setTitleText("Chọn thời gian dừng phát")
+                    .build();
+        }
+
 
         checkYeuThich();
 
@@ -127,6 +174,10 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             layoutXemMV.setVisibility(View.GONE);
         } else {
             layoutXemMV.setVisibility(View.VISIBLE);
+        }
+
+        if (ChiTietNhacActivity.isChiTietNhac) {
+            layoutExtends.setVisibility(View.VISIBLE);
         }
 
         layoutThemVaoDS.setOnClickListener(new View.OnClickListener() {
@@ -240,7 +291,6 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Tính năng này chưa cập nhật", Toast.LENGTH_SHORT)
                         .show();
-
             }
         });
 
@@ -282,6 +332,112 @@ public class BsBaiHat extends BottomSheetDialogFragment {
                         Log.e("Loi", "Loi kiem tra yeu thich bai hat");
                     }
                 });
+            }
+        });
+
+
+        btnHenGio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                picker.show(getParentFragmentManager(), "tag");
+            }
+        });
+
+        btnHenGio.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (!isHenGio) return false;
+                Log.e("vao", "");
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Dừng hẹn giờ");
+                builder.setMessage("Bạn có chắc chắn muốn dừng hẹn giờ.");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (countDownTimer != null) {
+                            countDownTimer.cancel();
+                            isHenGio = false;
+
+                            if (txtHenGio != null) {
+                                txtHenGio.setText("Hẹn giờ");
+                                txtHenGio.setTextColor(Color.WHITE);
+                            }
+                            if (iconHenGio != null)
+                                iconHenGio.setImageResource(R.drawable.ic_clock);
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Xử lý khi người dùng nhấn vào nút Hủy
+                    }
+                });
+
+                builder.show();
+
+
+                return true;
+            }
+        });
+
+        picker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int hour = picker.getHour();
+                int minute = picker.getMinute();
+
+                long timestamp = minute * 60000;
+                timestamp += hour * 3600000;
+
+
+                if (countDownTimer != null) {
+                    countDownTimer.cancel();
+                }
+                isHenGio = true;
+                long finalTimestamp = timestamp;
+                countDownTimer = new CountDownTimer(finalTimestamp, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        // Cập nhật thời gian còn lại trên bong bóng nổi
+                        Log.e("dang dem", String.valueOf(millisUntilFinished));
+                        int tgConLai = (int) millisUntilFinished / 1000;
+                        if (txtHenGio != null) {
+                            txtHenGio.setText(String.valueOf(tgConLai) + "s");
+                            txtHenGio.setTextColor(Color.parseColor("#52267D"));
+                        }
+                        if (iconHenGio != null)
+                            iconHenGio.setImageResource(R.drawable.clock_active);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        MediaCustom.pause();
+                        Log.e("ket thuc", String.valueOf(finalTimestamp));
+                        isHenGio = false;
+
+                        if (txtHenGio != null) {
+                            txtHenGio.setText("Hẹn giờ");
+                            txtHenGio.setTextColor(Color.WHITE);
+                        }
+                        if (iconHenGio != null)
+                            iconHenGio.setImageResource(R.drawable.ic_clock);
+                    }
+                };
+
+                // Bắt đầu đếm ngược
+                countDownTimer.start();
+
+
+            }
+        });
+
+        layoutNhacChuong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
             }
         });
 

@@ -216,7 +216,7 @@ public class BinhLuanAdapter extends RecyclerView.Adapter<BinhLuanAdapter.VHolde
 
         }
 
-        if (BinhLuanFragment.listIdLike.contains(cmt.getId())) {
+        if (BinhLuanFragment.listIdLike != null && BinhLuanFragment.listIdLike.contains(cmt.getId())) {
             holder.btnToggleLike.setImageResource(R.drawable.heart_contained);
         } else {
         }

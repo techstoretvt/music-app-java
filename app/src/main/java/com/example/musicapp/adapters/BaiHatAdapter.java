@@ -100,6 +100,10 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         while (dataBaiHat.moveToNext()) {
             holder.iconDownLoad.setVisibility(View.VISIBLE);
         }
+        if (ChiTietNhacActivity.isChiTietNhac) {
+            holder.btnMore.setVisibility(View.GONE);
+            holder.ic_wrap.setVisibility(View.VISIBLE);
+        }
 
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -225,6 +229,17 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
             }
         });
 
+        if (!ChiTietNhacActivity.isChiTietNhac && !ChiTietThuVienFragment.isChiTietDS) {
+            holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    holder.btnMore.callOnClick();
+                    return true;
+                }
+            });
+        }
+
+
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -246,7 +261,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
     }
 
-    public static void getListRandomBaiHat(BaiHat bh) {
+    public static void getListRandomBaiHat(@NonNull BaiHat bh) {
         String header = Common.getHeader();
         int limit = 20;
         String id = bh.getId();
@@ -312,7 +327,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
         TextView stt, tenBaiHat, tenCasi;
         LinearLayout linearLayout;
 
-        ImageView imgView, btnMore, iconDownLoad;
+        ImageView imgView, btnMore, iconDownLoad, ic_wrap;
 
 
         public VHolder(@NonNull View itemView) {
@@ -324,6 +339,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
             imgView = itemView.findViewById(R.id.imgView);
             btnMore = itemView.findViewById(R.id.btnMore);
             iconDownLoad = itemView.findViewById(R.id.iconDownLoad);
+            ic_wrap = itemView.findViewById(R.id.ic_wrap);
         }
     }
 }

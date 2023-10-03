@@ -17,10 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.BaiHatComparator;
 import com.example.musicapp.modal.anhxajson.GetListBHYeuThich;
@@ -137,6 +139,13 @@ public class YeuThichFragment extends Fragment {
 
                 MediaCustom.phatNhac(data.get(0).getLinkBaiHat());
                 MediaCustom.isRandom = true;
+
+                BaiHat bh2 = data.get(1);
+                if (bh2 != null) {
+                    NextMiniNhacFragment.tenBaiHat.setText(bh2.getTenBaiHat());
+                    NextMiniNhacFragment.tenCaSi.setText(bh2.getCasi().getTenCaSi());
+                    Glide.with(getContext()).load(bh2.getAnhBia()).into(NextMiniNhacFragment.imgNhac);
+                }
             }
         });
     }

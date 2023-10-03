@@ -2,10 +2,13 @@ package com.example.musicapp.fragments.fragment_chi_tiet_bh;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +39,7 @@ public class ThongTinBaiHatFragment extends Fragment {
     public static LinearLayoutManager manager;
     public static BaiHatAdapter adapter;
 
-    ArrayList<BaiHat> danhSachBaiHat = null;
+    public static ArrayList<BaiHat> danhSachBaiHat = null;
 
     public static ImageView anhBaiHat;
     public static TextView tenBaiHat = null, tenCaSi, theLoai, phatHanh, cungCap;
@@ -73,7 +76,76 @@ public class ThongTinBaiHatFragment extends Fragment {
 
         getData();
 
+        setTouchHelper();
+
         return view;
+    }
+
+    private void setTouchHelper() {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN; // Di chuyển lên và xuống
+                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                return makeMovementFlags(dragFlags, 0);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+
+
+                adapter.notifyItemMoved(fromPosition, toPosition);
+
+                BaiHat a = danhSachBaiHat.get(fromPosition);
+                BaiHat b = danhSachBaiHat.get(toPosition);
+                danhSachBaiHat.remove(fromPosition);
+                danhSachBaiHat.add(fromPosition, b);
+                danhSachBaiHat.remove(toPosition);
+                danhSachBaiHat.add(toPosition, a);
+
+                int indexA = MediaCustom.danhSachPhats.indexOf(a);
+                int indexB = MediaCustom.danhSachPhats.indexOf(b);
+                Log.e("from", String.valueOf(indexA) + " - " + String.valueOf(indexB));
+
+
+                a = MediaCustom.danhSachPhats.get(indexA);
+                b = MediaCustom.danhSachPhats.get(indexB);
+
+                MediaCustom.danhSachPhats.remove(indexA);
+                MediaCustom.danhSachPhats.add(indexA, b);
+
+                MediaCustom.danhSachPhats.remove(indexB);
+                MediaCustom.danhSachPhats.add(indexB, a);
+
+
+                return true;
+            }
+
+            @Override
+            public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
+                super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+//                Log.e("from", String.valueOf(fromPosition) + " - " + String.valueOf(toPosition));
+
+
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Log.e("vao", "");
+                int position = viewHolder.getAdapterPosition();
+//                deleteBaiHatKhoiDS(danhBaiHats.get(position).getId());
+//
+//                danhBaiHats.remove(position);
+//                adapter.notifyDataSetChanged();
+            }
+
+        });
+
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     public static void getData() {
@@ -95,7 +167,9 @@ public class ThongTinBaiHatFragment extends Fragment {
                 }
             }
         } else if (MediaCustom.typeDanhSachPhat == 2 && MediaCustom.isRandom) {
-            listBH = MediaCustom.danhSachPhats;
+            MediaCustom.ranDomDanhSach();
+            listBH = MediaCustom.danhSachPhatsRanDom;
+            listBH.remove(0);
         }
 
 
@@ -112,6 +186,8 @@ public class ThongTinBaiHatFragment extends Fragment {
         recyclerView.setLayoutParams(layoutParams);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setNestedScrollingEnabled(false);
+
+        danhSachBaiHat = listBH;
 
 
     }

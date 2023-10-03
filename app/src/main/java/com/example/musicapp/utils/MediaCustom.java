@@ -11,6 +11,7 @@ import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
@@ -31,6 +32,7 @@ public class MediaCustom {
     public static MediaPlayer mediaPlayer = new MediaPlayer();
 
     public static ArrayList<BaiHat> danhSachPhats = null;
+    public static ArrayList<BaiHat> danhSachPhatsRanDom = null;
 
     public static int typeDanhSachPhat;
 
@@ -134,6 +136,14 @@ public class MediaCustom {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             isPlay = false;
+
+            if (ChiTietNhacActivity.isChiTietNhac) {
+                ChiTietNhacActivity.btnPausePlay.setImageResource(R.drawable.baseline_play_arrow_white);
+            }
+
+            if (MainActivity.dungNhac != null) {
+                MainActivity.dungNhac.setImageResource(R.drawable.baseline_play_arrow_24);
+            }
         }
     }
 
@@ -385,5 +395,15 @@ public class MediaCustom {
 
             }
         });
+    }
+
+    public static void ranDomDanhSach() {
+        taoListRandom();
+
+        danhSachPhatsRanDom = new ArrayList<>();
+        for (int i : positionRandom) {
+            danhSachPhatsRanDom.add(danhSachPhats.get(i));
+        }
+
     }
 }

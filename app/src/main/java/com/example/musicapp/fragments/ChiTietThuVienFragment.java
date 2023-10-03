@@ -37,6 +37,7 @@ import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.activities.ThemBHVaoDSActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.ChiTietDanhSachPhat;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
@@ -310,6 +311,13 @@ public class ChiTietThuVienFragment extends Fragment {
 
                 MediaCustom.phatNhac(danhBaiHats.get(0).getLinkBaiHat());
                 MediaCustom.isRandom = true;
+
+                BaiHat bh2 = danhBaiHats.get(1);
+                if (bh2 != null) {
+                    NextMiniNhacFragment.tenBaiHat.setText(bh2.getTenBaiHat());
+                    NextMiniNhacFragment.tenCaSi.setText(bh2.getCasi().getTenCaSi());
+                    Glide.with(getContext()).load(bh2.getAnhBia()).into(NextMiniNhacFragment.imgNhac);
+                }
             }
         });
     }

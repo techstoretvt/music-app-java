@@ -27,6 +27,7 @@ import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.adapters.CaSiAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.DanhSachCaSi;
 import com.example.musicapp.modal.anhxajson.GetCaSiByID;
@@ -186,6 +187,13 @@ public class ChiTietCaSiFragment extends Fragment {
                         dsBaiHats.get(0).getCasi().getTenCaSi());
 
                 MediaCustom.phatNhac(dsBaiHats.get(0).getLinkBaiHat());
+
+                BaiHat bh2 = dsBaiHats.get(1);
+                if (bh2 != null) {
+                    NextMiniNhacFragment.tenBaiHat.setText(bh2.getTenBaiHat());
+                    NextMiniNhacFragment.tenCaSi.setText(bh2.getCasi().getTenCaSi());
+                    Glide.with(getContext()).load(bh2.getAnhBia()).into(NextMiniNhacFragment.imgNhac);
+                }
             }
         });
 

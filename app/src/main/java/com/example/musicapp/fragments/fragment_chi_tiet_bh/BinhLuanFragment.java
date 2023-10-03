@@ -63,7 +63,7 @@ public class BinhLuanFragment extends Fragment {
     Boolean isAddCmt = false;
 
     public static LinearLayout layoutReply;
-    public static TextView nameReply;
+    public static TextView nameReply, slCmt;
 
     public static Boolean isReply = false, isOpenMoreCmt = false;
     public static String idCommentCha = null;
@@ -252,6 +252,17 @@ public class BinhLuanFragment extends Fragment {
                                         recyclerView.setLayoutManager(manager);
 
                                         isOpenMoreCmt = false;
+
+                                        int slcmt = 0;
+                                        for (CommentBaiHat i : listData) {
+                                            slcmt++;
+                                            if (i.getCommentBHCons() != null) {
+                                                slcmt += i.getCommentBHCons().size();
+                                            }
+                                        }
+                                        slCmt.setText(String.valueOf(slcmt) + " bình luận");
+
+
                                     } else {
                                         if (res.getStatus() == 401) {
                                             System.exit(0);
@@ -292,6 +303,7 @@ public class BinhLuanFragment extends Fragment {
         layoutReply = view.findViewById(R.id.layoutReply);
         nameReply = view.findViewById(R.id.nameReply);
         btnCloseReply = view.findViewById(R.id.btnCloseReply);
+        slCmt = view.findViewById(R.id.slCmt);
     }
 
     @Override

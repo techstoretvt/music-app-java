@@ -20,6 +20,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
@@ -45,6 +47,7 @@ import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.DaTaiFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.fragments.NgheSiQuanTamFragment;
+import com.example.musicapp.fragments.NoiBatFragment;
 import com.example.musicapp.fragments.ThongBaoFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
 import com.example.musicapp.fragments.YeuThichFragment;
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String isNetworkStr = intent.getStringExtra("isNetwork");
         if (isNetworkStr.equals("true")) {
-            replace_fragment(new KhamPhaFragment());
+            replace_fragment(new NoiBatFragment());
         } else {
             replace_fragment(new DaTaiFragment());
         }
@@ -130,16 +133,29 @@ public class MainActivity extends AppCompatActivity {
         idUser = sharedPreferences.getString("idUser", null);
         initEventSocket();
 
+
         //binding bottom tabs
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.khamPha) {
                 replace_fragment(new KhamPhaFragment());
+                GradientDrawable gradientDrawable = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        new int[]{Color.parseColor("#BDB3FF"), Color.parseColor("#BDB3FF")}
+                );
+                bottomNavigationView.setBackground(gradientDrawable);
             } else if (item.getItemId() == R.id.thuVien) {
                 replace_fragment(new ThuVienFragment());
             } else if (item.getItemId() == R.id.thongBao) {
                 replace_fragment(new ThongBaoFragment());
             } else if (item.getItemId() == R.id.caNhan) {
                 replace_fragment(new CaNhanFragment());
+            } else if (item.getItemId() == R.id.noiBat) {
+                replace_fragment(new NoiBatFragment());
+                GradientDrawable gradientDrawable2 = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        new int[]{Color.parseColor("#4c4951d6"), Color.BLACK}
+                );
+                bottomNavigationView.setBackground(gradientDrawable2);
             }
 
             return true;
