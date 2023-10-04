@@ -117,26 +117,8 @@ public class TimKiemFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tim_kiem, container, false);
-        rvTimKiemGanDay = view.findViewById(R.id.rvTimKiemGanDay);
-        manager = new LinearLayoutManager(getContext());
-        txtBH = view.findViewById(R.id.txtBH);
-        txtCS = view.findViewById(R.id.txtCS);
-        lineBH = view.findViewById(R.id.lineBH);
-        lineCS = view.findViewById(R.id.lineCS);
-        laTimBH = view.findViewById(R.id.laTimBH);
-        laTimCS = view.findViewById(R.id.laTimCS);
-        rvBaiHat = view.findViewById(R.id.rvBaiHat);
-        managerBH = new LinearLayoutManager(getContext());
-        valueSearch = view.findViewById(R.id.valueSearch);
-        laValueSearch = view.findViewById(R.id.laValueSearch);
-        rvCaSi = view.findViewById(R.id.rvCaSi);
-        btnBack = view.findViewById(R.id.btnBack);
-        managerCS = new GridLayoutManager(getContext(), 2);
-        laTimKiemGanDay = view.findViewById(R.id.laTimKiemGanDay);
-        isTimKiem = true;
-        sharedPreferences = getContext()
-                .getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
 
+        anhXa(view);
 
         setEventLoaiTK();
         setEventInput();
@@ -182,6 +164,28 @@ public class TimKiemFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void anhXa(View view) {
+        rvTimKiemGanDay = view.findViewById(R.id.rvTimKiemGanDay);
+        manager = new LinearLayoutManager(getContext());
+        txtBH = view.findViewById(R.id.txtBH);
+        txtCS = view.findViewById(R.id.txtCS);
+        lineBH = view.findViewById(R.id.lineBH);
+        lineCS = view.findViewById(R.id.lineCS);
+        laTimBH = view.findViewById(R.id.laTimBH);
+        laTimCS = view.findViewById(R.id.laTimCS);
+        rvBaiHat = view.findViewById(R.id.rvBaiHat);
+        managerBH = new LinearLayoutManager(getContext());
+        valueSearch = view.findViewById(R.id.valueSearch);
+        laValueSearch = view.findViewById(R.id.laValueSearch);
+        rvCaSi = view.findViewById(R.id.rvCaSi);
+        btnBack = view.findViewById(R.id.btnBack);
+        managerCS = new GridLayoutManager(getContext(), 2);
+        laTimKiemGanDay = view.findViewById(R.id.laTimKiemGanDay);
+        isTimKiem = true;
+        sharedPreferences = getContext()
+                .getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
     }
 
     private void setEventInput() {

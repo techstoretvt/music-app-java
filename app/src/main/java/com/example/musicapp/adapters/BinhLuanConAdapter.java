@@ -1,11 +1,6 @@
 package com.example.musicapp.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
-import com.example.musicapp.modal.anhxajson.CommentBaiHat;
 import com.example.musicapp.modal.anhxajson.CommentBaiHatCon;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.anhxajson.TaiKhoan;

@@ -4,7 +4,6 @@ package com.example.musicapp.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -31,7 +30,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +40,7 @@ import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.adapters.ViewPagerMiniNhacAdapter;
 import com.example.musicapp.databinding.ActivityMainBinding;
+import com.example.musicapp.fragments.CT_ThuVien_NoiBatFragment;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.DaTaiFragment;
@@ -64,7 +63,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.tabs.TabLayout;
 
 import io.socket.emitter.Emitter;
 
@@ -90,9 +88,6 @@ public class MainActivity extends AppCompatActivity {
 
     private long lastBackPressedTime;
 
-//    public static Boolean isChiTietThuVien = false;
-
-
     public static FragmentManager supportFragmentManager;
 
     public static BottomNavigationView bottomNavigationView;
@@ -108,22 +103,26 @@ public class MainActivity extends AppCompatActivity {
     public static ConstraintLayout constraintLayout;
     public static LinearProgressIndicator progess_phatNhac = null;
 
+    public static Fragment noiBat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        anhXaView();
+
+
         Intent intent = getIntent();
         String isNetworkStr = intent.getStringExtra("isNetwork");
         if (isNetworkStr.equals("true")) {
-            replace_fragment(new NoiBatFragment());
+            replace_fragment(new KhamPhaFragment());
         } else {
             replace_fragment(new DaTaiFragment());
         }
 
 
-        anhXaView();
         webSocketClient = new MyWebSocketClient();
         isActive = true;
 
@@ -145,12 +144,27 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationView.setBackground(gradientDrawable);
             } else if (item.getItemId() == R.id.thuVien) {
                 replace_fragment(new ThuVienFragment());
+                GradientDrawable gradientDrawable = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        new int[]{Color.parseColor("#BDB3FF"), Color.parseColor("#BDB3FF")}
+                );
+                bottomNavigationView.setBackground(gradientDrawable);
             } else if (item.getItemId() == R.id.thongBao) {
                 replace_fragment(new ThongBaoFragment());
+                GradientDrawable gradientDrawable = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        new int[]{Color.parseColor("#BDB3FF"), Color.parseColor("#BDB3FF")}
+                );
+                bottomNavigationView.setBackground(gradientDrawable);
             } else if (item.getItemId() == R.id.caNhan) {
                 replace_fragment(new CaNhanFragment());
+                GradientDrawable gradientDrawable = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        new int[]{Color.parseColor("#BDB3FF"), Color.parseColor("#BDB3FF")}
+                );
+                bottomNavigationView.setBackground(gradientDrawable);
             } else if (item.getItemId() == R.id.noiBat) {
-                replace_fragment(new NoiBatFragment());
+                replace_fragment(noiBat);
                 GradientDrawable gradientDrawable2 = new GradientDrawable(
                         GradientDrawable.Orientation.TOP_BOTTOM,
                         new int[]{Color.parseColor("#4c4951d6"), Color.BLACK}
@@ -161,48 +175,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        //play/pause nhac
-        dungNhac.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (MediaCustom.isPlay) {
-                    dungNhac.setImageResource(R.drawable.baseline_play_arrow_24);
-                    MediaCustom.pause();
-                } else {
-                    dungNhac.setImageResource(R.drawable.baseline_pause_24);
-                    MediaCustom.play();
-                }
-
-            }
-        });
-
-        //btn next
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Boolean statusPhatNhac = MediaCustom.next();
-            }
-        });
-
-        btnPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Boolean statusPhatNhac = MediaCustom.prev();
-            }
-        });
-
-//        //mo chi tiet nhac
-//        layoutTencasi.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (MediaCustom.danhSachPhats != null) {
-//
-//                    Intent intent = new Intent(MainActivity.this, ChiTietNhacActivity.class);
-//                    startActivity(intent);
-//                }
-//
-//            }
-//        });
+        setEvent();
 
 
         //set su kien mat mang
@@ -212,9 +185,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLost(Network network) {
                 isNetwork = false;
-
-//                Toast.makeText(MainActivity.this, "Mat mang", Toast.LENGTH_SHORT)
-//                        .show();
 
                 if (isActive) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -258,9 +228,38 @@ public class MainActivity extends AppCompatActivity {
         connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkCallback);
 
 
-        //sqlite
+    }
 
+    private void setEvent() {
+        //play/pause nhac
+        dungNhac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (MediaCustom.isPlay) {
+                    dungNhac.setImageResource(R.drawable.baseline_play_arrow_24);
+                    MediaCustom.pause();
+                } else {
+                    dungNhac.setImageResource(R.drawable.baseline_pause_24);
+                    MediaCustom.play();
+                }
 
+            }
+        });
+
+        //btn next
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Boolean statusPhatNhac = MediaCustom.next();
+            }
+        });
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Boolean statusPhatNhac = MediaCustom.prev();
+            }
+        });
     }
 
     private void initEventSocket() {
@@ -324,13 +323,18 @@ public class MainActivity extends AppCompatActivity {
                 ChiTietThuVienFragment.isChiTietDS || DaTaiFragment.isFragmentDaTai) {
             replace_fragment(new ThuVienFragment());
             return;
+        } else if (CT_ThuVien_NoiBatFragment.isChiTietDSNoiBat) {
+            replace_fragment(MainActivity.noiBat);
+            return;
         }
 
 
         if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
             finish();
         } else {
-            Toast.makeText(this, "Nhấn back lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nhấn back lần nữa để thoát ứng dụng",
+                            Toast.LENGTH_SHORT)
+                    .show();
         }
         lastBackPressedTime = System.currentTimeMillis();
     }
@@ -367,6 +371,7 @@ public class MainActivity extends AppCompatActivity {
         progess_phatNhac = findViewById(R.id.progess_phatNhac);
         mViewPager = findViewById(R.id.view_pager);
         constraintLayout = findViewById(R.id.layout);
+        noiBat = new NoiBatFragment();
 
         ViewPagerMiniNhacAdapter viewPagerMiniNhacAdapter = new ViewPagerMiniNhacAdapter(getSupportFragmentManager(),
                 FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);

@@ -1,6 +1,5 @@
 package com.example.musicapp.utils;
 
-import android.media.AudioRouting;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +10,6 @@ import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.api.ApiServiceV1;
-import com.example.musicapp.fragments.ChiTietThuVienFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;

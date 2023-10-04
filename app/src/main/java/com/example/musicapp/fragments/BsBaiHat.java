@@ -69,52 +69,35 @@ public class BsBaiHat extends BottomSheetDialogFragment {
 
     public static ImageView iconHenGio;
 
+    LinearLayout layoutThemVaoDS;
+    LinearLayout layoutTaiVe;
+    LinearLayout layoutPhatKeTiep;
+    LinearLayout layoutXemMV;
+    LinearLayout layoutXemNS;
+    LinearLayout layoutChan;
+    LinearLayout removeBH;
+    LinearLayout layoutYeuThich;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_bs_baihat, container, false);
-        LinearLayout layoutThemVaoDS = view.findViewById(R.id.layoutThemVaoDS);
-        LinearLayout layoutTaiVe = view.findViewById(R.id.layoutTaiVe);
-        LinearLayout layoutPhatKeTiep = view.findViewById(R.id.layoutPhatKeTiep);
-        LinearLayout layoutXemMV = view.findViewById(R.id.layoutXemMV);
-        LinearLayout layoutXemNS = view.findViewById(R.id.layoutXemNS);
-        LinearLayout layoutChan = view.findViewById(R.id.layoutChan);
-        LinearLayout removeBH = view.findViewById(R.id.layoutRemove);
-        LinearLayout layoutYeuThich = view.findViewById(R.id.layouYeuThich);
-        iconYeuThich = view.findViewById(R.id.iconYeuThich);
-        txtYeuThich = view.findViewById(R.id.txtYeuThich);
-        anhBaiHat = view.findViewById(R.id.anhBaiHat);
-        tenBaiHat = view.findViewById(R.id.tenBaiHat);
-        tenCaSi = view.findViewById(R.id.tenCaSi);
-        txtHenGio = view.findViewById(R.id.txtHenGio);
-        layoutExtends = view.findViewById(R.id.layoutExtends);
-        btnHenGio = view.findViewById(R.id.btnHenGio);
-        iconHenGio = view.findViewById(R.id.iconHenGio);
-        layoutNhacChuong = view.findViewById(R.id.layoutNhacChuong);
 
+        anhXa(view);
 
-        BaiHat currentBH = BaiHatAdapter.currentBaiHat;
-        tenBaiHat.setText(currentBH.getTenBaiHat());
-        tenCaSi.setText(currentBH.getCasi().getTenCaSi());
-        Glide.with(getContext()).load(currentBH.getAnhBia()).into(anhBaiHat);
-
-
-        if (picker == null) {
-            picker = new MaterialTimePicker.Builder()
-                    .setTimeFormat(TimeFormat.CLOCK_24H)
-                    .setHour(12)
-                    .setMinute(10)
-                    .setTitleText("Chọn thời gian dừng phát")
-                    .build();
-        }
-
+        initUi();
 
         checkYeuThich();
 
+        setEvent();
+
+        return view;
+    }
+
+    private void setEvent() {
         if (ChiTietThuVienFragment.isChiTietDS && ChiTietNhacActivity.isChiTietNhac == false) {
             removeBH.setVisibility(View.VISIBLE);
-
             removeBH.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -165,21 +148,6 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         } else {
             removeBH.setVisibility(View.GONE);
         }
-
-        if (ChiTietNhacActivity.isChiTietNhac || DaTaiFragment.isFragmentDaTai) {
-            layoutTaiVe.setVisibility(View.GONE);
-        }
-
-        if (BaiHatAdapter.linkMV == null || BaiHatAdapter.linkMV.equals("false")) {
-            layoutXemMV.setVisibility(View.GONE);
-        } else {
-            layoutXemMV.setVisibility(View.VISIBLE);
-        }
-
-        if (ChiTietNhacActivity.isChiTietNhac) {
-            layoutExtends.setVisibility(View.VISIBLE);
-        }
-
         layoutThemVaoDS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -274,6 +242,11 @@ public class BsBaiHat extends BottomSheetDialogFragment {
 
                 } else if (YeuThichFragment.isYeuThich) {
                     ChiTietCaSiFragment.typeBack = 4;
+                    Common.replace_fragment(new ChiTietCaSiFragment());
+                    BaiHatAdapter.md.dismiss();
+
+                } else if (CT_ThuVien_NoiBatFragment.isChiTietDSNoiBat) {
+                    ChiTietCaSiFragment.typeBack = 5;
                     Common.replace_fragment(new ChiTietCaSiFragment());
                     BaiHatAdapter.md.dismiss();
 
@@ -437,11 +410,61 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutNhacChuong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
             }
         });
+    }
 
-        return view;
+    private void initUi() {
+        BaiHat currentBH = BaiHatAdapter.currentBaiHat;
+        tenBaiHat.setText(currentBH.getTenBaiHat());
+        tenCaSi.setText(currentBH.getCasi().getTenCaSi());
+        Glide.with(getContext()).load(currentBH.getAnhBia()).into(anhBaiHat);
+
+        if (ChiTietNhacActivity.isChiTietNhac || DaTaiFragment.isFragmentDaTai) {
+            layoutTaiVe.setVisibility(View.GONE);
+        }
+
+        if (BaiHatAdapter.linkMV == null || BaiHatAdapter.linkMV.equals("false")) {
+            layoutXemMV.setVisibility(View.GONE);
+        } else {
+            layoutXemMV.setVisibility(View.VISIBLE);
+        }
+
+        if (ChiTietNhacActivity.isChiTietNhac) {
+            layoutExtends.setVisibility(View.VISIBLE);
+            layoutNhacChuong.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void anhXa(View view) {
+        layoutThemVaoDS = view.findViewById(R.id.layoutThemVaoDS);
+        layoutTaiVe = view.findViewById(R.id.layoutTaiVe);
+        layoutPhatKeTiep = view.findViewById(R.id.layoutPhatKeTiep);
+        layoutXemMV = view.findViewById(R.id.layoutXemMV);
+        layoutXemNS = view.findViewById(R.id.layoutXemNS);
+        layoutChan = view.findViewById(R.id.layoutChan);
+        removeBH = view.findViewById(R.id.layoutRemove);
+        layoutYeuThich = view.findViewById(R.id.layouYeuThich);
+        iconYeuThich = view.findViewById(R.id.iconYeuThich);
+        txtYeuThich = view.findViewById(R.id.txtYeuThich);
+        anhBaiHat = view.findViewById(R.id.anhBaiHat);
+        tenBaiHat = view.findViewById(R.id.tenBaiHat);
+        tenCaSi = view.findViewById(R.id.tenCaSi);
+        txtHenGio = view.findViewById(R.id.txtHenGio);
+        layoutExtends = view.findViewById(R.id.layoutExtends);
+        btnHenGio = view.findViewById(R.id.btnHenGio);
+        iconHenGio = view.findViewById(R.id.iconHenGio);
+        layoutNhacChuong = view.findViewById(R.id.layoutNhacChuong);
+        if (picker == null) {
+            picker = new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setHour(12)
+                    .setMinute(10)
+                    .setTitleText("Chọn thời gian dừng phát")
+                    .build();
+        }
+
     }
 
     private void checkYeuThich() {

@@ -6,9 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
-import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
-import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
 import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 

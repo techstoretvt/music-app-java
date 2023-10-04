@@ -87,18 +87,9 @@ public class ThuVienFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_thu_vien, container, false);
-        btnAddNew = view.findViewById(R.id.btnAddNew);
+        anhXa(view);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-        manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-        topAppBar = view.findViewById(R.id.topAppBar);
-        layoutYeuThich = view.findViewById(R.id.layoutYeuThich);
-        layoutNgheSi = view.findViewById(R.id.layoutNgheSi);
-        layoutDaTai = view.findViewById(R.id.layoutDaTai);
-
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setNestedScrollingEnabled(false);
-
+        //gradient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
@@ -114,6 +105,13 @@ public class ThuVienFragment extends Fragment {
             getDanhSachPhat();
         }
 
+        setEvent();
+
+
+        return view;
+    }
+
+    private void setEvent() {
         btnAddNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,9 +161,17 @@ public class ThuVienFragment extends Fragment {
                 Common.replace_fragment(new DaTaiFragment());
             }
         });
+    }
 
+    private void anhXa(View view) {
+        btnAddNew = view.findViewById(R.id.btnAddNew);
 
-        return view;
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
+        manager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        topAppBar = view.findViewById(R.id.topAppBar);
+        layoutYeuThich = view.findViewById(R.id.layoutYeuThich);
+        layoutNgheSi = view.findViewById(R.id.layoutNgheSi);
+        layoutDaTai = view.findViewById(R.id.layoutDaTai);
     }
 
     private void getDanhSachPhat() {

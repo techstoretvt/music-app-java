@@ -37,16 +37,19 @@ public class AddPlayListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_play_list);
 
-        layoutTenDS = findViewById(R.id.layoutTenDS);
-        tenDS = findViewById(R.id.tenDS);
-        btnTao = findViewById(R.id.btnTao);
+        anhXa();
 
+
+        setEvent();
+
+    }
+
+    private void setEvent() {
         Intent intent = getIntent();
 
         tenDS.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(tenDS, InputMethodManager.SHOW_IMPLICIT);
-
         tenDS.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -64,7 +67,6 @@ public class AddPlayListActivity extends AppCompatActivity {
 
             }
         });
-
 
         btnTao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +123,13 @@ public class AddPlayListActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
+    private void anhXa() {
+        layoutTenDS = findViewById(R.id.layoutTenDS);
+        tenDS = findViewById(R.id.tenDS);
+        btnTao = findViewById(R.id.btnTao);
+    }
+
+
 }

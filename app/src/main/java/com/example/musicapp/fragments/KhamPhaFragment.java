@@ -44,12 +44,9 @@ import retrofit2.Response;
 
 public class KhamPhaFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -97,11 +94,9 @@ public class KhamPhaFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kham_pha, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress);
-        manager = new LinearLayoutManager(getActivity());
-        topAppBar = view.findViewById(R.id.topAppBar);
+        anhXa(view);
 
+        //gradient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
@@ -114,7 +109,36 @@ public class KhamPhaFragment extends Fragment {
         );
         bgTitle.setBackground(gradientDrawable2);
 
+        setUi();
 
+        setEvent();
+
+
+        return view;
+    }
+
+    private void setEvent() {
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.e(String.valueOf(item), "");
+                if (String.valueOf(item).equals("search")) {
+                    TimKiemFragment.typeBack = 1;
+                    Common.replace_fragment(new TimKiemFragment());
+                } else if (String.valueOf(item).equals("micro")) {
+                    Log.e("vao", "");
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
+                    startActivityForResult(intent, 1);
+
+                }
+                return false;
+            }
+        });
+    }
+
+    private void setUi() {
         if (list == null) {
             list = new ArrayList<BaiHat>();
             getListBaiHat();
@@ -123,7 +147,6 @@ public class KhamPhaFragment extends Fragment {
             adapter = new BaiHatAdapter(list, getActivity());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(manager);
-
 
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -151,28 +174,13 @@ public class KhamPhaFragment extends Fragment {
 
             });
         }
+    }
 
-        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Log.e(String.valueOf(item), "");
-                if (String.valueOf(item).equals("search")) {
-                    TimKiemFragment.typeBack = 1;
-                    Common.replace_fragment(new TimKiemFragment());
-                } else if (String.valueOf(item).equals("micro")) {
-                    Log.e("vao", "");
-                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
-                    startActivityForResult(intent, 1);
-
-                }
-                return false;
-            }
-        });
-
-
-        return view;
+    private void anhXa(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress);
+        manager = new LinearLayoutManager(getActivity());
+        topAppBar = view.findViewById(R.id.topAppBar);
     }
 
     private void getListBaiHat() {

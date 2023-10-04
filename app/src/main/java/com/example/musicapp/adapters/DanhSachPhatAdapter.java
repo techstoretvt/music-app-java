@@ -57,39 +57,12 @@ public class DanhSachPhatAdapter extends RecyclerView.Adapter<DanhSachPhatAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VHolder holder, int position) {
-        holder.tenDS.setText(data.get(holder.getAdapterPosition()).getTenDanhSach());
-//        Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
-        if (data.get(holder.getAdapterPosition()).getChiTietDanhSachPhats() != null) {
+        setUI(holder, position);
 
-            int slBh = data.get(holder.getAdapterPosition()).getChiTietDanhSachPhats().size();
-            if (slBh > 0 && slBh < 4) {
-                Glide.with(holder.anh1.getContext())
-                        .load(data.get(holder.getAdapterPosition()).
-                                getChiTietDanhSachPhats().get(0).getBaihat().getAnhBia())
-                        .into(holder.img1anh);
-            } else if (slBh >= 4) {
-                holder.layout4anh.setVisibility(View.VISIBLE);
-                holder.img1anh.setVisibility(View.GONE);
-                Glide.with(holder.anh1.getContext())
-                        .load(data.get(holder.getAdapterPosition()).
-                                getChiTietDanhSachPhats().get(0).getBaihat().getAnhBia())
-                        .into(holder.anh1);
-                Glide.with(holder.anh1.getContext())
-                        .load(data.get(holder.getAdapterPosition()).
-                                getChiTietDanhSachPhats().get(1).getBaihat().getAnhBia())
-                        .into(holder.anh2);
-                Glide.with(holder.anh1.getContext())
-                        .load(data.get(holder.getAdapterPosition()).
-                                getChiTietDanhSachPhats().get(2).getBaihat().getAnhBia())
-                        .into(holder.anh3);
-                Glide.with(holder.anh1.getContext())
-                        .load(data.get(holder.getAdapterPosition()).
-                                getChiTietDanhSachPhats().get(3).getBaihat().getAnhBia())
-                        .into(holder.anh4);
-            }
-        }
+        setEvent(holder);
+    }
 
-        //set onclick
+    private void setEvent(VHolder holder) {
         holder.layoutDS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,8 +123,39 @@ public class DanhSachPhatAdapter extends RecyclerView.Adapter<DanhSachPhatAdapte
                 ChiTietThuVienFragment.idDanhSachPhat = data.get(holder.getAdapterPosition()).getId();
             }
         });
+    }
 
+    private void setUI(VHolder holder, int position) {
+        holder.tenDS.setText(data.get(holder.getAdapterPosition()).getTenDanhSach());
+        if (data.get(holder.getAdapterPosition()).getChiTietDanhSachPhats() != null) {
 
+            int slBh = data.get(holder.getAdapterPosition()).getChiTietDanhSachPhats().size();
+            if (slBh > 0 && slBh < 4) {
+                Glide.with(holder.anh1.getContext())
+                        .load(data.get(holder.getAdapterPosition()).
+                                getChiTietDanhSachPhats().get(0).getBaihat().getAnhBia())
+                        .into(holder.img1anh);
+            } else if (slBh >= 4) {
+                holder.layout4anh.setVisibility(View.VISIBLE);
+                holder.img1anh.setVisibility(View.GONE);
+                Glide.with(holder.anh1.getContext())
+                        .load(data.get(holder.getAdapterPosition()).
+                                getChiTietDanhSachPhats().get(0).getBaihat().getAnhBia())
+                        .into(holder.anh1);
+                Glide.with(holder.anh1.getContext())
+                        .load(data.get(holder.getAdapterPosition()).
+                                getChiTietDanhSachPhats().get(1).getBaihat().getAnhBia())
+                        .into(holder.anh2);
+                Glide.with(holder.anh1.getContext())
+                        .load(data.get(holder.getAdapterPosition()).
+                                getChiTietDanhSachPhats().get(2).getBaihat().getAnhBia())
+                        .into(holder.anh3);
+                Glide.with(holder.anh1.getContext())
+                        .load(data.get(holder.getAdapterPosition()).
+                                getChiTietDanhSachPhats().get(3).getBaihat().getAnhBia())
+                        .into(holder.anh4);
+            }
+        }
     }
 
     public class VHolder extends RecyclerView.ViewHolder {

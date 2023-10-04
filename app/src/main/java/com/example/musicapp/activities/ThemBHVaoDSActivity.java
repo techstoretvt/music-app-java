@@ -47,17 +47,17 @@ public class ThemBHVaoDSActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_them_bhvao_dsactivity);
 
-        manager = new LinearLayoutManager(this);
-        rvBaiHat = findViewById(R.id.rvBaiHat);
-        valueSearch = findViewById(R.id.valueSearch);
-        laValueSearch = findViewById(R.id.laValueSearch);
-        btnBack = findViewById(R.id.btnBack);
+        anhXa();
+
 
         layDanhSachBaiHat("a");
 
-        Log.e("idDanhSach", String.valueOf(idDanhSach));
+        setEvent();
 
 
+    }
+
+    private void setEvent() {
         laValueSearch.setStartIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +84,14 @@ public class ThemBHVaoDSActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void anhXa() {
+        manager = new LinearLayoutManager(this);
+        rvBaiHat = findViewById(R.id.rvBaiHat);
+        valueSearch = findViewById(R.id.valueSearch);
+        laValueSearch = findViewById(R.id.laValueSearch);
+        btnBack = findViewById(R.id.btnBack);
     }
 
     private void layDanhSachBaiHat(String keyword) {

@@ -87,12 +87,15 @@ public class CaNhanFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ca_nhan, container, false);
-        topAppBar = view.findViewById(R.id.topAppBar);
-        anhUser = view.findViewById(R.id.anhUser);
-        tenUser = view.findViewById(R.id.tenUser);
-        typeUser = view.findViewById(R.id.typeUser);
-        xemDsQuanTam = view.findViewById(R.id.xemDsQuanTam);
+        anhXa(view);
 
+        setEvent();
+
+        getTaiKhoan();
+        return view;
+    }
+
+    private void setEvent() {
         topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -122,9 +125,14 @@ public class CaNhanFragment extends Fragment {
                 Common.replace_fragment(new NgheSiQuanTamFragment());
             }
         });
+    }
 
-        getTaiKhoan();
-        return view;
+    private void anhXa(View view) {
+        topAppBar = view.findViewById(R.id.topAppBar);
+        anhUser = view.findViewById(R.id.anhUser);
+        tenUser = view.findViewById(R.id.tenUser);
+        typeUser = view.findViewById(R.id.typeUser);
+        xemDsQuanTam = view.findViewById(R.id.xemDsQuanTam);
     }
 
     private void getTaiKhoan() {

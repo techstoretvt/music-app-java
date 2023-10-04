@@ -20,7 +20,6 @@ import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
 import com.example.musicapp.modal.anhxajson.CommentBaiHat;
 import com.example.musicapp.modal.anhxajson.CommentBaiHatCon;
-import com.example.musicapp.modal.anhxajson.GetListIdLikeComment_item;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
 import com.example.musicapp.modal.anhxajson.TaiKhoan;
 import com.example.musicapp.modal.body.BodyToggleLikeComment;
@@ -66,7 +65,6 @@ public class BinhLuanAdapter extends RecyclerView.Adapter<BinhLuanAdapter.VHolde
         setUI(holder);
 
         setEvent(holder);
-
 
     }
 

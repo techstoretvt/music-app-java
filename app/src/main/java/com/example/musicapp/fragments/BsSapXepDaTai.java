@@ -28,6 +28,17 @@ public class BsSapXepDaTai extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.item_bs_sap_xep_da_tai, container, false);
+
+        anhXa(view);
+
+        initCheck();
+
+        initEvent();
+
+        return view;
+    }
+
+    private void anhXa(View view) {
         laMoiNhat = view.findViewById(R.id.laMoiNhat);
         laCuNhat = view.findViewById(R.id.laCuNhat);
         laAdenZ = view.findViewById(R.id.laAdenZ);
@@ -37,12 +48,6 @@ public class BsSapXepDaTai extends BottomSheetDialogFragment {
         checkCuNhat = view.findViewById(R.id.checkCuNhat);
         checkAdenA = view.findViewById(R.id.checkAdenZ);
         checkZdenA = view.findViewById(R.id.checkZdenA);
-
-        initCheck();
-
-        initEvent();
-
-        return view;
     }
 
     private void initEvent() {

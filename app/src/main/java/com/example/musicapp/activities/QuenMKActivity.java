@@ -40,6 +40,12 @@ public class QuenMKActivity extends AppCompatActivity {
 //        overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         anhXa();
 
+        setEvent();
+
+
+    }
+
+    private void setEvent() {
         btnLayMa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +61,6 @@ public class QuenMKActivity extends AppCompatActivity {
                 return false;
             }
         });
-
     }
 
     private void handleLayMa() {

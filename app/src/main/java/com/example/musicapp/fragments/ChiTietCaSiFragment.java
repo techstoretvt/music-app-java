@@ -104,28 +104,17 @@ public class ChiTietCaSiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chi_tiet_ca_si, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-        recyclerViewCS = (RecyclerView) view.findViewById(R.id.recycleViewCS);
-        manager = new LinearLayoutManager(getActivity());
-        managerCS = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        chuaCoBaihat = view.findViewById(R.id.chuaCoBaihat);
-        thongTin = view.findViewById(R.id.thongTin);
-        tenCS = view.findViewById(R.id.tenCS);
-        anhCS = view.findViewById(R.id.anhCS);
-        btnBack = view.findViewById(R.id.btnBack);
-        isChiTietCS = true;
-        btnQuanTam = view.findViewById(R.id.btnQuanTam);
-        numberQuanTam = view.findViewById(R.id.numberQuanTam);
-        btnPhatNhac = view.findViewById(R.id.btnPhatNhac);
+
+        anhXa(view);
 
 
+        //set mau gradient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{Color.parseColor("#4c49515c"), Color.BLACK}
         );
         LinearLayout linearLayout = view.findViewById(R.id.layoutInfo);
         linearLayout.setBackground(gradientDrawable);
-
 
         layThongTinCaSi();
 
@@ -135,6 +124,12 @@ public class ChiTietCaSiFragment extends Fragment {
 
         kiemTraQuanTam();
 
+        setEvent();
+
+        return view;
+    }
+
+    private void setEvent() {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,6 +157,11 @@ public class ChiTietCaSiFragment extends Fragment {
                 } else if (typeBack == 4) {
 
                     Common.replace_fragment(new YeuThichFragment());
+
+                } else if (typeBack == 5) {
+
+                    Common.replace_fragment(MainActivity.noiBat);
+                    MainActivity.bottomNavigationView.setSelectedItemId(R.id.noiBat);
 
                 }
             }
@@ -196,9 +196,22 @@ public class ChiTietCaSiFragment extends Fragment {
                 }
             }
         });
+    }
 
-
-        return view;
+    private void anhXa(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
+        recyclerViewCS = (RecyclerView) view.findViewById(R.id.recycleViewCS);
+        manager = new LinearLayoutManager(getActivity());
+        managerCS = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        chuaCoBaihat = view.findViewById(R.id.chuaCoBaihat);
+        thongTin = view.findViewById(R.id.thongTin);
+        tenCS = view.findViewById(R.id.tenCS);
+        anhCS = view.findViewById(R.id.anhCS);
+        btnBack = view.findViewById(R.id.btnBack);
+        isChiTietCS = true;
+        btnQuanTam = view.findViewById(R.id.btnQuanTam);
+        numberQuanTam = view.findViewById(R.id.numberQuanTam);
+        btnPhatNhac = view.findViewById(R.id.btnPhatNhac);
     }
 
     private void kiemTraQuanTam() {

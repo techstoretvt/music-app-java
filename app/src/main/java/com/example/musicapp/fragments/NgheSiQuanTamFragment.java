@@ -79,12 +79,10 @@ public class NgheSiQuanTamFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_nghe_si_quan_tam, container, false);
-        recyclerView = view.findViewById(R.id.recycleView);
-        btnBack = view.findViewById(R.id.btnBack);
-        numberQuanTam = view.findViewById(R.id.numberQuanTam);
-        manager = new GridLayoutManager(getContext(), 2);
-        isQuanTamNgheSi = true;
 
+        anhXa(view);
+
+        //gradient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{Color.parseColor("#38383894"), Color.BLACK}
@@ -94,14 +92,28 @@ public class NgheSiQuanTamFragment extends Fragment {
 
         getListCaSi();
 
+
+        setEvent();
+
+
+        return view;
+    }
+
+    private void setEvent() {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Common.replace_fragment(new ThuVienFragment());
             }
         });
+    }
 
-        return view;
+    private void anhXa(View view) {
+        recyclerView = view.findViewById(R.id.recycleView);
+        btnBack = view.findViewById(R.id.btnBack);
+        numberQuanTam = view.findViewById(R.id.numberQuanTam);
+        manager = new GridLayoutManager(getContext(), 2);
+        isQuanTamNgheSi = true;
     }
 
     private void getListCaSi() {

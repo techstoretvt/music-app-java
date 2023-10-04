@@ -70,6 +70,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //set click btn login
+        setEvent();
+
+
+    }
+
+    private void setEvent() {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,23 +128,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        btnGoogle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//            }
-//        });
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(LoginActivity.this,
                 gso);
-
-//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
-
 
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +143,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent, 100);
             }
         });
-
     }
 
     @Override
@@ -167,8 +161,6 @@ public class LoginActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-//            Toast.makeText(this, account.getId(), Toast.LENGTH_SHORT).show();
 
             String idGoogle = account.getId();
             String firstName = account.getGivenName();

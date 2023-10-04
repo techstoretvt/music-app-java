@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,28 +83,15 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
     @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(@NonNull VHolder holder, int position) {
-        holder.stt.setText(String.valueOf(position + 1));
-        holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
-        holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
-        Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
 
-        MusicAppHelper musicAppHelper = new MusicAppHelper(context,
-                "MusicApp.sqlite", null, 1);
+        setUI(holder, position);
 
-        Cursor dataBaiHat = musicAppHelper.GetData(String.format(
-                "SELECT * FROM BaiHat where id = '%s'",
-                data.get(position).getId()
-        ));
-
-        while (dataBaiHat.moveToNext()) {
-            holder.iconDownLoad.setVisibility(View.VISIBLE);
-        }
-        if (ChiTietNhacActivity.isChiTietNhac) {
-            holder.btnMore.setVisibility(View.GONE);
-            holder.ic_wrap.setVisibility(View.VISIBLE);
-        }
+        setEvent(holder, position);
 
 
+    }
+
+    private void setEvent(VHolder holder, int position) {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,8 +224,6 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 }
             });
         }
-
-
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,7 +242,29 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 md.show(MainActivity.supportFragmentManager, BsBaiHat.TAG);
             }
         });
+    }
 
+    private void setUI(VHolder holder, int position) {
+        holder.stt.setText(String.valueOf(position + 1));
+        holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
+        holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
+        Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
+
+        MusicAppHelper musicAppHelper = new MusicAppHelper(context,
+                "MusicApp.sqlite", null, 1);
+
+        Cursor dataBaiHat = musicAppHelper.GetData(String.format(
+                "SELECT * FROM BaiHat where id = '%s'",
+                data.get(position).getId()
+        ));
+
+        while (dataBaiHat.moveToNext()) {
+            holder.iconDownLoad.setVisibility(View.VISIBLE);
+        }
+        if (ChiTietNhacActivity.isChiTietNhac) {
+            holder.btnMore.setVisibility(View.GONE);
+            holder.ic_wrap.setVisibility(View.VISIBLE);
+        }
     }
 
     public static void getListRandomBaiHat(@NonNull BaiHat bh) {

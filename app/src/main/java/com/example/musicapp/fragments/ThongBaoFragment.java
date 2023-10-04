@@ -72,9 +72,8 @@ public class ThongBaoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_thong_bao, container, false);
-        manager = new LinearLayoutManager(getContext());
-        recyclerView = view.findViewById(R.id.rvThongBao);
-        numberThongBao = 0;
+
+        anhXa(view);
 
         layDanhSachThongBao();
 
@@ -82,42 +81,22 @@ public class ThongBaoFragment extends Fragment {
         badge.setVisible(false);
         badge.setNumber(numberThongBao);
 
-//        btnTest.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String dataStr = "{\"title\":\"Ca khúc mới có tên \\\"nhạc cười 4\\\"\",\"content\":\"\\\"nhạc cười 4\\\" - một bài hát mới của [tên nghệ sĩ\\/nhóm nhạc] đã chính thức ra mắt. Đây là một bài hát về tình yêu đơn phương, mang đến cho người nghe những cảm xúc lắng đọng và sâu sắc.\\n\\n                    Giai điệu của bài hát du dương, ngọt ngào, kết hợp với giọng hát đầy cảm xúc của [tên nghệ sĩ\\/nhóm nhạc], đã mang đến cho khán giả những cảm xúc lắng đọng.\\n                    \\n                    \\\"nhạc cười 4\\\" là một bài hát dễ nghe, dễ nhớ, và dễ đi vào lòng người. Bài hát chắc chắn sẽ là một bản hit trong thời gian tới.\",\"timeCreate\":1695607515696,\"urlImage\":\"https:\\/\\/source.unsplash.com\\/random?sig=11\"}";
-//
-//
-//                Gson gson = new Gson();
-//                ThongBao newTB = gson.fromJson(dataStr, ThongBao.class);
-//
-//                Log.e("title", newTB.getTitle());
-////                Log.e("content", newTB.getContent());
-////                Log.e("url image", newTB.getUrlImage());
-//
-//                data.add(0, newTB);
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-
         MainActivity.webSocketClient.socket.on("new_thong_bao", new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
                 // Xử lý dữ liệu từ máy chủ ở đây
-//                String dataStr = args[0].toString();
-////                Log.e("data", dataStr);
-//
-//                Gson gson = new Gson();
-//                ThongBao newTB = gson.fromJson(dataStr, ThongBao.class);
-//
-//                data.add(0, newTB);
-//                adapter.notifyDataSetChanged();
                 layDanhSachThongBao();
 
             }
         });
 
         return view;
+    }
+
+    private void anhXa(View view) {
+        manager = new LinearLayoutManager(getContext());
+        recyclerView = view.findViewById(R.id.rvThongBao);
+        numberThongBao = 0;
     }
 
     private void layDanhSachThongBao() {

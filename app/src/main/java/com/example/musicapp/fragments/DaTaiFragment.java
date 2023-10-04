@@ -79,14 +79,10 @@ public class DaTaiFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_da_tai, container, false);
-        recyclerView = view.findViewById(R.id.recycleView);
-        manager = new LinearLayoutManager(getContext());
-        isFragmentDaTai = true;
-        btnBack = view.findViewById(R.id.btnBack);
-        btnPhatNgauNhien = view.findViewById(R.id.btnRandom);
-        btnFilter = view.findViewById(R.id.btnFilter);
-        bs = new BsSapXepDaTai();
 
+        anhXa(view);
+
+        //gradient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{Color.parseColor("#38383894"), Color.BLACK}
@@ -99,6 +95,16 @@ public class DaTaiFragment extends Fragment {
         setEvent();
 
         return view;
+    }
+
+    private void anhXa(View view) {
+        recyclerView = view.findViewById(R.id.recycleView);
+        manager = new LinearLayoutManager(getContext());
+        isFragmentDaTai = true;
+        btnBack = view.findViewById(R.id.btnBack);
+        btnPhatNgauNhien = view.findViewById(R.id.btnRandom);
+        btnFilter = view.findViewById(R.id.btnFilter);
+        bs = new BsSapXepDaTai();
     }
 
     private void setEvent() {

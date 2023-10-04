@@ -61,19 +61,13 @@ public class ThemBHVaoDSAdapter extends RecyclerView.Adapter<ThemBHVaoDSAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull VHolder holder, int position) {
-        holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
-        holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
-        Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
+        setUI(holder, position);
 
-        String idBaiHat = data.get(holder.getAdapterPosition()).getId();
-        for (BaiHat i : ChiTietThuVienFragment.danhBaiHats) {
-            if (i.getId().equals(idBaiHat)) {
-                holder.icon.setImageResource(R.drawable.baseline_check_white);
-                holder.checkBox.setChecked(true);
-                break;
-            }
-        }
+        setEvent(holder, position);
 
+    }
+
+    private void setEvent(VHolder holder, int position) {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,8 +133,21 @@ public class ThemBHVaoDSAdapter extends RecyclerView.Adapter<ThemBHVaoDSAdapter.
                 }
             }
         });
+    }
 
+    private void setUI(VHolder holder, int position) {
+        holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
+        holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
+        Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
 
+        String idBaiHat = data.get(holder.getAdapterPosition()).getId();
+        for (BaiHat i : ChiTietThuVienFragment.danhBaiHats) {
+            if (i.getId().equals(idBaiHat)) {
+                holder.icon.setImageResource(R.drawable.baseline_check_white);
+                holder.checkBox.setChecked(true);
+                break;
+            }
+        }
     }
 
     public class VHolder extends RecyclerView.ViewHolder {

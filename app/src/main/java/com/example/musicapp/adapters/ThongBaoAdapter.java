@@ -43,18 +43,27 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.VHolde
 
     @Override
     public void onBindViewHolder(@NonNull VHolder holder, int position) {
-        holder.tieuDe.setText(data.get(holder.getAdapterPosition()).getTitle());
-        holder.noiDung.setText(data.get(holder.getAdapterPosition()).getContent());
-        Glide.with(context).load(data.get(holder.getAdapterPosition()).getUrlImage())
-                .into(holder.anhTB);
+        setUI(holder);
+
+        setEvent(holder);
 
 
+    }
+
+    private void setEvent(@NonNull VHolder holder) {
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.noiDung.setMaxLines(1000);
             }
         });
+    }
+
+    private void setUI(@NonNull VHolder holder) {
+        holder.tieuDe.setText(data.get(holder.getAdapterPosition()).getTitle());
+        holder.noiDung.setText(data.get(holder.getAdapterPosition()).getContent());
+        Glide.with(context).load(data.get(holder.getAdapterPosition()).getUrlImage())
+                .into(holder.anhTB);
     }
 
     public class VHolder extends RecyclerView.ViewHolder {

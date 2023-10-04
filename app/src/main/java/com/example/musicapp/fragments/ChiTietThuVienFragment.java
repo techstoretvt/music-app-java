@@ -111,6 +111,27 @@ public class ChiTietThuVienFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chi_tiet_thu_vien, container, false);
 
+        anhXa(view);
+
+        layDanhSachBaiHat();
+
+        setItemTouchHelper();
+
+        //set mau gradient
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.parseColor("#332733"), Color.BLACK}
+        );
+        recyclerView.setBackground(gradientDrawable);
+
+        //set event
+        initEvent();
+
+
+        return view;
+    }
+
+    private void anhXa(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
         manager = new GridLayoutManager(getActivity(), 1);
         layoutBtn = view.findViewById(R.id.layoutBtn);
@@ -134,23 +155,6 @@ public class ChiTietThuVienFragment extends Fragment {
 
 
         danhBaiHats = new ArrayList<>();
-
-        layDanhSachBaiHat();
-
-        setItemTouchHelper();
-
-        GradientDrawable gradientDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[]{Color.parseColor("#332733"), Color.BLACK}
-        );
-        recyclerView.setBackground(gradientDrawable);
-
-
-        //set event
-        initEvent();
-
-
-        return view;
     }
 
     private void initEvent() {

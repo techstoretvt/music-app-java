@@ -62,6 +62,8 @@ public class StartActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+
+        //set mau gradient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{Color.parseColor("#4c49515c"), Color.BLACK}

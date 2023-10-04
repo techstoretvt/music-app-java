@@ -88,14 +88,10 @@ public class YeuThichFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_yeu_thich, container, false);
-        recyclerView = view.findViewById(R.id.recycleView);
-        manager = new LinearLayoutManager(getContext());
-        btnBack = view.findViewById(R.id.btnBack);
-        btnFilter = view.findViewById(R.id.btnFilter);
-        bs = new BsSapXepYeuThich();
-        isYeuThich = true;
-        btnRandom = view.findViewById(R.id.btnRandom);
 
+        anhXa(view);
+
+        //gredient
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{Color.parseColor("#38383894"), Color.BLACK}
@@ -108,6 +104,16 @@ public class YeuThichFragment extends Fragment {
         setEventClick();
 
         return view;
+    }
+
+    private void anhXa(View view) {
+        recyclerView = view.findViewById(R.id.recycleView);
+        manager = new LinearLayoutManager(getContext());
+        btnBack = view.findViewById(R.id.btnBack);
+        btnFilter = view.findViewById(R.id.btnFilter);
+        bs = new BsSapXepYeuThich();
+        isYeuThich = true;
+        btnRandom = view.findViewById(R.id.btnRandom);
     }
 
     private void setEventClick() {

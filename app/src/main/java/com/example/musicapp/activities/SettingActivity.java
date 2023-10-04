@@ -28,9 +28,15 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        btnBack = findViewById(R.id.btnBack);
-        btnDangXuat = findViewById(R.id.btnDangXuat);
 
+        anhXa();
+
+        setEvent();
+
+
+    }
+
+    private void setEvent() {
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +78,11 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void anhXa() {
+        btnBack = findViewById(R.id.btnBack);
+        btnDangXuat = findViewById(R.id.btnDangXuat);
 
     }
 }
