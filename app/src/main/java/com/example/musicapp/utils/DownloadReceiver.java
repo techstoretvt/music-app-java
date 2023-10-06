@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -20,6 +21,8 @@ import java.io.File;
 public class DownloadReceiver extends BroadcastReceiver {
 
     public static Boolean isDownload = false;
+
+    public static Boolean isNhacChuong = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -40,7 +43,12 @@ public class DownloadReceiver extends BroadcastReceiver {
 
                 if (file.exists()) {
                     // Tệp tồn tại
-                    Toast.makeText(context, "Tải xuống hoàn thành", Toast.LENGTH_SHORT).show();
+                    if (!isNhacChuong) {
+                        Toast.makeText(context, "Tải xuống hoàn thành", Toast.LENGTH_SHORT).show();
+                        Log.e("Nhac chuong", "khong cai nhac chuong");
+                        isNhacChuong = false;
+                    }
+
 
                     //logic xu ly
                     if (BsBaiHat.iconDownLoad != null) {
@@ -81,16 +89,31 @@ public class DownloadReceiver extends BroadcastReceiver {
                                 id, tenBh, tenCS, path, linkAnh, loiBH));
                     }
 
+                    if (isNhacChuong == true) {
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.e("Nhac chuong", "Vao nhac chuong");
+                                Common.setRingtone(context, path);
+
+                            }
+                        }, 1000);
+                    }
                     DownloadReceiver.isDownload = false;
+                    isNhacChuong = false;
 
                 } else {
                     DownloadReceiver.isDownload = false;
+                    isNhacChuong = false;
                     // Tệp không tồn tại
                     Toast.makeText(context, "Tải xuống thất bại", Toast.LENGTH_SHORT).show();
                 }
 
             } else {
                 DownloadReceiver.isDownload = false;
+                isNhacChuong = false;
                 Toast.makeText(context, "Tải xuống that bai", Toast.LENGTH_SHORT).show();
             }
         }

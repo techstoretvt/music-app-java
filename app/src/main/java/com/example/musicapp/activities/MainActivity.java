@@ -2,14 +2,18 @@ package com.example.musicapp.activities;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
@@ -25,9 +29,11 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -69,6 +75,7 @@ import io.socket.emitter.Emitter;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_WRITE_SETTINGS_PERMISSION = 3;
     ActivityMainBinding binding;
 
     public static LinearLayout layoutTencasi;
@@ -488,6 +495,36 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 if (!DownloadReceiver.isDownload) {
+                    //xin quyen cai dat
+                    if (DownloadReceiver.isNhacChuong) {
+                        boolean permission;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            permission = Settings.System.canWrite(this);
+                        } else {
+                            permission = ContextCompat.checkSelfPermission(this,
+                                    Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
+                        }
+                        if (permission) {
+                            //do your code
+                        } else {
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                                intent.setData(Uri.parse("package:" + this.getPackageName()));
+                                this.startActivityForResult(intent, REQUEST_WRITE_SETTINGS_PERMISSION);
+                                return;
+                            } else {
+                                ActivityCompat.requestPermissions(this,
+                                        new String[]{Manifest.permission.WRITE_SETTINGS},
+                                        REQUEST_WRITE_SETTINGS_PERMISSION);
+                                return;
+                            }
+                        }
+                    }
+
+
+                    Log.e("Nhac chuong", "Code chay mat dinh");
+
+
                     DownloadReceiver.isDownload = true;
 
                     String linkBaiHat = BaiHatAdapter.linkBaiHat;
@@ -515,9 +552,52 @@ public class MainActivity extends AppCompatActivity {
                 // Cung cấp cho người dùng một giải pháp thay thế
 
             }
+        } else if (requestCode == REQUEST_WRITE_SETTINGS_PERMISSION) {
+            Log.e("Nhac chuong", "Code chay trong permission");
+
+            DownloadReceiver.isDownload = true;
+
+            String linkBaiHat = BaiHatAdapter.linkBaiHat;
+
+            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            Uri uri = Uri.parse(linkBaiHat);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setTitle("Tải nhạc");
+            request.setDescription("Tải nhạc từ link");
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC,
+                    BaiHatAdapter.idBaiHat + ".mp3");
+            downloadManager.enqueue(request);
+
+            downloadReceiver = new DownloadReceiver();
+            IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            registerReceiver(downloadReceiver, filter);
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_WRITE_SETTINGS_PERMISSION) {
+            Log.e("Nhac chuong", "Code chay trong onActivityResult");
+
+            DownloadReceiver.isDownload = true;
+
+            String linkBaiHat = BaiHatAdapter.linkBaiHat;
+
+            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            Uri uri = Uri.parse(linkBaiHat);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setTitle("Tải nhạc");
+            request.setDescription("Tải nhạc từ link");
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC,
+                    BaiHatAdapter.idBaiHat + ".mp3");
+            downloadManager.enqueue(request);
+
+            downloadReceiver = new DownloadReceiver();
+            IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            registerReceiver(downloadReceiver, filter);
+        }
+    }
 }
 
 

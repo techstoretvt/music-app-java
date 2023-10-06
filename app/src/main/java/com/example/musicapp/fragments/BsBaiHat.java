@@ -410,7 +410,29 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutNhacChuong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (DownloadReceiver.isDownload) {
+                    Toast.makeText(getContext(), "Đang tải file khác 1",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                iconDownLoad = BaiHatAdapter.iconDownLoad;
+                currentBaiHat = BaiHatAdapter.currentBaiHat;
+                DownloadReceiver.isNhacChuong = true;
+
+
+                // Kiểm tra xem người dùng đã cấp quyền chưa
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Giải thích lý do tại sao ứng dụng của bạn cần quyền
+                    Toast.makeText(getContext(),
+                            "Ứng dụng cần quyền truy cập bộ nhớ để lưu trữ dữ liệu",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Yêu cầu quyền truy cập bộ nhớ
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
             }
         });
     }
@@ -433,6 +455,9 @@ public class BsBaiHat extends BottomSheetDialogFragment {
 
         if (ChiTietNhacActivity.isChiTietNhac) {
             layoutExtends.setVisibility(View.VISIBLE);
+
+        }
+        if (!ChiTietNhacActivity.isChiTietNhac && !DaTaiFragment.isFragmentDaTai) {
             layoutNhacChuong.setVisibility(View.VISIBLE);
         }
     }

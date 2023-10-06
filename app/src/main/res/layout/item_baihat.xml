@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:paddingHorizontal="16dp"
+    android:paddingHorizontal="4dp"
     android:paddingTop="16dp"
     android:paddingBottom="2dp"
     android:layout_height="wrap_content">
@@ -16,14 +16,14 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="match_parent"
             android:id="@+id/txtStt"
             android:textColor="#fff"
             android:text="1"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:textSize="14dp"/>
+            android:textSize="12dp"/>
 
         <LinearLayout
             android:id="@+id/layoutBaiHat"
@@ -33,19 +33,17 @@
             android:layout_weight="1">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="14dp"
                 app:cardCornerRadius="10dp">
 
                 <ImageView
                     android:id="@+id/imgView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/anh_header"
-                    android:scaleType="centerCrop"
-                    android:fitsSystemWindows="true"
-                    android:contentDescription="anh header"/>
+                    android:scaleType="centerCrop"/>
 
             </androidx.cardview.widget.CardView>
 

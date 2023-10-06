@@ -1,11 +1,22 @@
 package com.example.musicapp.utils;
 
 
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
 
 import com.example.musicapp.R;
 import com.example.musicapp.activities.MainActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +66,43 @@ public class Common {
         if (listKeyword.contains(value.toLowerCase()))
             check = false;
         return check;
+    }
+
+    public static void setRingtone(Context context, String path) {
+        Log.e("Nhac chuong", "setRingtone " + path);
+        if (path == null) {
+
+//            Toast.makeText(context, "Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        File file = new File(path);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
+        String filterName = path.substring(path.lastIndexOf("/") + 1);
+        contentValues.put(MediaStore.MediaColumns.TITLE, filterName);
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
+        contentValues.put(MediaStore.MediaColumns.SIZE, file.length());
+        contentValues.put(MediaStore.Audio.Media.IS_RINGTONE, true);
+
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(path);
+        Cursor cursor = context.getContentResolver().query(uri, null, MediaStore.MediaColumns.DATA + "=?", new String[]{path}, null);
+        if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
+            String id = cursor.getString(0);
+            contentValues.put(MediaStore.Audio.Media.IS_RINGTONE, true);
+            context.getContentResolver().update(uri, contentValues, MediaStore.MediaColumns.DATA + "=?", new String[]{path});
+            Uri newuri = ContentUris.withAppendedId(uri, Long.valueOf(id));
+            Log.e("Nhac chuong", "vao 1");
+            try {
+                RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newuri);
+                Toast.makeText(context, "Đã cài làm nhạc chuông", Toast.LENGTH_SHORT).show();
+                Log.e("Nhac chuong", "vao 2");
+            } catch (Throwable t) {
+                Toast.makeText(context, "Cài làm nhạc chuông thất bại", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+                Log.e("Nhac chuong", "vao 3");
+            }
+            cursor.close();
+        }
     }
 
 }
