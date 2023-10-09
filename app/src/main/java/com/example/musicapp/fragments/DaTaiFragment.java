@@ -21,6 +21,7 @@ import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.modal.anhxajson.BaiHat;
+import com.example.musicapp.modal.anhxajson.BaiHat_CaSi;
 import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.utils.Common;
 import com.example.musicapp.utils.MediaCustom;
@@ -126,9 +127,19 @@ public class DaTaiFragment extends Fragment {
                 MediaCustom.typeDanhSachPhat = 2;
                 MediaCustom.tenLoai = "Đã tải";
 
+                String strTenCaSi = "";
+                for (int i = 0; i < danhSachBaiHat.get(0).getBaiHat_caSis().size(); i++) {
+                    if (i == 0)
+                        strTenCaSi = danhSachBaiHat.get(0).getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                    else
+                        strTenCaSi += ", " + danhSachBaiHat.get(0).getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                }
+
                 MainActivity.phatNhacMini(danhSachBaiHat.get(0).getAnhBia(),
                         danhSachBaiHat.get(0).getTenBaiHat(),
-                        danhSachBaiHat.get(0).getCasi().getTenCaSi());
+                        strTenCaSi);
 
                 MediaCustom.phatNhac(danhSachBaiHat.get(0).getLinkBaiHat());
                 MediaCustom.isRandom = true;
@@ -161,8 +172,11 @@ public class DaTaiFragment extends Fragment {
             String loiBH = dataBaiHat.getString(5);
 
             Casi cs = new Casi("1", tenCS, "mota", "anh");
+            BaiHat_CaSi baiHat_caSi = new BaiHat_CaSi("id", "id", "id", cs);
+            ArrayList<BaiHat_CaSi> arrBh_casi = new ArrayList<>();
+            arrBh_casi.add(baiHat_caSi);
 
-            BaiHat bh = new BaiHat(idBaiHat, tenBaiHat, loiBH, linkAnh, linkBH, cs);
+            BaiHat bh = new BaiHat(idBaiHat, tenBaiHat, loiBH, linkAnh, linkBH, arrBh_casi);
             danhSachBaiHat.add(bh);
 
         }

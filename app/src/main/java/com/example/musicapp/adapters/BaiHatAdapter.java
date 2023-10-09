@@ -30,6 +30,7 @@ import com.example.musicapp.fragments.YeuThichFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
+import com.example.musicapp.fragments.Bs_XemNS;
 import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
 import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
@@ -58,6 +59,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
 
     public static BsBaiHat md = new BsBaiHat();
+    public static Bs_XemNS mdXemNS = new Bs_XemNS();
 
     ArrayList<BaiHat> data;
     Context context;
@@ -98,22 +100,39 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
 
                 MainActivity.progess_phatNhac.setProgress(100);
+                BaiHat currentBH = data.get(holder.getAdapterPosition());
+
+                String strTenCaSi = "";
+                for (int i = 0; i < currentBH.getBaiHat_caSis().size(); i++) {
+                    if (i == 0)
+                        strTenCaSi = currentBH.getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                    else
+                        strTenCaSi += ", " + currentBH.getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                }
 
                 if (ChiTietNhacActivity.isChiTietNhac) {
-                    BaiHat currentBH = data.get(holder.getAdapterPosition());
+
                     int indexBH = MediaCustom.danhSachPhats.indexOf(currentBH);
                     if (indexBH != -1) {
                         MediaCustom.position = indexBH;
 
                         String anhBia = currentBH.getAnhBia();
                         //update ui
+
+
                         ChiTietNhacActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
+
                         if (MainActivity.dungNhac != null) {
                             //current
                             Glide.with(MainActivity.layoutAudio.getContext()).load(anhBia)
                                     .into(CurrentMiniNhacFragment.imgNhac);
                             CurrentMiniNhacFragment.tenBaiHat.setText(currentBH.getTenBaiHat());
-                            CurrentMiniNhacFragment.tenCaSi.setText(currentBH.getCasi().getTenCaSi());
+
+
+                            CurrentMiniNhacFragment.tenCaSi.setText(strTenCaSi);
+
                             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
 
                             //next
@@ -124,8 +143,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                                     .into(NextMiniNhacFragment.imgNhac);
                             NextMiniNhacFragment.tenBaiHat.setText(MediaCustom.danhSachPhats.get(nextPosition)
                                     .getTenBaiHat());
-                            NextMiniNhacFragment.tenCaSi.setText(MediaCustom.danhSachPhats.get(nextPosition)
-                                    .getCasi().getTenCaSi());
+                            NextMiniNhacFragment.tenCaSi.setText(strTenCaSi);
 
                         }
                         if (BaiHatFragment.imgNhac != null) {
@@ -133,8 +151,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                                     .into(BaiHatFragment.imgNhac);
                             BaiHatFragment.txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
                                     getTenBaiHat());
-                            BaiHatFragment.txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
-                                    getCasi().getTenCaSi());
+                            BaiHatFragment.txtTenCS.setText(strTenCaSi);
                             BaiHatFragment.txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
                                     getLoiBaiHat());
 
@@ -179,6 +196,8 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 } else {
                     //kham pha
                     MediaCustom.position = 0;
+                    MediaCustom.danhSachPhats = new ArrayList<>();
+                    MediaCustom.danhSachPhats.add(data.get(holder.getAdapterPosition()));
                     MediaCustom.typeDanhSachPhat = 1;
                     MediaCustom.tenLoai = "Khám phá";
                     getListRandomBaiHat(data.get(holder.getAdapterPosition()));
@@ -187,7 +206,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                 //
                 MainActivity.phatNhacMini(data.get(holder.getAdapterPosition()).getAnhBia(),
                         data.get(holder.getAdapterPosition()).getTenBaiHat(),
-                        data.get(holder.getAdapterPosition()).getCasi().getTenCaSi());
+                        strTenCaSi);
 
                 if (MediaCustom.phatNhac(data.get(holder.getAdapterPosition()).getLinkBaiHat())) {
                     if (ChiTietNhacActivity.isChiTietNhac) {
@@ -229,7 +248,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
             public void onClick(View view) {
                 //
                 idBaiHat = data.get(holder.getAdapterPosition()).getId();
-                idCaSi = data.get(holder.getAdapterPosition()).getCasi().getId();
+//                idCaSi = data.get(holder.getAdapterPosition()).g.getCasi().getId();
                 linkMV = data.get(holder.getAdapterPosition()).getLinkMV();
                 linkBaiHat = data.get(holder.getAdapterPosition()).getLinkBaiHat();
                 linkAnh = data.get(holder.getAdapterPosition()).getAnhBia();
@@ -247,7 +266,20 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
     private void setUI(VHolder holder, int position) {
         holder.stt.setText(String.valueOf(position + 1));
         holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
-        holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
+
+
+        String strTenCaSi = "";
+        for (int i = 0; i < data.get(position).getBaiHat_caSis().size(); i++) {
+            if (i == 0)
+                strTenCaSi = data.get(position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+            else
+                strTenCaSi += ", " + data.get(position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+        }
+        holder.tenCasi.setText(strTenCaSi);
+
+
         Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
 
         MusicAppHelper musicAppHelper = new MusicAppHelper(context,
@@ -285,7 +317,21 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                             if (NextMiniNhacFragment.tenBaiHat != null) {
                                 BaiHat bh0 = listBH.get(0);
                                 NextMiniNhacFragment.tenBaiHat.setText(bh0.getTenBaiHat());
-                                NextMiniNhacFragment.tenCaSi.setText(bh0.getCasi().getTenCaSi());
+
+
+                                String strTenCaSi = "";
+                                for (int i = 0; i < bh0.getBaiHat_caSis().size(); i++) {
+                                    if (i == 0)
+                                        strTenCaSi = bh0.getBaiHat_caSis().
+                                                get(i).getCasi().getTenCaSi();
+                                    else
+                                        strTenCaSi += ", " + bh0.getBaiHat_caSis().
+                                                get(i).getCasi().getTenCaSi();
+                                }
+
+                                NextMiniNhacFragment.tenCaSi.setText(strTenCaSi);
+
+
                                 Glide.with(MainActivity.layoutAudio.getContext()).load(bh0.getAnhBia())
                                         .into(NextMiniNhacFragment.imgNhac);
                             }

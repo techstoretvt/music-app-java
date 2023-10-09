@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="6dp"
+    android:id="@+id/layoutBaiHat"
+    android:background="#000"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/wrap_casi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="20dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="40dp">
+
+            <ImageView
+                android:id="@+id/anhCaSi"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/anh_cho"
+                android:scaleType="centerCrop"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tenCs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nal"
+                android:textColor="#fff"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/slQuanTam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="112k quan tam"
+                android:textColor="#ccc"
+                android:textStyle="bold"/>
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_right_white"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

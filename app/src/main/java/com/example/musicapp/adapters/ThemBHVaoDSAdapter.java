@@ -137,7 +137,19 @@ public class ThemBHVaoDSAdapter extends RecyclerView.Adapter<ThemBHVaoDSAdapter.
 
     private void setUI(VHolder holder, int position) {
         holder.tenBaiHat.setText(data.get(position).getTenBaiHat());
-        holder.tenCasi.setText(data.get(position).getCasi().getTenCaSi());
+
+
+        String strTenCaSi = "";
+        for (int i = 0; i < data.get(position).getBaiHat_caSis().size(); i++) {
+            if (i == 0)
+                strTenCaSi = data.get(position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+            else
+                strTenCaSi += ", " + data.get(position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+        }
+        holder.tenCasi.setText(strTenCaSi);
+
         Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
 
         String idBaiHat = data.get(holder.getAdapterPosition()).getId();

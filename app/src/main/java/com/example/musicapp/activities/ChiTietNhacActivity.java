@@ -2,19 +2,25 @@ package com.example.musicapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,6 +43,8 @@ import com.google.android.material.tabs.TabLayout;
 
 public class ChiTietNhacActivity extends AppCompatActivity {
 
+    private static final int REQUEST_WRITE_SETTINGS_PERMISSION = 3;
+    DownloadReceiver downloadReceiver;
     ImageView iconClose, btnRandom, btnLoop, btnMore;
     public static ImageView btnNext, btnPrev;
     TextView txtTypePlay;
@@ -141,8 +149,20 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                             .into(BaiHatFragment.imgNhac);
                     BaiHatFragment.txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
                             getTenBaiHat());
-                    BaiHatFragment.txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
-                            getCasi().getTenCaSi());
+
+
+                    String strTenCaSi = "";
+                    for (int i = 0; i < MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().size(); i++) {
+                        if (i == 0)
+                            strTenCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                                    get(i).getCasi().getTenCaSi();
+                        else
+                            strTenCaSi += ", " + MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                                    get(i).getCasi().getTenCaSi();
+                    }
+                    BaiHatFragment.txtTenCS.setText(strTenCaSi);
+
+
                     BaiHatFragment.txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
                             getLoiBaiHat());
 
@@ -177,8 +197,20 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                             .into(BaiHatFragment.imgNhac);
                     BaiHatFragment.txtTenBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
                             getTenBaiHat());
-                    BaiHatFragment.txtTenCS.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
-                            getCasi().getTenCaSi());
+
+
+                    String strTenCaSi = "";
+                    for (int i = 0; i < MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().size(); i++) {
+                        if (i == 0)
+                            strTenCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                                    get(i).getCasi().getTenCaSi();
+                        else
+                            strTenCaSi += ", " + MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                                    get(i).getCasi().getTenCaSi();
+                    }
+                    BaiHatFragment.txtTenCS.setText(strTenCaSi);
+
+
                     BaiHatFragment.txtLoiBH.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).
                             getLoiBaiHat());
 
@@ -205,9 +237,12 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                 supportFragmentManager = getSupportFragmentManager();
                 md.show(supportFragmentManager, BsBaiHat.TAG);
 
-                BaiHatAdapter.idCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position)
-                        .getCasi().getId();
+//                BaiHatAdapter.idCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position)
+//                        .getCasi().getId();
+
+
                 BaiHatAdapter.currentBaiHat = MediaCustom.danhSachPhats.get(MediaCustom.position);
+                BsBaiHat.currentBaiHat = MediaCustom.danhSachPhats.get(MediaCustom.position);
                 BaiHatAdapter.iconDownLoad = null;
             }
         });
@@ -386,6 +421,96 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                if (!DownloadReceiver.isDownload) {
+                    //xin quyen cai dat
+                    if (DownloadReceiver.isNhacChuong) {
+                        boolean permission;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            permission = Settings.System.canWrite(this);
+                        } else {
+                            permission = ContextCompat.checkSelfPermission(this,
+                                    Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
+                        }
+                        if (permission) {
+                            //do your code
+                        } else {
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                                intent.setData(Uri.parse("package:" + this.getPackageName()));
+                                this.startActivityForResult(intent, REQUEST_WRITE_SETTINGS_PERMISSION);
+                                return;
+                            } else {
+                                ActivityCompat.requestPermissions(this,
+                                        new String[]{Manifest.permission.WRITE_SETTINGS},
+                                        REQUEST_WRITE_SETTINGS_PERMISSION);
+                                return;
+                            }
+                        }
+                    }
+
+
+                    Log.e("Nhac chuong", "Code chay mat dinh");
+                    BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
+                    BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
+
+                    DownloadReceiver.isDownload = true;
+
+                    String linkBaiHat = BaiHatAdapter.currentBaiHat.getLinkBaiHat();
+
+                    DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    Uri uri = Uri.parse(linkBaiHat);
+                    DownloadManager.Request request = new DownloadManager.Request(uri);
+                    request.setTitle("Tải nhạc");
+                    request.setDescription("Tải nhạc từ link");
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC,
+                            BaiHatAdapter.idBaiHat + ".mp3");
+                    downloadManager.enqueue(request);
+
+                    downloadReceiver = new DownloadReceiver();
+                    IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+                    registerReceiver(downloadReceiver, filter);
+                } else {
+                    Toast.makeText(ChiTietNhacActivity.this,
+                            "Đang tải file khác", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } else {
+                // Người dùng từ chối quyền
+                // Cung cấp cho người dùng một giải pháp thay thế
+
+            }
+        } else if (requestCode == REQUEST_WRITE_SETTINGS_PERMISSION) {
+            Log.e("Nhac chuong", "Code chay trong permission");
+            BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
+            BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
+
+            DownloadReceiver.isDownload = true;
+
+            String linkBaiHat = BaiHatAdapter.linkBaiHat;
+
+            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            Uri uri = Uri.parse(linkBaiHat);
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setTitle("Tải nhạc");
+            request.setDescription("Tải nhạc từ link");
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MUSIC,
+                    BaiHatAdapter.idBaiHat + ".mp3");
+            downloadManager.enqueue(request);
+
+            downloadReceiver = new DownloadReceiver();
+            IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            registerReceiver(downloadReceiver, filter);
+        }
     }
 
 

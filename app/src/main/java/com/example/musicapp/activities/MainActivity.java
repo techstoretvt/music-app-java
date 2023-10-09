@@ -17,6 +17,7 @@ import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,6 +47,7 @@ import com.example.musicapp.R;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.adapters.ViewPagerMiniNhacAdapter;
 import com.example.musicapp.databinding.ActivityMainBinding;
+import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.CT_ThuVien_NoiBatFragment;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
@@ -523,7 +525,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     Log.e("Nhac chuong", "Code chay mat dinh");
-
+                    BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
+                    BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
 
                     DownloadReceiver.isDownload = true;
 
@@ -543,7 +546,7 @@ public class MainActivity extends AppCompatActivity {
                     registerReceiver(downloadReceiver, filter);
                 } else {
                     Toast.makeText(MainActivity.this,
-                            "Đang tải file khác 2", Toast.LENGTH_SHORT).show();
+                            "Đang tải file khác", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -554,6 +557,8 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUEST_WRITE_SETTINGS_PERMISSION) {
             Log.e("Nhac chuong", "Code chay trong permission");
+            BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
+            BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
 
             DownloadReceiver.isDownload = true;
 
@@ -579,6 +584,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_WRITE_SETTINGS_PERMISSION) {
             Log.e("Nhac chuong", "Code chay trong onActivityResult");
+            BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
+            BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
 
             DownloadReceiver.isDownload = true;
 

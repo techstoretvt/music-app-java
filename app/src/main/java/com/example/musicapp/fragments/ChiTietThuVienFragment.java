@@ -309,17 +309,35 @@ public class ChiTietThuVienFragment extends Fragment {
                 MediaCustom.typeDanhSachPhat = 2;
                 MediaCustom.tenLoai = tenDanhSach;
 
+                String strTenCaSi = "";
+                for (int i = 0; i < danhBaiHats.get(0).getBaiHat_caSis().size(); i++) {
+                    if (i == 0)
+                        strTenCaSi = danhBaiHats.get(0).getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                    else
+                        strTenCaSi += ", " + danhBaiHats.get(0).getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                }
+
                 MainActivity.phatNhacMini(danhBaiHats.get(0).getAnhBia(),
                         danhBaiHats.get(0).getTenBaiHat(),
-                        danhBaiHats.get(0).getCasi().getTenCaSi());
+                        strTenCaSi);
 
                 MediaCustom.phatNhac(danhBaiHats.get(0).getLinkBaiHat());
                 MediaCustom.isRandom = true;
 
                 BaiHat bh2 = danhBaiHats.get(1);
+                for (int i = 0; i < bh2.getBaiHat_caSis().size(); i++) {
+                    if (i == 0)
+                        strTenCaSi = bh2.getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                    else
+                        strTenCaSi += ", " + bh2.getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                }
                 if (bh2 != null) {
                     NextMiniNhacFragment.tenBaiHat.setText(bh2.getTenBaiHat());
-                    NextMiniNhacFragment.tenCaSi.setText(bh2.getCasi().getTenCaSi());
+                    NextMiniNhacFragment.tenCaSi.setText(strTenCaSi);
                     Glide.with(getContext()).load(bh2.getAnhBia()).into(NextMiniNhacFragment.imgNhac);
                 }
             }

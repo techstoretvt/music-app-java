@@ -139,17 +139,35 @@ public class YeuThichFragment extends Fragment {
                 MediaCustom.typeDanhSachPhat = 2;
                 MediaCustom.tenLoai = "Yêu thích";
 
+                String strTenCaSi = "";
+                for (int i = 0; i < data.get(0).getBaiHat_caSis().size(); i++) {
+                    if (i == 0)
+                        strTenCaSi = data.get(0).getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                    else
+                        strTenCaSi += ", " + data.get(0).getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                }
+
                 MainActivity.phatNhacMini(data.get(0).getAnhBia(),
                         data.get(0).getTenBaiHat(),
-                        data.get(0).getCasi().getTenCaSi());
+                        strTenCaSi);
 
                 MediaCustom.phatNhac(data.get(0).getLinkBaiHat());
                 MediaCustom.isRandom = true;
 
                 BaiHat bh2 = data.get(1);
+                for (int i = 0; i < bh2.getBaiHat_caSis().size(); i++) {
+                    if (i == 0)
+                        strTenCaSi = bh2.getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                    else
+                        strTenCaSi += ", " + bh2.getBaiHat_caSis().
+                                get(i).getCasi().getTenCaSi();
+                }
                 if (bh2 != null) {
                     NextMiniNhacFragment.tenBaiHat.setText(bh2.getTenBaiHat());
-                    NextMiniNhacFragment.tenCaSi.setText(bh2.getCasi().getTenCaSi());
+                    NextMiniNhacFragment.tenCaSi.setText(strTenCaSi);
                     Glide.with(getContext()).load(bh2.getAnhBia()).into(NextMiniNhacFragment.imgNhac);
                 }
             }

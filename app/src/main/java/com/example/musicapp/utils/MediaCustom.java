@@ -212,7 +212,19 @@ public class MediaCustom {
             Glide.with(MainActivity.layoutAudio.getContext()).load(anhBia)
                     .into(CurrentMiniNhacFragment.imgNhac);
             CurrentMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-            CurrentMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+
+
+            String strTenCaSi = "";
+            for (int i = 0; i < danhSachPhats.get(position).getBaiHat_caSis().size(); i++) {
+                if (i == 0)
+                    strTenCaSi = danhSachPhats.get(position).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+                else
+                    strTenCaSi += ", " + danhSachPhats.get(position).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+            }
+            CurrentMiniNhacFragment.tenCaSi.setText(strTenCaSi);
+
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
 
             //next
@@ -223,7 +235,18 @@ public class MediaCustom {
             Glide.with(MainActivity.layoutAudio.getContext()).load(anhBiaNext)
                     .into(NextMiniNhacFragment.imgNhac);
             NextMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(nextPosition).getTenBaiHat());
-            NextMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(nextPosition).getCasi().getTenCaSi());
+
+            for (int i = 0; i < danhSachPhats.get(nextPosition).getBaiHat_caSis().size(); i++) {
+                if (i == 0)
+                    strTenCaSi = danhSachPhats.get(nextPosition).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+                else
+                    strTenCaSi += ", " + danhSachPhats.get(nextPosition).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+            }
+
+            NextMiniNhacFragment.tenCaSi.setText(strTenCaSi);
+
 
             MainActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_24);
         }
@@ -307,7 +330,18 @@ public class MediaCustom {
             Glide.with(MainActivity.layoutAudio.getContext()).load(anhBia)
                     .into(CurrentMiniNhacFragment.imgNhac);
             CurrentMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(position).getTenBaiHat());
-            CurrentMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(position).getCasi().getTenCaSi());
+
+            String strTenCaSi = "";
+            for (int i = 0; i < danhSachPhats.get(position).getBaiHat_caSis().size(); i++) {
+                if (i == 0)
+                    strTenCaSi = danhSachPhats.get(position).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+                else
+                    strTenCaSi += ", " + danhSachPhats.get(position).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+            }
+            CurrentMiniNhacFragment.tenCaSi.setText(strTenCaSi);
+
             MainActivity.dungNhac.setImageResource(R.drawable.baseline_pause_24);
 
             //next
@@ -317,7 +351,16 @@ public class MediaCustom {
             Glide.with(MainActivity.layoutAudio.getContext()).load(anhBiaNext)
                     .into(NextMiniNhacFragment.imgNhac);
             NextMiniNhacFragment.tenBaiHat.setText(danhSachPhats.get(nextPosition).getTenBaiHat());
-            NextMiniNhacFragment.tenCaSi.setText(danhSachPhats.get(nextPosition).getCasi().getTenCaSi());
+
+            for (int i = 0; i < danhSachPhats.get(nextPosition).getBaiHat_caSis().size(); i++) {
+                if (i == 0)
+                    strTenCaSi = danhSachPhats.get(nextPosition).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+                else
+                    strTenCaSi += ", " + danhSachPhats.get(nextPosition).getBaiHat_caSis().
+                            get(i).getCasi().getTenCaSi();
+            }
+            NextMiniNhacFragment.tenCaSi.setText(strTenCaSi);
         }
 
 

@@ -2,10 +2,10 @@ package com.example.musicapp.fragments;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,14 +22,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
@@ -68,6 +69,9 @@ public class BsBaiHat extends BottomSheetDialogFragment {
     public static Boolean isHenGio = false;
 
     public static ImageView iconHenGio;
+
+    public static LottieAnimationView iconDownload2;
+    public static ImageView iconDownLoad1;
 
     LinearLayout layoutThemVaoDS;
     LinearLayout layoutTaiVe;
@@ -176,7 +180,6 @@ public class BsBaiHat extends BottomSheetDialogFragment {
                 iconDownLoad = BaiHatAdapter.iconDownLoad;
                 currentBaiHat = BaiHatAdapter.currentBaiHat;
 
-
                 // Kiểm tra xem người dùng đã cấp quyền chưa
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -214,8 +217,20 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutXemNS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChiTietCaSiFragment.idCaSi = BaiHatAdapter.idCaSi;
+                if (BaiHatAdapter.currentBaiHat.getBaiHat_caSis().size() > 1) {
+                    if (ChiTietNhacActivity.isChiTietNhac)
+                        BaiHatAdapter.mdXemNS.show(ChiTietNhacActivity.supportFragmentManager, Bs_XemNS.TAG);
+                    else {
+                        BaiHatAdapter.mdXemNS.show(MainActivity.supportFragmentManager, Bs_XemNS.TAG);
+                        BaiHatAdapter.md.dismiss();
+                    }
 
+                    return;
+                }
+
+
+                ChiTietCaSiFragment.idCaSi = BaiHatAdapter.currentBaiHat.getBaiHat_caSis()
+                        .get(0).getCasi().getId();
                 //set type back
                 if (ChiTietThuVienFragment.isChiTietDS && !ChiTietNhacActivity.isChiTietNhac) {
                     ChiTietCaSiFragment.typeBack = 1;
@@ -225,12 +240,7 @@ public class BsBaiHat extends BottomSheetDialogFragment {
                     BaiHatAdapter.md.dismiss();
 
                 } else if (ChiTietNhacActivity.isChiTietNhac) {
-//                    BaiHatAdapter.md.dismiss();
                     getActivity().finish();
-//                    Intent intent = new Intent(getContext(), MainActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                    startActivity(intent);
-//                    ChiTietCaSiFragment.typeBack = 2;
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -420,6 +430,8 @@ public class BsBaiHat extends BottomSheetDialogFragment {
                 currentBaiHat = BaiHatAdapter.currentBaiHat;
                 DownloadReceiver.isNhacChuong = true;
 
+                layoutNhacChuong.setBackgroundColor(Color.parseColor("#737373"));
+
 
                 // Kiểm tra xem người dùng đã cấp quyền chưa
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
@@ -440,12 +452,29 @@ public class BsBaiHat extends BottomSheetDialogFragment {
     private void initUi() {
         BaiHat currentBH = BaiHatAdapter.currentBaiHat;
         tenBaiHat.setText(currentBH.getTenBaiHat());
-        tenCaSi.setText(currentBH.getCasi().getTenCaSi());
+
+
+        String strTenCaSi = "";
+        for (int i = 0; i < currentBH.getBaiHat_caSis().size(); i++) {
+            if (i == 0)
+                strTenCaSi = currentBH.getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+            else
+                strTenCaSi += ", " + currentBH.getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+        }
+
+        tenCaSi.setText(strTenCaSi);
+
+
         Glide.with(getContext()).load(currentBH.getAnhBia()).into(anhBaiHat);
 
-        if (ChiTietNhacActivity.isChiTietNhac || DaTaiFragment.isFragmentDaTai) {
+        if (DaTaiFragment.isFragmentDaTai) {
             layoutTaiVe.setVisibility(View.GONE);
         }
+//        if (ChiTietNhacActivity.isChiTietNhac) {
+//            layoutTaiVe.setVisibility(View.GONE);
+//        }
 
         if (BaiHatAdapter.linkMV == null || BaiHatAdapter.linkMV.equals("false")) {
             layoutXemMV.setVisibility(View.GONE);
@@ -457,9 +486,25 @@ public class BsBaiHat extends BottomSheetDialogFragment {
             layoutExtends.setVisibility(View.VISIBLE);
 
         }
-        if (!ChiTietNhacActivity.isChiTietNhac && !DaTaiFragment.isFragmentDaTai) {
+        if (!DaTaiFragment.isFragmentDaTai) {
             layoutNhacChuong.setVisibility(View.VISIBLE);
         }
+
+
+        MusicAppHelper musicAppHelper = new MusicAppHelper(getContext(),
+                "MusicApp.sqlite", null, 1);
+
+        Cursor dataBaiHat = musicAppHelper.GetData(String.format(
+                "SELECT * FROM BaiHat where id = '%s'",
+                currentBH.getId()
+        ));
+
+        layoutTaiVe.setVisibility(View.VISIBLE);
+        while (dataBaiHat.moveToNext()) {
+            layoutTaiVe.setVisibility(View.GONE);
+        }
+
+
     }
 
     private void anhXa(View view) {
@@ -481,6 +526,9 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         btnHenGio = view.findViewById(R.id.btnHenGio);
         iconHenGio = view.findViewById(R.id.iconHenGio);
         layoutNhacChuong = view.findViewById(R.id.layoutNhacChuong);
+        iconDownload2 = view.findViewById(R.id.iconDownload2);
+        iconDownLoad1 = view.findViewById(R.id.iconDownload1);
+
         if (picker == null) {
             picker = new MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)

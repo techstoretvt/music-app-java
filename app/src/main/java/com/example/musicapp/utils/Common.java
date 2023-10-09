@@ -94,14 +94,17 @@ public class Common {
             Log.e("Nhac chuong", "vao 1");
             try {
                 RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newuri);
-                Toast.makeText(context, "Đã cài làm nhạc chuông", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), "Đã cài làm nhạc chuông", Toast.LENGTH_SHORT).show();
                 Log.e("Nhac chuong", "vao 2");
             } catch (Throwable t) {
                 Toast.makeText(context, "Cài làm nhạc chuông thất bại", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
                 Log.e("Nhac chuong", "vao 3");
             }
+            DownloadReceiver.isNhacChuong = false;
             cursor.close();
+        } else {
+            DownloadReceiver.isNhacChuong = false;
         }
     }
 

@@ -1,8 +1,10 @@
 package com.example.musicapp.fragments.fragment_chi_tiet_bh;
 
+import android.Manifest;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
@@ -43,6 +47,8 @@ public class ThongTinBaiHatFragment extends Fragment {
 
     public static ImageView anhBaiHat;
     public static TextView tenBaiHat = null, tenCaSi, theLoai, phatHanh, cungCap;
+
+    LinearLayout layoutTaiVe;
 
 
     public ThongTinBaiHatFragment() {
@@ -78,7 +84,29 @@ public class ThongTinBaiHatFragment extends Fragment {
 
         setTouchHelper();
 
+        setEvent();
+
         return view;
+    }
+
+    private void setEvent() {
+        layoutTaiVe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Kiểm tra xem người dùng đã cấp quyền chưa
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Giải thích lý do tại sao ứng dụng của bạn cần quyền
+                    Toast.makeText(getContext(),
+                            "Ứng dụng cần quyền truy cập bộ nhớ để lưu trữ dữ liệu",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Yêu cầu quyền truy cập bộ nhớ
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
+            }
+        });
     }
 
     private void setTouchHelper() {
@@ -151,7 +179,19 @@ public class ThongTinBaiHatFragment extends Fragment {
     public static void getData() {
         //gan gia tri
         tenBaiHat.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat());
-        tenCaSi.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi());
+
+
+        String strTenCaSi = "";
+        for (int i = 0; i < MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().size(); i++) {
+            if (i == 0)
+                strTenCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+            else
+                strTenCaSi += ", " + MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+        }
+        tenCaSi.setText(strTenCaSi);
+
 
         if (ChiTietNhacActivity.isChiTietNhac)
             Glide.with(ChiTietNhacActivity.btnPausePlay.getContext()).
@@ -201,6 +241,7 @@ public class ThongTinBaiHatFragment extends Fragment {
         theLoai = view.findViewById(R.id.theLoai);
         phatHanh = view.findViewById(R.id.phatHanh);
         cungCap = view.findViewById(R.id.cungCap);
+        layoutTaiVe = view.findViewById(R.id.layoutTaiVe);
     }
 
     @Override

@@ -104,8 +104,21 @@ public class BaiHatFragment extends Fragment {
     }
 
     private void initUI() {
+        if (MediaCustom.danhSachPhats == null) return;
         String tenBh = MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat();
-        String tenCs = MediaCustom.danhSachPhats.get(MediaCustom.position).getCasi().getTenCaSi();
+
+
+        String strTenCaSi = "";
+        for (int i = 0; i < MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().size(); i++) {
+            if (i == 0)
+                strTenCaSi = MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+            else
+                strTenCaSi += ", " + MediaCustom.danhSachPhats.get(MediaCustom.position).getBaiHat_caSis().
+                        get(i).getCasi().getTenCaSi();
+        }
+        String tenCs = strTenCaSi;
+
         String loiBh = MediaCustom.danhSachPhats.get(MediaCustom.position).getLoiBaiHat();
         String anhBia = MediaCustom.danhSachPhats.get(MediaCustom.position).getAnhBia();
 

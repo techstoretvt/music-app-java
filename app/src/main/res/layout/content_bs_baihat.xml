@@ -150,6 +150,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/iconDownload1"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
@@ -157,7 +158,20 @@
                     android:contentDescription="anh header"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
+                    android:visibility="visible"
                     android:src="@drawable/baseline_arrow_circle_down_24"/>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/iconDownload2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:lottie_url="REPLACE_JSON_URL"
+                    android:layout_marginLeft="14dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_rawRes="@raw/animation_download"
+                    android:visibility="gone"
+                    app:lottie_loop="false"/>
+
 
                 <TextView
                     android:layout_width="wrap_content"

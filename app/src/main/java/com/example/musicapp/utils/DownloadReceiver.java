@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.musicapp.activities.ChiTietNhacActivity;
+import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.database.MusicAppHelper;
 import com.example.musicapp.fragments.BsBaiHat;
@@ -43,15 +45,10 @@ public class DownloadReceiver extends BroadcastReceiver {
 
                 if (file.exists()) {
                     // Tệp tồn tại
-                    if (!isNhacChuong) {
-                        Toast.makeText(context, "Tải xuống hoàn thành", Toast.LENGTH_SHORT).show();
-                        Log.e("Nhac chuong", "khong cai nhac chuong");
-                        isNhacChuong = false;
-                    }
 
 
                     //logic xu ly
-                    if (BsBaiHat.iconDownLoad != null) {
+                    if (BsBaiHat.iconDownLoad != null && !ChiTietNhacActivity.isChiTietNhac) {
                         BsBaiHat.iconDownLoad.setVisibility(View.VISIBLE);
                         Log.e("icon", "tim thay");
                         if (ChiTietThuVienFragment.isChiTietDS) {
@@ -60,7 +57,9 @@ public class DownloadReceiver extends BroadcastReceiver {
                     } else {
                         Log.e("icon", "ko tim thay");
                     }
-                    if (BsBaiHat.currentBaiHat.getId().equals(BaiHatAdapter.currentBaiHat.getId()))
+                    if (BsBaiHat.currentBaiHat.getId().equals(BaiHatAdapter.currentBaiHat.getId()) &&
+                            !ChiTietNhacActivity.isChiTietNhac
+                    )
                         BaiHatAdapter.md.dismiss();
 
                     //luu vao sqlite
@@ -81,7 +80,19 @@ public class DownloadReceiver extends BroadcastReceiver {
                     if (!checkExists) {
                         String id = BsBaiHat.currentBaiHat.getId();
                         String tenBh = BsBaiHat.currentBaiHat.getTenBaiHat();
-                        String tenCS = BsBaiHat.currentBaiHat.getCasi().getTenCaSi();
+
+
+                        String strTenCaSi = "";
+                        for (int i = 0; i < BsBaiHat.currentBaiHat.getBaiHat_caSis().size(); i++) {
+                            if (i == 0)
+                                strTenCaSi = BsBaiHat.currentBaiHat.getBaiHat_caSis().
+                                        get(i).getCasi().getTenCaSi();
+                            else
+                                strTenCaSi += ", " + BsBaiHat.currentBaiHat.getBaiHat_caSis().
+                                        get(i).getCasi().getTenCaSi();
+                        }
+                        String tenCS = strTenCaSi;
+
                         String linkAnh = BsBaiHat.currentBaiHat.getAnhBia();
                         String loiBH = BsBaiHat.currentBaiHat.getLoiBaiHat();
 
@@ -100,9 +111,12 @@ public class DownloadReceiver extends BroadcastReceiver {
 
                             }
                         }, 1000);
+                    } else {
+                        Toast.makeText(context, "Tải xuống hoàn thành", Toast.LENGTH_SHORT).show();
+                        Log.e("Nhac chuong", "khong cai nhac chuong");
                     }
                     DownloadReceiver.isDownload = false;
-                    isNhacChuong = false;
+
 
                 } else {
                     DownloadReceiver.isDownload = false;

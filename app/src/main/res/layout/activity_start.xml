@@ -27,11 +27,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
 
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:lottie_url="REPLACE_JSON_URL"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/animation_dog"
+            app:lottie_loop="true"/>
+
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:indeterminate="true"/>
-
 
         <TextView
             android:id="@+id/txtText"

@@ -1,5 +1,7 @@
 package com.example.musicapp.modal.anhxajson;
 
+import java.util.ArrayList;
+
 public class BaiHat {
     private String id;
     private String tenBaiHat;
@@ -7,17 +9,28 @@ public class BaiHat {
     private String anhBia;
     private String linkBaiHat;
     private String linkMV;
-    private Casi casi;
+    private ArrayList<BaiHat_CaSi> baiHat_caSis;
 
     private double thoiGian;
 
-    public BaiHat(String id, String tenBaiHat, String loiBaiHat, String anhBia, String linkBaiHat, Casi casi) {
+    public BaiHat(String id, String tenBaiHat, String loiBaiHat, String anhBia, String linkBaiHat,
+                  ArrayList<BaiHat_CaSi> baiHat_caSis) {
         this.id = id;
         this.tenBaiHat = tenBaiHat;
         this.loiBaiHat = loiBaiHat;
         this.anhBia = anhBia;
         this.linkBaiHat = linkBaiHat;
-        this.casi = casi;
+        this.linkMV = linkMV;
+        this.baiHat_caSis = baiHat_caSis;
+        this.thoiGian = thoiGian;
+    }
+
+    public ArrayList<BaiHat_CaSi> getBaiHat_caSis() {
+        return baiHat_caSis;
+    }
+
+    public void setBaiHat_caSis(ArrayList<BaiHat_CaSi> baiHat_caSis) {
+        this.baiHat_caSis = baiHat_caSis;
     }
 
     public String getLinkMV() {
@@ -76,11 +89,5 @@ public class BaiHat {
         this.linkBaiHat = linkBaiHat;
     }
 
-    public Casi getCasi() {
-        return casi;
-    }
 
-    public void setCasi(Casi casi) {
-        this.casi = casi;
-    }
 }
