@@ -8,26 +8,38 @@
     android:orientation="vertical"
     tools:context=".activities.TestActivity">
 
-    <Button
-        android:id="@+id/btnTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"/>
-
-    <TextView
-        android:id="@+id/txtTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#fff"
-        android:text=""/>
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:lottie_url="REPLACE_JSON_URL"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/animation_dog"
-        app:lottie_loop="true"/>
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:textColor="#fff"
+            android:hint="Nhập số dòng"/>
+
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="test"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#000"
+        android:paddingTop="10dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 
 </LinearLayout>

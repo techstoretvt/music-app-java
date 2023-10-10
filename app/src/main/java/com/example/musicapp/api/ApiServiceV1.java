@@ -11,6 +11,7 @@ import com.example.musicapp.modal.anhxajson.GetListCSQuanTam;
 import com.example.musicapp.modal.anhxajson.GetListCommentById;
 import com.example.musicapp.modal.anhxajson.GetListIdLikeComment;
 import com.example.musicapp.modal.anhxajson.GetListPlaylist;
+import com.example.musicapp.modal.anhxajson.GetLoiBaiHat;
 import com.example.musicapp.modal.anhxajson.GetTaiKhoan;
 import com.example.musicapp.modal.anhxajson.Keyword;
 import com.example.musicapp.modal.anhxajson.LayDsThongBao;
@@ -214,6 +215,9 @@ public interface ApiServiceV1 {
     Call<ResponseDefault> tangViewBaiHat(@Query("idBaiHat") String idBaiHat,
                                          @Header("authorization") String authorization
     );
+
+    @GET("/api/v2/get-list-loi-bai-hat")
+    Call<GetLoiBaiHat> getLoiBaiHatById(@Query("idBaiHat") String idBaiHat);
 
 
     /* Get

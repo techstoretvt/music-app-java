@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.LoiBaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -23,6 +24,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return new BaiHatFragment();
             case 2:
+                return new LoiBaiHatFragment();
+            case 3:
                 return new BinhLuanFragment();
             default:
                 return new ThongTinBaiHatFragment();
@@ -31,7 +34,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Nullable
@@ -46,6 +49,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 title = "•";
                 break;
             case 2:
+                title = "•";
+                break;
+            case 3:
                 title = "•";
                 break;
         }

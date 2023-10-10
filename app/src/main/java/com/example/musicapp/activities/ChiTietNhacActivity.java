@@ -342,6 +342,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                 } else if (position == 1) {
                     layoutControl.setVisibility(View.VISIBLE);
                 } else if (position == 2) {
+                    layoutControl.setVisibility(View.VISIBLE);
+                } else if (position == 3) {
                     layoutControl.setVisibility(View.GONE);
                 }
             }
