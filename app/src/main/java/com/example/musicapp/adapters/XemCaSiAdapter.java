@@ -2,6 +2,7 @@ package com.example.musicapp.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
+import com.example.musicapp.activities.MVBaiHatActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.BsBaiHat;
@@ -26,6 +28,7 @@ import com.example.musicapp.fragments.Bs_XemNS;
 import com.example.musicapp.fragments.CT_ThuVien_NoiBatFragment;
 import com.example.musicapp.fragments.ChiTietCaSiFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
+import com.example.musicapp.fragments.MvBaiHatFragment;
 import com.example.musicapp.fragments.YeuThichFragment;
 import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.modal.anhxajson.DanhSachPhat;
@@ -76,7 +79,7 @@ public class XemCaSiAdapter extends RecyclerView.Adapter<XemCaSiAdapter.VHolder>
             @Override
             public void onClick(View view) {
                 ChiTietCaSiFragment.idCaSi = data.get(holder.getAdapterPosition()).getId();
-                BaiHatAdapter.mdXemNS.dismiss();
+//                BaiHatAdapter.mdXemNS.dismiss();
 
                 //set type back
                 if (ChiTietThuVienFragment.isChiTietDS && !ChiTietNhacActivity.isChiTietNhac) {
@@ -106,6 +109,24 @@ public class XemCaSiAdapter extends RecyclerView.Adapter<XemCaSiAdapter.VHolder>
                     ChiTietCaSiFragment.typeBack = 5;
                     Common.replace_fragment(new ChiTietCaSiFragment());
                     BaiHatAdapter.md.dismiss();
+
+                } else if (MVBaiHatActivity.isMVBaiHatActivity) {
+                    Log.e("Vao", "MVBaiHatActivity");
+//                    activity.finish();
+
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    context.startActivity(intent);
+
+                    ChiTietCaSiFragment.typeBack = 6;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Common.replace_fragment(new ChiTietCaSiFragment());
+                        }
+                    }, 500);
+
 
                 } else {
                     ChiTietCaSiFragment.typeBack = 0;

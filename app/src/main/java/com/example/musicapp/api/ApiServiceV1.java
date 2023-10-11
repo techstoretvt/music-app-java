@@ -3,6 +3,7 @@ package com.example.musicapp.api;
 import com.example.musicapp.modal.anhxajson.AddCommentCon;
 import com.example.musicapp.modal.anhxajson.AddCommentParent;
 import com.example.musicapp.modal.anhxajson.DanhSachCaSi;
+import com.example.musicapp.modal.anhxajson.GetBaiHatById;
 import com.example.musicapp.modal.anhxajson.GetCaSiByID;
 import com.example.musicapp.modal.anhxajson.GetDSPhatById;
 import com.example.musicapp.modal.anhxajson.GetListBHYeuThich;
@@ -21,6 +22,7 @@ import com.example.musicapp.modal.anhxajson.ThemBHVaoDS;
 import com.example.musicapp.modal.anhxajson.ThemDSPhat;
 import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
+import com.example.musicapp.modal.anhxajson.TimKiemMV;
 import com.example.musicapp.modal.body.BodyAddCommentCon;
 import com.example.musicapp.modal.body.BodyAddCommentParent;
 import com.example.musicapp.modal.body.BodyChangePass;
@@ -219,6 +221,19 @@ public interface ApiServiceV1 {
     @GET("/api/v2/get-list-loi-bai-hat")
     Call<GetLoiBaiHat> getLoiBaiHatById(@Query("idBaiHat") String idBaiHat);
 
+    @GET("/api/v2/tim-kiem-bai-hat-by-id")
+    Call<GetBaiHatById> getBaiHatById(@Query("idBaiHat") String idBaiHat);
+
+
+    @GET("/api/v2/get-goi-y-mv-bai-hat")
+    Call<GetListBaiHat> getGoiYMVBaiHat(
+            @Query("listIdBaiHat") String listIdBaiHat
+    );
+
+    @GET("/api/v2/tim-kiem-mv")
+    Call<TimKiemMV> timKiemMV(
+            @Query("value") String value
+    );
 
     /* Get
     1. Truyền tham số ?access_key=access_key

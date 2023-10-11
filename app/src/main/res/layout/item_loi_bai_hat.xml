@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:paddingHorizontal="10dp"
     android:paddingVertical="10dp"
-    android:id="@+id/layoutBaiHat"
+    android:id="@+id/layoutLoiBH"
     android:layout_height="70dp">
 
     <TextView

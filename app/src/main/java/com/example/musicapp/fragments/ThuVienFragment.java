@@ -55,7 +55,7 @@ public class ThuVienFragment extends Fragment {
 
     MaterialToolbar topAppBar;
 
-    LinearLayout layoutYeuThich, layoutNgheSi, layoutDaTai;
+    LinearLayout layoutYeuThich, layoutNgheSi, layoutDaTai, layoutMV;
 
     public static ArrayList<DanhSachPhat> danhSachPhats = null;
 
@@ -161,9 +161,17 @@ public class ThuVienFragment extends Fragment {
                 Common.replace_fragment(new DaTaiFragment());
             }
         });
+
+        layoutMV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.replace_fragment(new MvBaiHatFragment());
+            }
+        });
     }
 
     private void anhXa(View view) {
+
         btnAddNew = view.findViewById(R.id.btnAddNew);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
@@ -172,6 +180,8 @@ public class ThuVienFragment extends Fragment {
         layoutYeuThich = view.findViewById(R.id.layoutYeuThich);
         layoutNgheSi = view.findViewById(R.id.layoutNgheSi);
         layoutDaTai = view.findViewById(R.id.layoutDaTai);
+        layoutMV = view.findViewById(R.id.layoutMV);
+
     }
 
     private void getDanhSachPhat() {

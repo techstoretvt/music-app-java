@@ -370,6 +370,13 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         );
         LinearLayout layoutChitietbaihat = findViewById(R.id.layoutChitietbaihat);
         layoutChitietbaihat.setBackground(gradientDrawable);
+
+        if (!isStartSlider) {
+            sliderProgress.setValue(MediaCustom.getFloatCurrentTime());
+        }
+        if (tgHienTai != null)
+            tgHienTai.setText(MediaCustom.getStrCurrentTime());
+
     }
 
     private void anhXaView() {

@@ -21,7 +21,12 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+//    Intent intent = new Intent(MVBaiHatActivity.this, MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                startActivity(intent);
 public class Common {
+
 
     public static int maxCountBaiHatHome = 15;
 

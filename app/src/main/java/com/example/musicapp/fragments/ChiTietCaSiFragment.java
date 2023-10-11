@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
+import com.example.musicapp.activities.MVBaiHatActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.adapters.CaSiAdapter;
@@ -161,8 +162,13 @@ public class ChiTietCaSiFragment extends Fragment {
                 } else if (typeBack == 5) {
 
                     Common.replace_fragment(MainActivity.noiBat);
-                    MainActivity.bottomNavigationView.setSelectedItemId(R.id.noiBat);
+//                    MainActivity.bottomNavigationView.setSelectedItemId(R.id.noiBat);
 
+                } else if (typeBack == 6) {
+//                    Common.replace_fragment(new MvBaiHatFragment());
+                    Intent intent = new Intent(getContext(), MVBaiHatActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    getActivity().startActivity(intent);
                 }
             }
         });

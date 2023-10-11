@@ -11,6 +11,7 @@ import com.example.musicapp.activities.ChiTietNhacActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.api.ApiServiceV1;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.LoiBaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.fragments.fragment_mini_nhac.CurrentMiniNhacFragment;
 import com.example.musicapp.fragments.fragment_mini_nhac.NextMiniNhacFragment;
@@ -265,6 +266,10 @@ public class MediaCustom {
             ThongTinBaiHatFragment.getData();
         }
 
+        if (LoiBaiHatFragment.isLoiBaiHat) {
+            LoiBaiHatFragment.getLoiBaiHat();
+        }
+
         //tang view
         tangView(danhSachPhats.get(position).getId());
 
@@ -384,6 +389,10 @@ public class MediaCustom {
             ThongTinBaiHatFragment.getData();
         }
 
+        if (LoiBaiHatFragment.isLoiBaiHat) {
+            LoiBaiHatFragment.getLoiBaiHat();
+        }
+
         return statusPhatNhac;
     }
 
@@ -410,6 +419,15 @@ public class MediaCustom {
             mediaPlayer.seekTo(newTime);
         }
     }
+
+    public static void setCurrentTimeDouble(double newTime) {
+        if (isData) {
+            int t1 = (int) Math.floor(newTime * 1000);
+            Log.e("t1", String.valueOf(t1));
+            mediaPlayer.seekTo(t1);
+        }
+    }
+
 
     public static void taoListRandom() {
         positionRandom = new ArrayList<>();
