@@ -48,8 +48,6 @@ public class ThongTinBaiHatFragment extends Fragment {
     public static ImageView anhBaiHat;
     public static TextView tenBaiHat = null, tenCaSi, theLoai, phatHanh, cungCap;
 
-    LinearLayout layoutTaiVe;
-
 
     public ThongTinBaiHatFragment() {
         // Required empty public constructor
@@ -90,23 +88,7 @@ public class ThongTinBaiHatFragment extends Fragment {
     }
 
     private void setEvent() {
-        layoutTaiVe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Kiểm tra xem người dùng đã cấp quyền chưa
-                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    // Giải thích lý do tại sao ứng dụng của bạn cần quyền
-                    Toast.makeText(getContext(),
-                            "Ứng dụng cần quyền truy cập bộ nhớ để lưu trữ dữ liệu",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    // Yêu cầu quyền truy cập bộ nhớ
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                }
-            }
-        });
+
     }
 
     private void setTouchHelper() {
@@ -241,7 +223,6 @@ public class ThongTinBaiHatFragment extends Fragment {
         theLoai = view.findViewById(R.id.theLoai);
         phatHanh = view.findViewById(R.id.phatHanh);
         cungCap = view.findViewById(R.id.cungCap);
-        layoutTaiVe = view.findViewById(R.id.layoutTaiVe);
     }
 
     @Override

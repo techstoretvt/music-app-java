@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
+import com.example.musicapp.fragments.fragment_chi_tiet_bh.LoiBaiHatFragment;
 import com.example.musicapp.fragments.fragment_chi_tiet_bh.ThongTinBaiHatFragment;
 import com.example.musicapp.adapters.ViewPagerAdapter;
 import com.example.musicapp.utils.DownloadReceiver;
@@ -131,6 +133,15 @@ public class ChiTietNhacActivity extends AppCompatActivity {
                 Log.e("value", String.valueOf(value));
                 MediaCustom.setCurrentTime((int) value);
                 tgHienTai.setText(MediaCustom.getStrCurrentTime());
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        LoiBaiHatFragment.isScrolling = false;
+                    }
+                }, 1000);
+
+
             }
         });
 
@@ -468,8 +479,11 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
 
                     Log.e("Nhac chuong", "Code chay mat dinh");
-                    BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
-                    BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
+                    if (BsBaiHat.iconDownLoad1 != null) {
+                        BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
+                        BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
+                    }
+
 
                     DownloadReceiver.isDownload = true;
 
@@ -500,8 +514,10 @@ public class ChiTietNhacActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUEST_WRITE_SETTINGS_PERMISSION) {
             Log.e("Nhac chuong", "Code chay trong permission");
-            BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
-            BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
+            if (BsBaiHat.iconDownLoad1 != null) {
+                BsBaiHat.iconDownLoad1.setVisibility(View.GONE);
+                BsBaiHat.iconDownload2.setVisibility(View.VISIBLE);
+            }
 
             DownloadReceiver.isDownload = true;
 

@@ -27,6 +27,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.musicapp.R;
 import com.example.musicapp.activities.ChiTietNhacActivity;
+import com.example.musicapp.activities.MVBaiHatActivity;
 import com.example.musicapp.activities.MainActivity;
 import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.api.ApiServiceV1;
@@ -208,9 +209,12 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutXemMV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                intent.putExtra(SearchManager.QUERY, BaiHatAdapter.linkMV);
+                Intent intent = new Intent(getContext(), MVBaiHatActivity.class);
+                intent.putExtra("idBaiHat", BaiHatAdapter.currentBaiHat.getId());
+
                 startActivity(intent);
+
+                BaiHatAdapter.md.dismiss();
             }
         });
 

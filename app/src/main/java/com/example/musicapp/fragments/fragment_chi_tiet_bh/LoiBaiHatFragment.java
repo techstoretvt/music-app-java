@@ -104,19 +104,34 @@ public class LoiBaiHatFragment extends Fragment {
                         @Override
                         public void run() {
                             if (MediaCustom.isPlay && listLoiBH != null && listLoiBH.size() != 0) {
-                                float currentTimeBH = MediaCustom.getFloatCurrentTime() + 0.5f;
+                                float currentTimeBH = MediaCustom.getFloatCurrentTime() + 0.3f;
                                 if (currentTimeBH < listLoiBH.get(0).getThoiGian())
                                     return;
 
                                 int currentPosition = -1;
 
-                                for (int i = 0; i < listLoiBH.size() - 1; i++) {
+                                int j = oldPosition == -1 ? 0 : oldPosition;
+
+                                boolean checkExitsPosition = false;
+                                for (int i = j; i < listLoiBH.size() - 1; i++) {
                                     if (currentTimeBH >= listLoiBH.get(i).getThoiGian()
                                             && currentTimeBH < listLoiBH.get(i + 1).getThoiGian()) {
                                         currentPosition = i;
+                                        checkExitsPosition = true;
                                         break;
                                     }
                                 }
+                                if (!checkExitsPosition) {
+                                    for (int i = 0; i < listLoiBH.size() - 1; i++) {
+                                        if (currentTimeBH >= listLoiBH.get(i).getThoiGian()
+                                                && currentTimeBH < listLoiBH.get(i + 1).getThoiGian()) {
+                                            currentPosition = i;
+                                            break;
+                                        }
+                                    }
+                                }
+
+
                                 if (currentPosition == -1)
                                     currentPosition = listLoiBH.size() - 1;
 

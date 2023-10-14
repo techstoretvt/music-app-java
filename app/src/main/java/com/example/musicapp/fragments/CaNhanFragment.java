@@ -155,6 +155,9 @@ public class CaNhanFragment extends Fragment {
                         }
 
                         //set avatar
+                        if (getContext() == null) {
+                            return;
+                        }
 
                         if (tk.getTypeAccount().equals("web")) {
                             if (tk.getAvatarUpdate() != null) {

@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String isNetworkStr = intent.getStringExtra("isNetwork");
         if (isNetworkStr.equals("true")) {
-            replace_fragment(new MvBaiHatFragment());
+            replace_fragment(new KhamPhaFragment());
         } else {
             replace_fragment(new DaTaiFragment());
         }
@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                                 isNextBaiHat = false;
                             }
                         }
-                    }, 500);
+                    }, 1000);
                 }
 
             }

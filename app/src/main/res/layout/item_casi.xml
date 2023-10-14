@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/anh"
             android:layout_width="match_parent"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:src="@drawable/anh_ds_rong"
             android:layout_height="wrap_content"/>
     </androidx.cardview.widget.CardView>

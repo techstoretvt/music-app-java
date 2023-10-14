@@ -319,16 +319,16 @@ public class MVBaiHatActivity extends AppCompatActivity {
         ChiTietCaSiFragment.typeBack = 0;
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Common.replace_fragment(new MvBaiHatFragment());
-            }
-        }, 500);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        finish();
+//
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Common.replace_fragment(new MvBaiHatFragment());
+//            }
+//        }, 500);
+//    }
 }

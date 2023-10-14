@@ -25,6 +25,7 @@ import com.example.musicapp.fragments.fragment_chi_tiet_bh.BinhLuanFragment;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.GetListBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemMV;
+import com.example.musicapp.utils.Common;
 import com.google.android.gms.common.api.Api;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -52,7 +53,7 @@ public class MvBaiHatFragment extends Fragment {
 
     TextInputEditText valueSearch;
 
-    ImageView ic_search;
+    ImageView ic_search, btnBack;
 
     public static boolean isMVBaiHatFragment = false;
 
@@ -117,6 +118,13 @@ public class MvBaiHatFragment extends Fragment {
                 InputMethodManager inputMethodManager = (InputMethodManager)
                         getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.replace_fragment(new ThuVienFragment());
             }
         });
     }
@@ -221,6 +229,7 @@ public class MvBaiHatFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycleView);
         valueSearch = view.findViewById(R.id.valueSearch);
         ic_search = view.findViewById(R.id.ic_search);
+        btnBack = view.findViewById(R.id.btnBack);
         manager = new LinearLayoutManager(getContext());
     }
 

@@ -78,6 +78,7 @@ public class LoiBaiHatAdapter extends RecyclerView.Adapter<LoiBaiHatAdapter.VHol
                 MediaCustom.play();
                 holder.loiBH.setTextColor(Color.YELLOW);
 
+
                 LoiBaiHatFragment.isScrolling = false;
                 if (ChiTietNhacActivity.isChiTietNhac) {
                     if (ChiTietNhacActivity.btnPausePlay != null) {

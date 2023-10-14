@@ -148,44 +148,43 @@ public class KhamPhaFragment extends Fragment {
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(manager);
 
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                        isScrolling = true;
-                    }
-                }
-
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if (isEnd) return;
-                    currentItems = manager.getChildCount();
-                    totalItems = manager.getItemCount();
-                    scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
-
-                    if (isScrolling && (currentItems + scrollOutItems + offSetScroll == totalItems)) {
-                        isScrolling = false;
-                        fetchData();
-                    }
-                }
-
-
-            });
+//            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                    super.onScrollStateChanged(recyclerView, newState);
+//                    if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+//                        isScrolling = true;
+//                    }
+//                }
+//
+//                @Override
+//                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                    super.onScrolled(recyclerView, dx, dy);
+//                    if (isEnd) return;
+//                    currentItems = manager.getChildCount();
+//                    totalItems = manager.getItemCount();
+//                    scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
+//
+//                    if (isScrolling && (currentItems + scrollOutItems + offSetScroll == totalItems)) {
+//                        isScrolling = false;
+//                        fetchData();
+//                    }
+//                }
+//
+//
+//            });
         }
     }
 
     private void anhXa(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress);
         manager = new LinearLayoutManager(getActivity());
         topAppBar = view.findViewById(R.id.topAppBar);
     }
 
     private void getListBaiHat() {
         Map<String, String> options = new HashMap<>();
-        options.put("maxCount", String.valueOf(maxCount));
+        options.put("maxCount", String.valueOf(50));
         options.put("page", "1");
         options.put("order_style", "desc");
         options.put("orderBy", "luotNghe");
@@ -203,31 +202,6 @@ public class KhamPhaFragment extends Fragment {
                         recyclerView.setLayoutManager(manager);
 
 
-                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                super.onScrollStateChanged(recyclerView, newState);
-                                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                                    isScrolling = true;
-                                }
-                            }
-
-                            @Override
-                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                super.onScrolled(recyclerView, dx, dy);
-                                if (isEnd) return;
-                                currentItems = manager.getChildCount();
-                                totalItems = manager.getItemCount();
-                                scrollOutItems = manager.findFirstCompletelyVisibleItemPosition();
-
-                                if (isScrolling && (currentItems + scrollOutItems + offSetScroll == totalItems)) {
-                                    isScrolling = false;
-                                    fetchData();
-                                }
-                            }
-
-
-                        });
                     } else {
                         Toast.makeText(getActivity(), res.getErrMessage(), Toast.LENGTH_SHORT)
                                 .show();
@@ -244,13 +218,9 @@ public class KhamPhaFragment extends Fragment {
     }
 
     private void fetchData() {
-//        progressBar.setVisibility(View.VISIBLE);
-
-        page++;
-
         Map<String, String> options = new HashMap<>();
-        options.put("maxCount", String.valueOf(maxCount));
-        options.put("page", String.valueOf(page));
+        options.put("maxCount", String.valueOf(100));
+        options.put("page", String.valueOf(1));
         options.put("order_style", "desc");
         options.put("orderBy", "luotNghe");
 
@@ -259,20 +229,12 @@ public class KhamPhaFragment extends Fragment {
             public void onResponse(Call<GetListBaiHat> call, Response<GetListBaiHat> response) {
                 GetListBaiHat res = response.body();
                 if (res != null) {
-                    if (res.getErrCode() == 0 && res.getData() != null && res.getData().size() != 0) {
+                    if (res.getErrCode() == 0) {
                         ArrayList<BaiHat> baiHats = res.getData();
-                        int startChange = list.size();
-                        int endChange = baiHats.size();
-                        list.addAll(baiHats);
-//                        offSetScroll += 3;
+                        list = baiHats;
+                        adapter.notifyDataSetChanged();
 
-
-                        adapter.notifyItemRangeChanged(startChange, endChange);
-
-                    } else if (res.getData().size() == 0) {
-                        isEnd = true;
                     }
-//                    progressBar.setVisibility(View.GONE);
                 }
             }
 

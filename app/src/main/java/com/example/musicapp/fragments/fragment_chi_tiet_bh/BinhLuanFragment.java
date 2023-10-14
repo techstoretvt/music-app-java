@@ -246,6 +246,9 @@ public class BinhLuanFragment extends Fragment {
                                 if (res != null) {
                                     if (res.getErrCode() == 0) {
                                         listData = res.getData();
+                                        if (recyclerView == null) {
+                                            return;
+                                        }
 
                                         adapter = new BinhLuanAdapter(listData, recyclerView.getContext());
                                         recyclerView.setAdapter(adapter);

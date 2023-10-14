@@ -21,10 +21,15 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//mở lại activity
+//Intent intent = new Intent(MVBaiHatActivity.this, MainActivity.class);
+//intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//startActivity(intent);
 
-//    Intent intent = new Intent(MVBaiHatActivity.this, MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//                startActivity(intent);
+//search trên google
+//Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+//intent.putExtra(SearchManager.QUERY, BaiHatAdapter.linkMV);
+
 public class Common {
 
 

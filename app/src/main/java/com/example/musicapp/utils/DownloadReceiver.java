@@ -94,7 +94,7 @@ public class DownloadReceiver extends BroadcastReceiver {
                         String tenCS = strTenCaSi;
 
                         String linkAnh = BsBaiHat.currentBaiHat.getAnhBia();
-                        String loiBH = BsBaiHat.currentBaiHat.getLoiBaiHat();
+                        String loiBH = BsBaiHat.currentBaiHat.getLoiBaiHat().replace("'", "");
 
                         musicAppHelper.QueryData(String.format("INSERT INTO BaiHat VALUES ('%s','%s','%s','%s','%s','%s')",
                                 id, tenBh, tenCS, path, linkAnh, loiBH));

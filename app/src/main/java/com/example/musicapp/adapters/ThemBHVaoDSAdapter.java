@@ -72,10 +72,12 @@ public class ThemBHVaoDSAdapter extends RecyclerView.Adapter<ThemBHVaoDSAdapter.
             @Override
             public void onClick(View view) {
                 String idDanhSach = ThemBHVaoDSActivity.idDanhSach;
+                String strIdBH = data.get(holder.getAdapterPosition()).getId();
                 String header = Common.getHeader();
 
                 if (!holder.checkBox.isChecked()) {
-                    BodyThemBHVaoDS body = new BodyThemBHVaoDS(idBaiHat, idDanhSach);
+
+                    BodyThemBHVaoDS body = new BodyThemBHVaoDS(strIdBH, idDanhSach);
                     ApiServiceV1.apiServiceV1.themBaiHatVaoDS(body, header).enqueue(new Callback<ThemBHVaoDS>() {
                         @Override
                         public void onResponse(Call<ThemBHVaoDS> call, Response<ThemBHVaoDS> response) {
@@ -106,7 +108,7 @@ public class ThemBHVaoDSAdapter extends RecyclerView.Adapter<ThemBHVaoDSAdapter.
                     });
                 } else {
 
-                    ApiServiceV1.apiServiceV1.xoaBaiHatKhoiDS(idDanhSach, idBaiHat, header).enqueue(new Callback<ResponseDefault>() {
+                    ApiServiceV1.apiServiceV1.xoaBaiHatKhoiDS(idDanhSach, strIdBH, header).enqueue(new Callback<ResponseDefault>() {
                         @Override
                         public void onResponse(Call<ResponseDefault> call, Response<ResponseDefault> response) {
                             ResponseDefault res = response.body();
@@ -152,9 +154,9 @@ public class ThemBHVaoDSAdapter extends RecyclerView.Adapter<ThemBHVaoDSAdapter.
 
         Glide.with(holder.itemView.getContext()).load(data.get(position).getAnhBia()).into(holder.imgView);
 
-        String idBaiHat = data.get(holder.getAdapterPosition()).getId();
+        String strIdBaiHat = data.get(holder.getAdapterPosition()).getId();
         for (BaiHat i : ChiTietThuVienFragment.danhBaiHats) {
-            if (i.getId().equals(idBaiHat)) {
+            if (i.getId().equals(strIdBaiHat)) {
                 holder.icon.setImageResource(R.drawable.baseline_check_white);
                 holder.checkBox.setChecked(true);
                 break;
