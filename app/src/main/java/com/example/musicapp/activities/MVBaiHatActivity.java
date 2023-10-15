@@ -308,7 +308,8 @@ public class MVBaiHatActivity extends AppCompatActivity {
                 youTubePlayer.play();
 
             });
-            mdXemNS.dismiss();
+            if (mdXemNS != null && mdXemNS.isAdded())
+                mdXemNS.dismiss();
         }
 
     }

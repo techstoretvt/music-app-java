@@ -101,6 +101,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
                 MainActivity.progess_phatNhac.setProgress(100);
                 BaiHat currentBH = data.get(holder.getAdapterPosition());
+                MediaCustom.isRandom = false;
 
                 String strTenCaSi = "";
                 for (int i = 0; i < currentBH.getBaiHat_caSis().size(); i++) {
@@ -114,6 +115,8 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
 
                 if (ChiTietNhacActivity.isChiTietNhac) {
 
+                    if (MediaCustom.danhSachPhats == null) return;
+
                     int indexBH = MediaCustom.danhSachPhats.indexOf(currentBH);
                     if (indexBH != -1) {
                         MediaCustom.position = indexBH;
@@ -122,7 +125,8 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                         //update ui
 
 
-                        ChiTietNhacActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
+                        if (ChiTietNhacActivity.btnPrev != null)
+                            ChiTietNhacActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_white);
 
                         if (MainActivity.dungNhac != null) {
                             //current
@@ -345,7 +349,7 @@ public class BaiHatAdapter extends RecyclerView.Adapter<BaiHatAdapter.VHolder> {
                         if (MainActivity.btnPrev != null) {
                             MainActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
                         }
-                        if (ChiTietNhacActivity.isChiTietNhac) {
+                        if (ChiTietNhacActivity.isChiTietNhac && ChiTietNhacActivity.btnPrev != null) {
                             ChiTietNhacActivity.btnPrev.setImageResource(R.drawable.baseline_skip_previous_disable);
                         }
 

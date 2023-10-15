@@ -160,6 +160,9 @@ public class ThongTinBaiHatFragment extends Fragment {
 
     public static void getData() {
         //gan gia tri
+        if (tenBaiHat == null) {
+            return;
+        }
         tenBaiHat.setText(MediaCustom.danhSachPhats.get(MediaCustom.position).getTenBaiHat());
 
 

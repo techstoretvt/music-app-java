@@ -275,6 +275,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/ic_phatKeTiep"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"

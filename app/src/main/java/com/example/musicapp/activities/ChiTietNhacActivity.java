@@ -48,7 +48,7 @@ public class ChiTietNhacActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_SETTINGS_PERMISSION = 3;
     DownloadReceiver downloadReceiver;
     ImageView iconClose, btnRandom, btnLoop, btnMore;
-    public static ImageView btnNext, btnPrev;
+    public static ImageView btnNext = null, btnPrev = null;
     TextView txtTypePlay;
     public static TextView totalTime = null, tgHienTai = null;
 
@@ -62,8 +62,8 @@ public class ChiTietNhacActivity extends AppCompatActivity {
 
     Boolean isStartSlider = false;
 
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
+    TabLayout mTabLayout;
+    ViewPager mViewPager;
 
     LinearLayout layoutControl;
 
@@ -91,12 +91,26 @@ public class ChiTietNhacActivity extends AppCompatActivity {
         super.onPause();
         tgHienTai = null;
         isChiTietNhac = false;
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isChiTietNhac = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        btnNext = null;
+        btnPrev = null;
+        tgHienTai = null;
+        totalTime = null;
+        btnPausePlay = null;
+        sliderProgress = null;
+        isChiTietNhac = false;
+
     }
 
     private void setEvent() {

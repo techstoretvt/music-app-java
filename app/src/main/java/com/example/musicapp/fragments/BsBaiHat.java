@@ -54,7 +54,7 @@ public class BsBaiHat extends BottomSheetDialogFragment {
 
     public static BottomSheetThemBHVaoDS md = new BottomSheetThemBHVaoDS();
 
-    public static ImageView iconDownLoad = null;
+    public static ImageView iconDownLoad = null, ic_phatKeTiep = null;
     public static BaiHat currentBaiHat = null;
 
     ImageView iconYeuThich, anhBaiHat;
@@ -201,8 +201,11 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutPhatKeTiep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Tính năng này chưa cập nhật", Toast.LENGTH_SHORT)
-                        .show();
+                if (MediaCustom.danhSachPhats != null) {
+                    MediaCustom.danhSachPhats.add(MediaCustom.position + 1, BaiHatAdapter.currentBaiHat);
+                    if (ic_phatKeTiep != null)
+                        ic_phatKeTiep.setImageResource(R.drawable.list_check);
+                }
             }
         });
 
@@ -532,6 +535,7 @@ public class BsBaiHat extends BottomSheetDialogFragment {
         layoutNhacChuong = view.findViewById(R.id.layoutNhacChuong);
         iconDownload2 = view.findViewById(R.id.iconDownload2);
         iconDownLoad1 = view.findViewById(R.id.iconDownload1);
+        ic_phatKeTiep = view.findViewById(R.id.ic_phatKeTiep);
 
         if (picker == null) {
             picker = new MaterialTimePicker.Builder()

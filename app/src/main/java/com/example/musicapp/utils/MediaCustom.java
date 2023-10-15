@@ -85,7 +85,7 @@ public class MediaCustom {
                         }
                     }
 
-                    if (ChiTietNhacActivity.isChiTietNhac) {
+                    if (ChiTietNhacActivity.isChiTietNhac && ChiTietNhacActivity.btnNext != null) {
                         ChiTietNhacActivity.btnNext.callOnClick();
                     } else {
                         next();
