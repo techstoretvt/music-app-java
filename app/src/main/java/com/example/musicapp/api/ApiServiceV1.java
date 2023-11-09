@@ -15,6 +15,7 @@ import com.example.musicapp.modal.anhxajson.GetListPlaylist;
 import com.example.musicapp.modal.anhxajson.GetLoiBaiHat;
 import com.example.musicapp.modal.anhxajson.GetTaiKhoan;
 import com.example.musicapp.modal.anhxajson.Keyword;
+import com.example.musicapp.modal.anhxajson.KeywordGoogle;
 import com.example.musicapp.modal.anhxajson.LayDsThongBao;
 import com.example.musicapp.modal.anhxajson.Login;
 import com.example.musicapp.modal.anhxajson.ResponseDefault;
@@ -29,6 +30,7 @@ import com.example.musicapp.modal.body.BodyChangePass;
 import com.example.musicapp.modal.body.BodyLogin;
 import com.example.musicapp.modal.body.BodyLoginGoogle;
 import com.example.musicapp.modal.body.BodySignUp;
+import com.example.musicapp.modal.body.BodySuaTGBaiHat;
 import com.example.musicapp.modal.body.BodyThemBHVaoDS;
 import com.example.musicapp.modal.body.BodyThemDSPhat;
 import com.example.musicapp.modal.body.BodyToggleLikeComment;
@@ -151,7 +153,7 @@ public interface ApiServiceV1 {
     );
 
     @GET("/api/v2/get-list-keyword-search-mobile")
-    Call<Keyword> getGoiYTuKhoa(@Query("value") String value);
+    Call<KeywordGoogle> getGoiYTuKhoa(@Query("value") String value);
 
     @GET("/api/v2/lay-danh-sach-thong-bao")
     Call<LayDsThongBao> layDanhSachTB(
@@ -233,6 +235,11 @@ public interface ApiServiceV1 {
     @GET("/api/v2/tim-kiem-mv")
     Call<TimKiemMV> timKiemMV(
             @Query("value") String value
+    );
+
+    @PUT("/api/v2/sua-thoi-gian-bai-hat-by-id")
+    Call<ResponseDefault> suaThoiGianLoiBHAdmin(@Body BodySuaTGBaiHat body,
+                                                @Header("authorization") String authorization
     );
 
     /* Get

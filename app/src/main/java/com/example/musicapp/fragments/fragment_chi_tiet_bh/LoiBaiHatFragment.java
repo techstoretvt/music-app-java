@@ -104,7 +104,7 @@ public class LoiBaiHatFragment extends Fragment {
                         @Override
                         public void run() {
                             if (MediaCustom.isPlay && listLoiBH != null && listLoiBH.size() != 0) {
-                                float currentTimeBH = MediaCustom.getFloatCurrentTime() + 0.3f;
+                                float currentTimeBH = MediaCustom.getFloatCurrentTime() + 0.5f;
                                 if (currentTimeBH < listLoiBH.get(0).getThoiGian())
                                     return;
 

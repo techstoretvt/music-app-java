@@ -31,9 +31,11 @@ import com.example.musicapp.adapters.BaiHatAdapter;
 import com.example.musicapp.adapters.CaSiAdapter;
 import com.example.musicapp.adapters.TimKiemGanDayAdapter;
 import com.example.musicapp.api.ApiServiceV1;
+import com.example.musicapp.api.ApiServiceV2;
 import com.example.musicapp.modal.anhxajson.BaiHat;
 import com.example.musicapp.modal.anhxajson.Casi;
 import com.example.musicapp.modal.anhxajson.Keyword;
+import com.example.musicapp.modal.anhxajson.KeywordGoogle;
 import com.example.musicapp.modal.anhxajson.TimKiemBaiHat;
 import com.example.musicapp.modal.anhxajson.TimKiemCaSi;
 import com.example.musicapp.utils.Common;
@@ -44,6 +46,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -228,19 +232,19 @@ public class TimKiemFragment extends Fragment {
     private void layTuKhoaGoiY(String value) {
 
         if (value.isEmpty()) return;
-        ApiServiceV1.apiServiceV1.getGoiYTuKhoa(value).enqueue(new Callback<Keyword>() {
+        ApiServiceV1.apiServiceV1.getGoiYTuKhoa(value).enqueue(new Callback<KeywordGoogle>() {
             @Override
-            public void onResponse(Call<Keyword> call, Response<Keyword> response) {
-                Keyword res = response.body();
+            public void onResponse(Call<KeywordGoogle> call, Response<KeywordGoogle> response) {
+                KeywordGoogle res = response.body();
                 if (res != null) {
                     if (res.getErrCode() == 0) {
-                        ArrayList<String> newArr = new ArrayList<>();
+//                        ArrayList<String> newArr = new ArrayList<>();
+//
+//                        for (int i = 0; i < res.getData().size(); i++) {
+//                            newArr.add(res.getKeywordGoogleByIndex(i));
+//                        }
 
-                        for (int i = 0; i < res.getData().size(); i++) {
-                            newArr.add(res.getKeywordByIndex(i));
-                        }
-
-                        dataGoiY = newArr;
+                        dataGoiY = res.getData();
                         ArrayAdapter<String> arrAdapter = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_list_item_1,
                                 dataGoiY);
@@ -259,11 +263,13 @@ public class TimKiemFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Keyword> call, Throwable t) {
+            public void onFailure(Call<KeywordGoogle> call, Throwable t) {
                 Toast.makeText(getContext(), "Loi lay tu khoa", Toast.LENGTH_SHORT)
                         .show();
             }
         });
+
+
     }
 
     private void submitTimKiem() {
