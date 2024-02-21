@@ -2,16 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions"/>
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -27,57 +27,59 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY"/>
+            android:value="YOUR_API_KEY" />
 
         <activity
             android:name=".activities.MVBaiHatActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.SettingActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.TestActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.ThemBHVaoDSActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activities.AddPlayListActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.ChiTietNhacActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.ChangePassForgetActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.QuenMKActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.DangKyActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.XacNhanTaiKhoanActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".activities.StartActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true"/>
+            android:exported="true">
+
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.auth.api.signin.293679478289-2ivcn0cfajfov6j5bajl6crvlr135317.apps.googleusercontent.com"
-            android:value="293679478289-2ivcn0cfajfov6j5bajl6crvlr135317.apps.googleusercontent.com"/>
+            android:value="293679478289-2ivcn0cfajfov6j5bajl6crvlr135317.apps.googleusercontent.com" />
     </application>
 
 </manifest>

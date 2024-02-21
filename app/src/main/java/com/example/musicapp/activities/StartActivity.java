@@ -53,6 +53,11 @@ public class StartActivity extends AppCompatActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
             // Có kết nối mạng
             checkStartServer();
+
+//            Intent intent = new Intent(StartActivity.this, MainActivity.class);
+//            intent.putExtra("isNetwork", "true");
+//            startActivity(intent);
+
         } else {
             // Không có kết nối mạng
             Toast.makeText(StartActivity.this, "khong co mang", Toast.LENGTH_SHORT)
@@ -80,6 +85,7 @@ public class StartActivity extends AppCompatActivity {
                 ResponseDefault responseDefault = response.body();
                 Log.e("log", String.valueOf(responseDefault));
                 if (responseDefault != null && responseDefault.getErrCode() == 0) {
+                    System.out.println("vao err code == 0");
                     SharedPreferences sharedPreferences = getSharedPreferences("DataLocal", Context.MODE_PRIVATE);
 
                     String accessToken = sharedPreferences.getString("accessToken", null);
@@ -112,6 +118,8 @@ public class StartActivity extends AppCompatActivity {
 
                     }
                     finish();
+                } else {
+                    System.out.println("vao err 1");
                 }
             }
 

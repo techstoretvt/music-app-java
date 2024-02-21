@@ -275,6 +275,7 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
 
                     } else {
+                        System.out.println("vao err login");
                         txtErrMess.setText(login.getErrMessage());
                         progressDialog.dismiss();
                     }

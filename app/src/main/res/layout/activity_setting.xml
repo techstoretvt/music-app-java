@@ -20,7 +20,7 @@
             android:layout_height="50dp"
             android:padding="16dp"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/arrow_left_solid"/>
+            android:src="@drawable/arrow_left_solid" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,14 +28,14 @@
             android:text="Thiết lập"
             android:textColor="#fff"
             android:layout_marginLeft="20dp"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         app:dividerColor="#333"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -48,6 +48,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/remoteControl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="20dp"
@@ -57,20 +58,20 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_play_circle_outline_white"/>
+                    android:src="@drawable/baseline_play_circle_outline_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Trình phát nhạc"
+                    android:text="Remote control"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_white"/>
+                    android:src="@drawable/arrow_right_white" />
 
             </LinearLayout>
 
@@ -84,7 +85,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/download_white"/>
+                    android:src="@drawable/download_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,12 +93,12 @@
                     android:text="Tải nhạc"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_white"/>
+                    android:src="@drawable/arrow_right_white" />
 
             </LinearLayout>
 
@@ -111,7 +112,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_music_video_24"/>
+                    android:src="@drawable/baseline_music_video_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -119,12 +120,12 @@
                     android:text="Thư viện"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_white"/>
+                    android:src="@drawable/arrow_right_white" />
 
             </LinearLayout>
 
@@ -138,7 +139,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/video_white"/>
+                    android:src="@drawable/video_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -146,12 +147,12 @@
                     android:text="Video"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_white"/>
+                    android:src="@drawable/arrow_right_white" />
 
             </LinearLayout>
 
@@ -165,7 +166,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/headphone_white"/>
+                    android:src="@drawable/headphone_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -173,12 +174,12 @@
                     android:text="Tai nghe và BlueTooth"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_white"/>
+                    android:src="@drawable/arrow_right_white" />
 
             </LinearLayout>
 
@@ -192,7 +193,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_notifications_24"/>
+                    android:src="@drawable/baseline_notifications_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -200,12 +201,12 @@
                     android:text="Thông báo"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_white"/>
+                    android:src="@drawable/arrow_right_white" />
 
             </LinearLayout>
 
@@ -219,7 +220,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/mat_trang_luoi_liem_white"/>
+                    android:src="@drawable/mat_trang_luoi_liem_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -227,12 +228,12 @@
                     android:text="Giao diện"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_right_white"/>
+                    android:src="@drawable/arrow_right_white" />
 
             </LinearLayout>
 
@@ -240,7 +241,7 @@
                 android:layout_width="match_parent"
                 app:dividerColor="#111"
                 android:layout_marginVertical="14dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -252,7 +253,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/info_white"/>
+                    android:src="@drawable/info_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -260,7 +261,7 @@
                     android:text="Phiên bản"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
@@ -275,7 +276,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/question_white"/>
+                    android:src="@drawable/question_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -283,7 +284,7 @@
                     android:text="Trợ giúp"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
@@ -298,7 +299,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/flag_white"/>
+                    android:src="@drawable/flag_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -306,7 +307,7 @@
                     android:text="Góp ý, báo lỗi"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
@@ -321,7 +322,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/start_ouline_white"/>
+                    android:src="@drawable/start_ouline_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -329,7 +330,7 @@
                     android:text="Bình chọn cho chúng tôi"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
@@ -344,7 +345,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/newspaper_white"/>
+                    android:src="@drawable/newspaper_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -352,7 +353,7 @@
                     android:text="Điều khoản dịch vụ"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
@@ -367,7 +368,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/security_white"/>
+                    android:src="@drawable/security_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -375,7 +376,7 @@
                     android:text="Chính sách bảo mật"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
@@ -384,7 +385,7 @@
                 android:layout_width="match_parent"
                 app:dividerColor="#111"
                 android:layout_marginVertical="14dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -396,7 +397,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/more_white"/>
+                    android:src="@drawable/more_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -404,7 +405,7 @@
                     android:text="Khac"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
@@ -420,7 +421,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/dang_xuat_white"/>
+                    android:src="@drawable/dang_xuat_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -428,7 +429,7 @@
                     android:text="Đăng xuất"
                     android:textColor="#fff"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
 
             </LinearLayout>

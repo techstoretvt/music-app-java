@@ -51,6 +51,7 @@ import com.example.musicapp.fragments.BsBaiHat;
 import com.example.musicapp.fragments.CT_ThuVien_NoiBatFragment;
 import com.example.musicapp.fragments.CaNhanFragment;
 import com.example.musicapp.fragments.ChiTietThuVienFragment;
+import com.example.musicapp.fragments.DKTuXaFragment;
 import com.example.musicapp.fragments.DaTaiFragment;
 import com.example.musicapp.fragments.KhamPhaFragment;
 import com.example.musicapp.fragments.MvBaiHatFragment;
@@ -127,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String isNetworkStr = intent.getStringExtra("isNetwork");
         if (isNetworkStr.equals("true")) {
-            replace_fragment(new KhamPhaFragment());
+//            replace_fragment(new KhamPhaFragment());
+            replace_fragment(new DKTuXaFragment());
         } else {
             replace_fragment(new DaTaiFragment());
         }

@@ -10,9 +10,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.musicapp.R;
+import com.example.musicapp.fragments.ChiTietCaSiFragment;
+import com.example.musicapp.fragments.DKTuXaFragment;
 import com.example.musicapp.fragments.ThuVienFragment;
+import com.example.musicapp.utils.Common;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,6 +27,8 @@ public class SettingActivity extends AppCompatActivity {
 
     ImageView btnBack;
     LinearLayout btnDangXuat;
+
+    LinearLayout remoteControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +84,29 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        remoteControl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                new Thread(() -> {
+
+                    try {
+                        Thread.sleep(500);
+                        Common.replace_fragment(new DKTuXaFragment());
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).start();
+
+            }
+        });
     }
 
     private void anhXa() {
         btnBack = findViewById(R.id.btnBack);
         btnDangXuat = findViewById(R.id.btnDangXuat);
+        remoteControl = findViewById(R.id.remoteControl);
 
     }
 }
