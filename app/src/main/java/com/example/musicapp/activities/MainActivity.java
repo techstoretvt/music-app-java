@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String isNetworkStr = intent.getStringExtra("isNetwork");
         if (isNetworkStr.equals("true")) {
-//            replace_fragment(new KhamPhaFragment());
-            replace_fragment(new DKTuXaFragment());
+            replace_fragment(new KhamPhaFragment());
+//            replace_fragment(new DKTuXaFragment());
         } else {
             replace_fragment(new DaTaiFragment());
         }
